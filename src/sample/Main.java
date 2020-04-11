@@ -7,12 +7,11 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class Main extends Application
-{
+public class Main extends Application {
     @Override
-    public void start(Stage primaryStage) throws Exception
-    {
+    public void start(Stage primaryStage) throws Exception {
         TabPane root = new TabPane();
+        Data.init();
         BorderPane bp_contestants = Contestants.generate();
         root.getTabs().add(new Tab("Teilnehmer", bp_contestants));
         root.getTabs().add(new Tab("Prüfungen"));
