@@ -1,5 +1,8 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 
 public class Contestant {
@@ -9,12 +12,14 @@ public class Contestant {
     private boolean isGroupMember;
     private int points;
     private int bookCount;
-    private ArrayList<Exam> exams;
+    private ObservableList<Exam> exams;
 
     public Contestant(String firstName, String lastName, String grade) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.grade = grade;
+
+        exams = FXCollections.observableArrayList();
     }
 
     public String getFirstName() {
@@ -59,11 +64,11 @@ public class Contestant {
         return bookCount;
     }
 
-    public ArrayList<Exam> getExams() {
+    public ObservableList<Exam> getExams() {
         return exams;
     }
 
-    public void setExams(ArrayList<Exam> exams) {
+    public void setExams(ObservableList<Exam> exams) {
         this.exams = exams;
         updatePointsAndBookCount();
     }

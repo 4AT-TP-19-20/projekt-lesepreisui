@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         TabPane root = new TabPane();
         Data.init();
-        BorderPane bp_contestants = Contestants.generate();
+        BorderPane bp_contestants = ContestantTab.generate();
         root.getTabs().add(new Tab("Teilnehmer", bp_contestants));
         root.getTabs().add(new Tab("Prüfungen"));
         root.getTabs().add(new Tab("Bücher"));

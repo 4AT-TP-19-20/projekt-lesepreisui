@@ -19,6 +19,7 @@ public class Exam {
     }
 
     public int getPoints() {
+        updatePassed();
         if (passed) {
             return book.getPoints();
         }
@@ -67,7 +68,7 @@ public class Exam {
         int correctAnswerCount = 0;
 
         for (char answer : answers.toCharArray()) {
-            if (answer == 'r') {
+            if (answer == 'R') {
                 correctAnswerCount++;
             }
         }

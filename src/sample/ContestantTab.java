@@ -12,7 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-public class Contestants {
+public class ContestantTab {
     public static BorderPane generate() {
         BorderPane borderPane = new BorderPane();
 
@@ -35,11 +35,13 @@ public class Contestants {
         column_lastName.setCellValueFactory(new PropertyValueFactory<Contestant, String>("lastName"));
         TableColumn column_grade = new TableColumn("Klasse");
         column_grade.setCellValueFactory(new PropertyValueFactory<Contestant, String>("grade"));
-        tbv_contestants.setItems(Data.contestants);
         tbv_contestants.getColumns().addAll(column_firstName, column_lastName, column_grade);
+        tbv_contestants.setItems(Data.contestants);
         tbv_contestants.setOnMouseClicked((MouseEvent event) -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-                System.out.println(tbv_contestants.getSelectionModel().getSelectedItem());
+                if(tbv_contestants.getSelectionModel().getSelectedItem() instanceof Contestant) {
+                    ContestantDetailWindow.showNewWindow((Contestant) tbv_contestants.getSelectionModel().getSelectedItem());
+                }
             }
         });
         borderPane.setCenter(tbv_contestants);
@@ -52,9 +54,5 @@ public class Contestants {
         BorderPane.setMargin(borderPane.getCenter(), new Insets(10, 0, 10, 0));
         borderPane.setPadding(new Insets(10));
         return borderPane;
-    }
-
-    private void openDetailWindow() {
-
     }
 }
