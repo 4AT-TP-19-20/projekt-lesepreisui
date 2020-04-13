@@ -35,7 +35,11 @@ public class ContestantTab {
         column_lastName.setCellValueFactory(new PropertyValueFactory<Contestant, String>("lastName"));
         TableColumn column_grade = new TableColumn("Klasse");
         column_grade.setCellValueFactory(new PropertyValueFactory<Contestant, String>("grade"));
-        tbv_contestants.getColumns().addAll(column_firstName, column_lastName, column_grade);
+        TableColumn column_bookCount = new TableColumn("Gelesene Bücher");
+        column_bookCount.setCellValueFactory(new PropertyValueFactory<Contestant, String>("bookCount"));
+        TableColumn column_points = new TableColumn("Punkte");
+        column_points.setCellValueFactory(new PropertyValueFactory<Contestant, String>("points"));
+        tbv_contestants.getColumns().addAll(column_firstName, column_lastName, column_grade, column_bookCount, column_points);
         tbv_contestants.setItems(Data.contestants);
         tbv_contestants.setOnMouseClicked((MouseEvent event) -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
