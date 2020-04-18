@@ -56,11 +56,11 @@ public class ContestantDetailWindow {
         borderPane.setTop(topItems);
 
         //Center
-        TableView tbv_exams = new TableView();
-        TableColumn column_title = new TableColumn("Atworten");
-        column_title.setCellValueFactory(new PropertyValueFactory<Exam, String>("answers"));
-        TableColumn column_authorFirstName = new TableColumn("Bibliothekar");
-        column_authorFirstName.setCellValueFactory(new PropertyValueFactory<Exam, String>("librarian"));
+        TableView<Exam> tbv_exams = new TableView<>();
+        TableColumn<Exam, String> column_title = new TableColumn<>("Atworten");
+        column_title.setCellValueFactory(new PropertyValueFactory<>("answers"));
+        TableColumn<Exam, String> column_authorFirstName = new TableColumn<>("Bibliothekar");
+        column_authorFirstName.setCellValueFactory(new PropertyValueFactory<>("librarian"));
         tbv_exams.getColumns().addAll(column_title, column_authorFirstName);
         tbv_exams.setItems(contestant.getExams());
         borderPane.setCenter(tbv_exams);

@@ -3,7 +3,6 @@ package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
@@ -28,23 +27,23 @@ public class ContestantTab {
         borderPane.setTop(topItems);
 
         //Center
-        TableView tbv_contestants = new TableView();
-        TableColumn column_firstName = new TableColumn("Vorname");
-        column_firstName.setCellValueFactory(new PropertyValueFactory<Contestant, String>("firstName"));
-        TableColumn column_lastName = new TableColumn("Nachname");
-        column_lastName.setCellValueFactory(new PropertyValueFactory<Contestant, String>("lastName"));
-        TableColumn column_grade = new TableColumn("Klasse");
-        column_grade.setCellValueFactory(new PropertyValueFactory<Contestant, String>("grade"));
-        TableColumn column_bookCount = new TableColumn("Gelesene Bücher");
-        column_bookCount.setCellValueFactory(new PropertyValueFactory<Contestant, String>("bookCount"));
-        TableColumn column_points = new TableColumn("Punkte");
-        column_points.setCellValueFactory(new PropertyValueFactory<Contestant, String>("points"));
+        TableView<Contestant> tbv_contestants = new TableView<>();
+        TableColumn<Contestant, String> column_firstName = new TableColumn<>("Vorname");
+        column_firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        TableColumn<Contestant, String> column_lastName = new TableColumn<>("Nachname");
+        column_lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        TableColumn<Contestant, String> column_grade = new TableColumn<>("Klasse");
+        column_grade.setCellValueFactory(new PropertyValueFactory<>("grade"));
+        TableColumn<Contestant, String> column_bookCount = new TableColumn<>("Gelesene Bücher");
+        column_bookCount.setCellValueFactory(new PropertyValueFactory<>("bookCount"));
+        TableColumn<Contestant, String> column_points = new TableColumn<>("Punkte");
+        column_points.setCellValueFactory(new PropertyValueFactory<>("points"));
         tbv_contestants.getColumns().addAll(column_firstName, column_lastName, column_grade, column_bookCount, column_points);
         tbv_contestants.setItems(Data.contestants);
         tbv_contestants.setOnMouseClicked((MouseEvent event) -> {
-            if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-                if(tbv_contestants.getSelectionModel().getSelectedItem() instanceof Contestant) {
-                    ContestantDetailWindow.showNewWindow((Contestant) tbv_contestants.getSelectionModel().getSelectedItem());
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                if(tbv_contestants.getSelectionModel().getSelectedItem() != null) {
+                    ContestantDetailWindow.showNewWindow(tbv_contestants.getSelectionModel().getSelectedItem());
                 }
             }
         });

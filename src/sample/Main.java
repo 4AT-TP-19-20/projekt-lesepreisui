@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -12,8 +11,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         TabPane root = new TabPane();
         Data.init();
-        BorderPane bp_contestants = ContestantTab.generate();
-        root.getTabs().add(new Tab("Teilnehmer", bp_contestants));
+        root.getTabs().add(new Tab("Teilnehmer", ContestantTab.generate()));
         root.getTabs().add(new Tab("Prüfungen"));
         root.getTabs().add(new Tab("Bücher"));
         root.getTabs().add(new Tab("Verlosung"));
