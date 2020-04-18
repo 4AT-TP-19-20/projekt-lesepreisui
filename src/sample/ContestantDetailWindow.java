@@ -57,7 +57,7 @@ public class ContestantDetailWindow {
 
         //Center
         TableView<Exam> tbv_exams = new TableView<>();
-        TableColumn<Exam, String> column_title = new TableColumn<>("Atworten");
+        TableColumn<Exam, String> column_title = new TableColumn<>("Antworten");
         column_title.setCellValueFactory(new PropertyValueFactory<>("answers"));
         TableColumn<Exam, String> column_authorFirstName = new TableColumn<>("Bibliothekar");
         column_authorFirstName.setCellValueFactory(new PropertyValueFactory<>("librarian"));
