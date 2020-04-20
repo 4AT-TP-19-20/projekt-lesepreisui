@@ -1,67 +1,102 @@
 package sample;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
-
 public class Contestant {
-    private String firstName;
-    private String lastName;
-    private String grade;
-    private boolean isGroupMember;
-    private int points;
-    private int bookCount;
+    private StringProperty firstName;
+    private StringProperty lastName;
+    private StringProperty grade;
+    private BooleanProperty isGroupMember;
     private ObservableList<Exam> exams;
 
     public Contestant(String firstName, String lastName, String grade) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.grade = grade;
+        this.firstName = new SimpleStringProperty(firstName);
+        this.lastName = new SimpleStringProperty(lastName);
+        this.grade = new SimpleStringProperty(grade);
+
+        this.isGroupMember = new SimpleBooleanProperty(false);
 
         exams = FXCollections.observableArrayList();
     }
 
-    public String getFirstName() {
-        return firstName;
+    public Contestant() {
+        this("", "", "");
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
-    public boolean isGroupMember() {
-        return isGroupMember;
-    }
-
-    public void setGroupMember(boolean groupMember) {
-        isGroupMember = groupMember;
-    }
 
     public int getPoints() {
-        updatePointsAndBookCount();
+        int points = 0;
+
+        for(Exam exam : exams) {
+            points += exam.getPoints();
+        }
+
         return points;
     }
 
     public int getBookCount() {
-        updatePointsAndBookCount();
+        int bookCount = 0;
+
+        for(Exam exam : exams) {
+            if(exam.isPassed()) {
+                bookCount++;
+            }
+        }
+
         return bookCount;
+    }
+
+    public String getFirstName() {
+        return firstName.get();
+    }
+
+    public StringProperty firstNameProperty() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName.set(firstName);
+    }
+
+    public String getLastName() {
+        return lastName.get();
+    }
+
+    public StringProperty lastNameProperty() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName.set(lastName);
+    }
+
+    public String getGrade() {
+        return grade.get();
+    }
+
+    public StringProperty gradeProperty() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade.set(grade);
+    }
+
+    public boolean isGroupMember() {
+        return isGroupMember.get();
+    }
+
+    public BooleanProperty groupMemberProperty() {
+        return isGroupMember;
+    }
+
+    public void setGroupMember(boolean groupMember) {
+        isGroupMember.set(groupMember);
     }
 
     public ObservableList<Exam> getExams() {
@@ -70,26 +105,9 @@ public class Contestant {
 
     public void setExams(ObservableList<Exam> exams) {
         this.exams = exams;
-        updatePointsAndBookCount();
     }
 
     public void addExam(Exam exam) {
         exams.add(exam);
-        updatePointsAndBookCount();
-    }
-
-    //TODO implement multiply option
-    private void updatePointsAndBookCount() {
-        int receivedPoints;
-        points = 0;
-        bookCount = 0;
-        for(Exam exam : exams) {
-            receivedPoints = exam.getPoints();
-            if(receivedPoints != 0)
-            {
-                bookCount++;
-                points += receivedPoints;
-            }
-        }
     }
 }

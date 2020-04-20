@@ -1,29 +1,44 @@
 package sample;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.Date;
 
 public class Exam {
     private Book book;
-    private String answers;
-    private boolean passed;
-    private String librarian;
+    private StringProperty answers;
+    private StringProperty librarian;
     private Date date;
 
     public Exam(Book book, String answers, String librarian, Date date) {
         this.book = book;
-        this.answers = answers;
-        this.librarian = librarian;
+        this.answers = new SimpleStringProperty(answers);
+        this.librarian = new SimpleStringProperty(librarian);
         this.date = date;
-
-        updatePassed();
     }
 
     public int getPoints() {
-        updatePassed();
-        if (passed) {
+        if (isPassed()) {
             return book.getPoints();
         }
         return 0;
+    }
+
+    public boolean isPassed() {
+        int correctAnswerCount = 0;
+
+        for (char answer : answers.get().toCharArray()) {
+            if (answer == 'R') {
+                correctAnswerCount++;
+            }
+        }
+
+        if (correctAnswerCount >= 4) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Book getBook() {
@@ -35,25 +50,27 @@ public class Exam {
     }
 
     public String getAnswers() {
+        return answers.get();
+    }
+
+    public StringProperty answersProperty() {
         return answers;
     }
 
     public void setAnswers(String answers) {
-        this.answers = answers;
-        updatePassed();
-    }
-
-    public boolean isPassed() {
-        updatePassed();
-        return passed;
+        this.answers.set(answers);
     }
 
     public String getLibrarian() {
+        return librarian.get();
+    }
+
+    public StringProperty librarianProperty() {
         return librarian;
     }
 
     public void setLibrarian(String librarian) {
-        this.librarian = librarian;
+        this.librarian.set(librarian);
     }
 
     public Date getDate() {
@@ -62,21 +79,5 @@ public class Exam {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    private void updatePassed() {
-        int correctAnswerCount = 0;
-
-        for (char answer : answers.toCharArray()) {
-            if (answer == 'R') {
-                correctAnswerCount++;
-            }
-        }
-
-        if (correctAnswerCount >= 4) {
-            passed = true;
-        } else {
-            passed = false;
-        }
     }
 }
