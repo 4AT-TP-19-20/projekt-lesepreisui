@@ -3,15 +3,16 @@ package sample;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Exam {
     private Book book;
     private StringProperty answers;
     private StringProperty librarian;
-    private Date date;
+    private LocalDate date;
 
-    public Exam(Book book, String answers, String librarian, Date date) {
+    public Exam(Book book, String answers, String librarian, LocalDate date) {
         this.book = book;
         this.answers = new SimpleStringProperty(answers);
         this.librarian = new SimpleStringProperty(librarian);
@@ -73,11 +74,11 @@ public class Exam {
         this.librarian.set(librarian);
     }
 
-    public Date getDate() {
-        return date;
+    public String getDate() {
+        return date.format(DateTimeFormatter.ofPattern("10.04.2020"));
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }
