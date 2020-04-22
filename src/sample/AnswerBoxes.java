@@ -6,7 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.HBox;
 
 public class AnswerBoxes extends HBox implements ObservableValue<HBox> {
-    SwitchBox[] switchBoxes;
+    private SwitchBox[] switchBoxes;
 
     AnswerBoxes(String initialValues, boolean enabled, String size) {
         switchBoxes = new SwitchBox[6];

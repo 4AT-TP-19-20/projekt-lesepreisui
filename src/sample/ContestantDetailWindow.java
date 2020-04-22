@@ -61,13 +61,13 @@ public class ContestantDetailWindow {
         //Center
         TableView<Exam> tbv_exams = new TableView<>();
         TableColumn<Exam, String> column_title = new TableColumn<>("Titel");
-        column_title.setCellValueFactory(param -> ((Exam)((TableColumn.CellDataFeatures)param).getValue()).getBook().titleProperty());
+        column_title.setCellValueFactory(param -> param.getValue().getBook().titleProperty());
         TableColumn<Exam, String> column_authorFirstName = new TableColumn<>("Vorname Author");
-        column_authorFirstName.setCellValueFactory(param -> ((Exam)((TableColumn.CellDataFeatures)param).getValue()).getBook().authorFirstNameProperty());
+        column_authorFirstName.setCellValueFactory(param -> param.getValue().getBook().authorFirstNameProperty());
         TableColumn<Exam, String> column_authorLastName = new TableColumn<>("Nachname Author");
-        column_authorLastName.setCellValueFactory(param -> ((Exam)((TableColumn.CellDataFeatures)param).getValue()).getBook().authorLastNameProperty());
+        column_authorLastName.setCellValueFactory(param -> param.getValue().getBook().authorLastNameProperty());
         TableColumn<Exam, String> column_language = new TableColumn<>("Sprache");
-        column_language.setCellValueFactory(param -> ((Exam)((TableColumn.CellDataFeatures)param).getValue()).getBook().languageProperty());
+        column_language.setCellValueFactory(param -> param.getValue().getBook().languageProperty());
         TableColumn<Exam, String> column_date = new TableColumn<>("Datum");
         column_date.setCellValueFactory(new PropertyValueFactory<>("date"));
         TableColumn<Exam, String> column_points = new TableColumn<>("Punkte");
