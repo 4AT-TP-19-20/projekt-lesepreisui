@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class ContestantDetailWindow {
@@ -75,8 +76,10 @@ public class ContestantDetailWindow {
         column_passed.setCellValueFactory(new PropertyValueFactory<>("passed"));
         TableColumn<Exam, String> column_librarian = new TableColumn<>("Bibliothekar");
         column_librarian.setCellValueFactory(new PropertyValueFactory<>("librarian"));
+        TableColumn<Exam, HBox> column_answers = new TableColumn<>("Antworten");
+        column_answers.setCellValueFactory(param -> new AnswerBoxes(param.getValue().getAnswers(), false, "small"));
 
-        tbv_exams.getColumns().addAll(column_title, column_authorFirstName, column_authorLastName, column_language, column_date, column_points, column_passed);
+        tbv_exams.getColumns().addAll(column_title, column_authorFirstName, column_authorLastName, column_language, column_date, column_points, column_passed, column_answers);
 
         tbv_exams.setItems(contestant.getExams());
         borderPane.setCenter(tbv_exams);
@@ -89,7 +92,7 @@ public class ContestantDetailWindow {
         borderPane.setPadding(new Insets(10));
         BorderPane.setMargin(borderPane.getCenter(), new Insets(10,0,10,0));
         stage.setTitle("Detailansicht Teilnehmer");
-        stage.setScene(new Scene(borderPane, 500, 500));
+        stage.setScene(new Scene(borderPane, 1000, 800));
         stage.show();
     }
 
