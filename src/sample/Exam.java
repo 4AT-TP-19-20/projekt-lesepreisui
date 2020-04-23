@@ -8,13 +8,13 @@ import java.time.format.DateTimeFormatter;
 
 public class Exam {
     private Book book;
-    private StringProperty answers;
+    private IntegerPropertyArray answers;
     private StringProperty librarian;
     private LocalDate date;
 
-    public Exam(Book book, String answers, String librarian, LocalDate date) {
+    public Exam(Book book, int[] answers, String librarian, LocalDate date) {
         this.book = book;
-        this.answers = new SimpleStringProperty(answers);
+        this.answers = new IntegerPropertyArray(Data.answerCount, answers);
         this.librarian = new SimpleStringProperty(librarian);
         this.date = date;
     }
@@ -29,17 +29,13 @@ public class Exam {
     public boolean isPassed() {
         int correctAnswerCount = 0;
 
-        for (char answer : answers.get().toCharArray()) {
-            if (answer == 'R') {
+        for (int i = 0; i < Data.answerCount; i++) {
+            if (answers.getByIndex(i).get() == 1) {
                 correctAnswerCount++;
             }
         }
 
-        if (correctAnswerCount >= 4) {
-            return true;
-        } else {
-            return false;
-        }
+        return correctAnswerCount >= 4;
     }
 
     public Book getBook() {
@@ -50,15 +46,15 @@ public class Exam {
         this.book = book;
     }
 
-    public String getAnswers() {
+    public int[] getAnswers() {
         return answers.get();
     }
 
-    public StringProperty answersProperty() {
+    public IntegerPropertyArray answersProperty() {
         return answers;
     }
 
-    public void setAnswers(String answers) {
+    public void setAnswers(int[] answers) {
         this.answers.set(answers);
     }
 

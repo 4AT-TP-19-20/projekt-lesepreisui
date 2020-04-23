@@ -1,23 +1,30 @@
 package sample;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 public class SwitchBox extends StackPane {
-    private int state;
+    private IntegerProperty state;
     private int stateCount;
-    private boolean enabled;
+    private BooleanProperty editable;
     private ImageView[] images;
 
     SwitchBox(String size) {
         this(0, size, true, true);
     }
 
-    SwitchBox(int initialState, String size, boolean enabled, boolean canBeEmpty) {
-        this.enabled = enabled;
+    SwitchBox(IntegerProperty stateProperty, String size, boolean editable, boolean canBeEmpty) {
+        this(stateProperty.get(), size, editable, canBeEmpty);
+        state.bindBidirectional(stateProperty);
+    }
+
+    SwitchBox(int initialState, String size, boolean editable, boolean canBeEmpty) {
         int height = size.equals("small") ? 15 : 50;
-        setCanBeEmpty(canBeEmpty);
 
         images = new ImageView[3];
         images[0] = new ImageView("file:no.png");
@@ -30,46 +37,41 @@ public class SwitchBox extends StackPane {
         images[2].setFitHeight(height);
         images[2].setPreserveRatio(true);
 
-        this.state = initialState;
-        updateImages();
-
-        this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(size.equals("small") ? 1 : 3))));
+        this.state = new SimpleIntegerProperty(initialState);
+        state.addListener((observable, oldValue, newValue) -> updateImages());
+        this.editable = new SimpleBooleanProperty(editable);
         this.getChildren().addAll(images);
-        this.setOnMouseClicked(e -> {
-            if(enabled) {
-                nextState();
-            }
-        });
-    }
+        this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(size.equals("small") ? 1 : 3))));
+        this.setOnMouseClicked(e -> mouseAction());
+        setCanBeEmpty(canBeEmpty);
 
-    public void nextState() {
-        state = (state + 1) % stateCount;
         updateImages();
-    }
-
-    private void updateImages() {
-        for(int i = 0; i < images.length; i++) {
-            images[i].setVisible(i == state);
-        }
     }
 
     public int getState() {
+        return state.get();
+    }
+
+    public IntegerProperty stateProperty() {
         return state;
     }
 
     public void setState(int state) {
         if(state >= 0 && state <= stateCount) {
-            this.state = state;
-            updateImages();
+            this.state.set(state);
         }
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public boolean getEditable() {
+        return editable.get();
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public BooleanProperty editableProperty() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable.set(editable);
     }
 
     public boolean canBeEmpty() {
@@ -78,5 +80,21 @@ public class SwitchBox extends StackPane {
 
     public void setCanBeEmpty(boolean canBeEmpty) {
         stateCount = canBeEmpty ? 3 : 2;
+    }
+
+    private void nextState() {
+        state.set((state.get() + 1) % stateCount);
+    }
+
+    private void updateImages() {
+        for(int i = 0; i < images.length; i++) {
+            images[i].setVisible(i == state.get());
+        }
+    }
+
+    private void mouseAction() {
+        if(editable.get()) {
+            nextState();
+        }
     }
 }

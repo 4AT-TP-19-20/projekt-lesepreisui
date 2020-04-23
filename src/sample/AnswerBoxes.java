@@ -8,26 +8,23 @@ import javafx.scene.layout.HBox;
 
 public class AnswerBoxes extends HBox implements ObservableValue<HBox> {
     private SwitchBox[] switchBoxes;
+    private IntegerPropertyArray values;
 
-    AnswerBoxes(String initialValues, boolean enabled, String size) {
-        switchBoxes = new SwitchBox[6];
+    AnswerBoxes(IntegerPropertyArray valueProperties, boolean enabled, String size) {
+        switchBoxes = new SwitchBox[Data.answerCount];
+        values = valueProperties;
 
-        for(int i = 0; i < 6; i++) {
-            int initial = 2;
-            if(initialValues.length() > i) {
-                if(initialValues.charAt(i) == 'F') {
-                    initial = 0;
-                }
-                else if(initialValues.charAt(i) == 'R') {
-                    initial = 1;
-                }
-            }
-            switchBoxes[i] = new SwitchBox(initial, size, enabled, true);
+        for(int i = 0; i < Data.answerCount; i++) {
+            switchBoxes[i] = new SwitchBox(values.getByIndex(i), size, enabled, true);
         }
 
         this.setSpacing(size.equals("small") ? 5 : 10);
         this.setAlignment(Pos.CENTER);
         this.getChildren().addAll(switchBoxes);
+    }
+
+    public SwitchBox[] getSwitchBoxes() {
+        return switchBoxes;
     }
 
     @Override

@@ -81,12 +81,12 @@ public class ContestantDetailWindow {
         TableColumn<Exam, String> column_passed = new TableColumn<>("Bestanden");
         column_passed.setCellFactory(param -> new AlignedTableCell<>());
         column_passed.setCellValueFactory(new PropertyValueFactory<>("passed"));
-        TableColumn<Exam, String> column_librarian = new TableColumn<>("Bibliothekar");
+        TableColumn<Exam, String> column_librarian = new TableColumn<>("BibliothekarIn");
         column_librarian.setCellFactory(param -> new AlignedTableCell<>());
         column_librarian.setCellValueFactory(new PropertyValueFactory<>("librarian"));
         TableColumn<Exam, HBox> column_answers = new TableColumn<>("Antworten");
         column_answers.setCellFactory(param -> new AlignedTableCell<>());
-        column_answers.setCellValueFactory(param -> new AnswerBoxes(param.getValue().getAnswers(), false, "small"));
+        column_answers.setCellValueFactory(param -> new AnswerBoxes(param.getValue().answersProperty(), false, "small"));
 
         tbv_exams.getColumns().addAll(column_title, column_authorFirstName, column_authorLastName, column_language, column_date, column_points, column_passed, column_answers);
         tbv_exams.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
