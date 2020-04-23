@@ -16,22 +16,19 @@ import javafx.scene.layout.Priority;
 import javafx.util.Callback;
 
 public class ContestantTab {
+    private static TableView<Contestant> tbv_contestants = new TableView<>();
+
     public static BorderPane generate() {
         BorderPane borderPane = new BorderPane();
 
         //Top
-        HBox topItems = new HBox();
         TextField txt_search = new TextField();
         txt_search.setPromptText("Suche nach Name, Klasse, ...");
         txt_search.setMaxWidth(10000);
-        Button btn_search = new Button("Suche");
-        HBox.setHgrow(txt_search, Priority.ALWAYS);
-        topItems.getChildren().addAll(txt_search, btn_search);
-        topItems.setSpacing(5);
-        borderPane.setTop(topItems);
+        txt_search.textProperty().addListener((observable, oldValue, newValue) -> textChangeListener(newValue));
+        borderPane.setTop(txt_search);
 
         //Center
-        TableView<Contestant> tbv_contestants = new TableView<>();
         TableColumn<Contestant, String> column_firstName = new TableColumn<>("Vorname");
         column_firstName.setCellFactory(param -> new AlignedTableCell<>());
         column_firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -49,7 +46,7 @@ public class ContestantTab {
         column_points.setCellValueFactory(new PropertyValueFactory<>("points"));
         tbv_contestants.getColumns().addAll(column_firstName, column_lastName, column_grade, column_bookCount, column_points);
         tbv_contestants.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tbv_contestants.setItems(Data.contestants);
+        tbv_contestants.getItems().addAll(Data.contestants);
         tbv_contestants.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
                 tbv_contestants.getSelectionModel().clearSelection();
@@ -71,5 +68,19 @@ public class ContestantTab {
         BorderPane.setMargin(borderPane.getCenter(), new Insets(10, 0, 10, 0));
         borderPane.setPadding(new Insets(10));
         return borderPane;
+    }
+
+    private static void textChangeListener(String newValue) {
+        tbv_contestants.getItems().clear();
+        if(newValue.trim().isEmpty()) {
+            tbv_contestants.getItems().addAll(Data.contestants);
+            return;
+        }
+
+        for(Contestant contestant : Data.contestants) {
+            if(contestant.getFirstName().contains(newValue) || contestant.getLastName().contains(newValue) || contestant.getGrade().contains(newValue)) {
+                tbv_contestants.getItems().add(contestant);
+            }
+        }
     }
 }
