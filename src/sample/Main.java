@@ -13,7 +13,7 @@ public class Main extends Application {
         Data.init();
         root.getTabs().add(new Tab("Teilnehmer", ContestantTab.generate()));
         root.getTabs().add(new Tab("Prüfungen"));
-        root.getTabs().add(new Tab("Bücher"));
+        root.getTabs().add(new Tab("Bücher", BookTab.generate()));
         root.getTabs().add(new Tab("Verlosung"));
         root.getTabs().add(new Tab("Einstellungen"));
         root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
