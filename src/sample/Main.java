@@ -18,7 +18,7 @@ public class Main extends Application {
         root.getTabs().add(new Tab("Einstellungen"));
         root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         primaryStage.setTitle("LesePreisUI");
-        primaryStage.setScene(new Scene(root, 800, 800));
+        primaryStage.setScene(new Scene(root, 1280, 1000));
         primaryStage.show();
     }
 

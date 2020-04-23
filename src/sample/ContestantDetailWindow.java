@@ -61,27 +61,37 @@ public class ContestantDetailWindow {
         //Center
         TableView<Exam> tbv_exams = new TableView<>();
         TableColumn<Exam, String> column_title = new TableColumn<>("Titel");
+        column_title.setCellFactory(param -> new AlignedTableCell<>());
         column_title.setCellValueFactory(param -> param.getValue().getBook().titleProperty());
         TableColumn<Exam, String> column_authorFirstName = new TableColumn<>("Vorname Author");
+        column_authorFirstName.setCellFactory(param -> new AlignedTableCell<>());
         column_authorFirstName.setCellValueFactory(param -> param.getValue().getBook().authorFirstNameProperty());
         TableColumn<Exam, String> column_authorLastName = new TableColumn<>("Nachname Author");
+        column_authorLastName.setCellFactory(param -> new AlignedTableCell<>());
         column_authorLastName.setCellValueFactory(param -> param.getValue().getBook().authorLastNameProperty());
         TableColumn<Exam, String> column_language = new TableColumn<>("Sprache");
+        column_language.setCellFactory(param -> new AlignedTableCell<>());
         column_language.setCellValueFactory(param -> param.getValue().getBook().languageProperty());
         TableColumn<Exam, String> column_date = new TableColumn<>("Datum");
+        column_date.setCellFactory(param -> new AlignedTableCell<>());
         column_date.setCellValueFactory(new PropertyValueFactory<>("date"));
         TableColumn<Exam, String> column_points = new TableColumn<>("Punkte");
+        column_points.setCellFactory(param -> new AlignedTableCell<>());
         column_points.setCellValueFactory(new PropertyValueFactory<>("points"));
         TableColumn<Exam, String> column_passed = new TableColumn<>("Bestanden");
+        column_passed.setCellFactory(param -> new AlignedTableCell<>());
         column_passed.setCellValueFactory(new PropertyValueFactory<>("passed"));
         TableColumn<Exam, String> column_librarian = new TableColumn<>("Bibliothekar");
+        column_librarian.setCellFactory(param -> new AlignedTableCell<>());
         column_librarian.setCellValueFactory(new PropertyValueFactory<>("librarian"));
         TableColumn<Exam, HBox> column_answers = new TableColumn<>("Antworten");
+        column_answers.setCellFactory(param -> new AlignedTableCell<>());
         column_answers.setCellValueFactory(param -> new AnswerBoxes(param.getValue().getAnswers(), false, "small"));
 
         tbv_exams.getColumns().addAll(column_title, column_authorFirstName, column_authorLastName, column_language, column_date, column_points, column_passed, column_answers);
-
+        tbv_exams.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tbv_exams.setItems(contestant.getExams());
+
         borderPane.setCenter(tbv_exams);
 
         //Bottom
@@ -92,7 +102,7 @@ public class ContestantDetailWindow {
         borderPane.setPadding(new Insets(10));
         BorderPane.setMargin(borderPane.getCenter(), new Insets(10,0,10,0));
         stage.setTitle("Detailansicht Teilnehmer");
-        stage.setScene(new Scene(borderPane, 1000, 800));
+        stage.setScene(new Scene(borderPane, 1280, 1000));
         stage.show();
     }
 

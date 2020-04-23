@@ -3,6 +3,7 @@ package sample;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 
 public class AnswerBoxes extends HBox implements ObservableValue<HBox> {
@@ -25,6 +26,7 @@ public class AnswerBoxes extends HBox implements ObservableValue<HBox> {
         }
 
         this.setSpacing(size.equals("small") ? 5 : 10);
+        this.setAlignment(Pos.CENTER);
         this.getChildren().addAll(switchBoxes);
     }
 
