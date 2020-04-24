@@ -15,7 +15,7 @@ public class SwitchBox extends StackPane {
     private ImageView[] images;
 
     SwitchBox(String size) {
-        this(0, size, true, true);
+        this(2, size, true, true);
     }
 
     SwitchBox(IntegerProperty stateProperty, String size, boolean editable, boolean canBeEmpty) {
