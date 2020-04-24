@@ -79,7 +79,7 @@ public class Exam {
     }
 
     public String getDate() {
-        return date.format(DateTimeFormatter.ofPattern("10.04.2020"));
+        return date.format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
     }
 
     public void setDate(LocalDate date) {
