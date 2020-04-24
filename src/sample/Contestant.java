@@ -1,9 +1,6 @@
 package sample;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -12,43 +9,22 @@ public class Contestant {
     private StringProperty lastName;
     private StringProperty grade;
     private BooleanProperty isGroupMember;
+    private IntegerProperty points;
+    private IntegerProperty bookCount;
     private ObservableList<Exam> exams;
 
     public Contestant(String firstName, String lastName, String grade) {
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.grade = new SimpleStringProperty(grade);
-
+        this.points = new SimpleIntegerProperty();
+        this.bookCount = new SimpleIntegerProperty();
         this.isGroupMember = new SimpleBooleanProperty(false);
-
         exams = FXCollections.observableArrayList();
     }
 
     public Contestant() {
         this("", "", "");
-    }
-
-
-    public int getPoints() {
-        int points = 0;
-
-        for(Exam exam : exams) {
-            points += exam.getPoints();
-        }
-
-        return points;
-    }
-
-    public int getBookCount() {
-        int bookCount = 0;
-
-        for(Exam exam : exams) {
-            if(exam.isPassed()) {
-                bookCount++;
-            }
-        }
-
-        return bookCount;
     }
 
     public String getFirstName() {
@@ -99,15 +75,75 @@ public class Contestant {
         isGroupMember.set(groupMember);
     }
 
+    public int getPoints() {
+        return points.get();
+    }
+
+    public IntegerProperty pointsProperty() {
+        return points;
+    }
+
+    public int getBookCount() {
+        int bookCount = 0;
+
+        for(Exam exam : exams) {
+            if(exam.getPassed() == 1) {
+                bookCount++;
+            }
+        }
+
+        return bookCount;
+    }
+
+    public IntegerProperty bookCountProperty() {
+        return bookCount;
+    }
+
     public ObservableList<Exam> getExams() {
         return exams;
     }
 
     public void setExams(ObservableList<Exam> exams) {
+        for(Exam exam : exams) {
+            exam.pointsProperty().addListener(param -> pointsUpdate());
+            exam.passedProperty().addListener(param -> bookCountUpdate());
+        }
         this.exams = exams;
     }
 
     public void addExam(Exam exam) {
+        exam.pointsProperty().addListener(param -> pointsUpdate());
+        pointsUpdate();
+        exam.passedProperty().addListener(param -> bookCountUpdate());
+        bookCountUpdate();
         exams.add(exam);
+    }
+
+    public void removeExam(Exam exam) {
+        exam.pointsProperty().removeListener(param -> pointsUpdate());
+        exam.passedProperty().removeListener(param -> bookCountUpdate());
+        exams.remove(exam);
+    }
+
+    private void pointsUpdate() {
+        int newPoints = 0;
+
+        for(Exam exam : exams) {
+            newPoints += exam.getPoints();
+        }
+
+        points.set(newPoints);
+    }
+
+    private void bookCountUpdate() {
+        int newBookCount = 0;
+
+        for(Exam exam : exams) {
+            if(exam.getPassed() == 1) {
+                newBookCount++;
+            }
+        }
+
+        bookCount.set(newBookCount);
     }
 }

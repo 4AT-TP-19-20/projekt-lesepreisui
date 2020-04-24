@@ -2,6 +2,7 @@ package sample;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
 
 public class IntegerPropertyArray {
     private int size;
@@ -37,6 +38,12 @@ public class IntegerPropertyArray {
     public void set(int[] array) {
         for (int i = 0; i < size; i++) {
             properties[i].set(array[i]);
+        }
+    }
+
+    public void addListener(ChangeListener<? super Number> changeListener) {
+        for(IntegerProperty property : properties) {
+            property.addListener(changeListener);
         }
     }
 }
