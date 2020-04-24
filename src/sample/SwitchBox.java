@@ -4,11 +4,13 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-public class SwitchBox extends StackPane {
+public class SwitchBox extends VBox {
+    private StackPane stackPane;
     private IntegerProperty state;
     private int stateCount;
     private BooleanProperty editable;
@@ -37,13 +39,15 @@ public class SwitchBox extends StackPane {
         images[2].setFitHeight(height);
         images[2].setPreserveRatio(true);
 
+        stackPane = new StackPane(images);
         this.state = new SimpleIntegerProperty(initialState);
         state.addListener((observable, oldValue, newValue) -> updateImages());
         this.editable = new SimpleBooleanProperty(editable);
-        this.getChildren().addAll(images);
-        this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(size.equals("small") ? 1 : 3))));
-        this.setOnMouseClicked(e -> mouseAction());
+        stackPane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(size.equals("small") ? 1 : 3))));
+        stackPane.setOnMouseClicked(e -> mouseAction());
         setCanBeEmpty(canBeEmpty);
+        this.setAlignment(Pos.CENTER);
+        this.getChildren().add(stackPane);
 
         updateImages();
     }
