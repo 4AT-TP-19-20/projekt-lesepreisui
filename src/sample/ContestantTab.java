@@ -71,14 +71,18 @@ public class ContestantTab {
     }
 
     private static void textChangeListener(String newValue) {
+        newValue = newValue.trim().toLowerCase();
         tbv_contestants.getItems().clear();
+
         if(newValue.trim().isEmpty()) {
             tbv_contestants.getItems().addAll(Data.contestants);
             return;
         }
 
         for(Contestant contestant : Data.contestants) {
-            if(contestant.getFirstName().contains(newValue) || contestant.getLastName().contains(newValue) || contestant.getGrade().contains(newValue)) {
+            if(contestant.getFirstName().toLowerCase().contains(newValue)
+                    || contestant.getLastName().toLowerCase().contains(newValue)
+                    || contestant.getGrade().toLowerCase().contains(newValue)) {
                 tbv_contestants.getItems().add(contestant);
             }
         }

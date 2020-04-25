@@ -52,14 +52,19 @@ public class BookTab {
     }
 
     private static void textChangeListener(String newValue) {
+        newValue = newValue.trim().toLowerCase();
         tbv_books.getItems().clear();
+
         if(newValue.trim().isEmpty()) {
             tbv_books.getItems().addAll(Data.books);
             return;
         }
 
         for(Book book : Data.books) {
-            if(book.getTitle().contains(newValue) || book.getAuthorFirstName().contains(newValue) || book.getAuthorLastName().contains(newValue) || book.getLanguage().contains(newValue)) {
+            if(book.getTitle().toLowerCase().contains(newValue)
+                    || book.getAuthorFirstName().toLowerCase().contains(newValue)
+                    || book.getAuthorLastName().toLowerCase().contains(newValue)
+                    || book.getLanguage().toLowerCase().contains(newValue)) {
                 tbv_books.getItems().add(book);
             }
         }
