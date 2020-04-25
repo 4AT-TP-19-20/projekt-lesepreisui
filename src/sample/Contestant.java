@@ -113,10 +113,10 @@ public class Contestant {
 
     public void addExam(Exam exam) {
         exam.pointsProperty().addListener(param -> pointsUpdate());
-        pointsUpdate();
         exam.passedProperty().addListener(param -> bookCountUpdate());
-        bookCountUpdate();
         exams.add(exam);
+        pointsUpdate();
+        bookCountUpdate();
     }
 
     public void removeExam(Exam exam) {
