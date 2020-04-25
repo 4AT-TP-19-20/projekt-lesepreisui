@@ -14,12 +14,16 @@ public class Main extends Application {
         root.getTabs().add(new Tab("Teilnehmer", ContestantTab.generate()));
         root.getTabs().add(new Tab("Prüfungen"));
         root.getTabs().add(new Tab("Bücher", BookTab.generate()));
-        root.getTabs().add(new Tab("Verlosung"));
+        root.getTabs().add(new Tab("Verlosung", DrawingTab.generate()));
         root.getTabs().add(new Tab("Einstellungen"));
         root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         primaryStage.setTitle("LesePreisUI");
-        primaryStage.setScene(new Scene(root, 1280, 1000));
+        Scene main = new Scene(root, 1280, 1000);
+        primaryStage.setScene(main);
         primaryStage.show();
+        //Link CSS Stylesheet
+        main.getStylesheets().add("stylesheet.css");
+
     }
 
 

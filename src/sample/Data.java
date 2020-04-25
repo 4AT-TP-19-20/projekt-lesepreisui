@@ -37,6 +37,7 @@ public class Data {
         contestants.get(2).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
         contestants.get(2).addExam(new Exam(books.get(2), new int[]{0,0,1,1,1,1}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
         contestants.get(3).addExam(new Exam(books.get(2), new int[]{1,0,1,1,1,2}, "Dorothea", LocalDate.parse("22.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
+
     }
 
     public static void pickWinners() {
@@ -72,6 +73,7 @@ public class Data {
                     currentPos += contestant.getKey().getPoints();
                 }
             }
+            //prizeCount--;
         }
 
         for(Contestant contestant : winners) {

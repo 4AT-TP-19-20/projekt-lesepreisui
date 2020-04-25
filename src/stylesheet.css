@@ -1,0 +1,21 @@
+#drawing-button {
+    -fx-font: 25px "Century Gothic";
+    -fx-padding: 30px;
+    -fx-border-radius: 25px;
+    -fx-background-color: #007d43;
+    -fx-text-fill: white;
+}
+#winner{
+    -fx-text-fill: black;
+    -fx-font: 80px "Century Gothic";
+    -fx-text-alignment: center;
+
+    -fx-stroke: 10px;
+}
+#drawing-button:hover{
+    -fx-background-color: #004d26;
+}
+
+#black-background{
+    -fx-background-color: black;
+}
