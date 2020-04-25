@@ -5,6 +5,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -108,5 +110,27 @@ public class Exam {
         else {
             passed.set(2);
         }
+    }
+
+    public Element appendExam(Document doc, Element nodeExams){
+        Element examElement = doc.createElement("Exam");
+        Element bookTitleElement = doc.createElement("BookTitle");
+        Element answersElement = doc.createElement("Answers");
+        Element librarianElement = doc.createElement("Librarian");
+        Element dateElement = doc.createElement("Date");
+
+        bookTitleElement.appendChild(doc.createTextNode(this.book.getTitle()));
+        answersElement.appendChild(doc.createTextNode(this.answers.toCompactString()));
+        librarianElement.appendChild(doc.createTextNode(this.getLibrarian()));
+        dateElement.appendChild(doc.createTextNode(this.getDate()));
+
+        examElement.appendChild(bookTitleElement);
+        examElement.appendChild(answersElement);
+        examElement.appendChild(librarianElement);
+        examElement.appendChild(dateElement);
+
+        nodeExams.appendChild(examElement);
+
+        return nodeExams;
     }
 }

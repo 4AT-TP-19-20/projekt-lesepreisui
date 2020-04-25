@@ -4,6 +4,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class Book {
     private StringProperty title;
@@ -79,5 +81,28 @@ public class Book {
 
     public void setPoints(int points) {
         this.points.set(points);
+    }
+
+    public Element getXMLNode(Document doc){
+        Element book = doc.createElement("Book");
+        Element titleElement = doc.createElement("Title");
+        Element authorFirstNameElement = doc.createElement("AuthorFirstName");
+        Element authorLastNameElement = doc.createElement("AuthorLastName");
+        Element languageElement = doc.createElement("Language");
+        Element pointsElement = doc.createElement("Points");
+
+        titleElement.appendChild(doc.createTextNode(this.getTitle()));
+        authorFirstNameElement.appendChild(doc.createTextNode(this.getAuthorFirstName()));
+        authorLastNameElement.appendChild(doc.createTextNode(this.getAuthorLastName()));
+        languageElement.appendChild(doc.createTextNode(this.getLanguage()));
+        pointsElement.appendChild(doc.createTextNode(""+this.getPoints()));
+
+        book.appendChild(titleElement);
+        book.appendChild(authorFirstNameElement);
+        book.appendChild(authorLastNameElement);
+        book.appendChild(languageElement);
+        book.appendChild(pointsElement);
+
+        return book;
     }
 }

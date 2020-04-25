@@ -3,6 +3,8 @@ package sample;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class Contestant {
     private StringProperty firstName;
@@ -145,5 +147,30 @@ public class Contestant {
         }
 
         bookCount.set(newBookCount);
+    }
+
+    public Element getXMLNode(Document doc){
+        Element contestantElement = doc.createElement("Contestant");
+        Element firstNameElement = doc.createElement("FirstName");
+        Element lastNameElement = doc.createElement("LastName");
+        Element gradeElement = doc.createElement("Grade");
+        Element isGroupMemberElement = doc.createElement("IsGroupMember");
+        Element examsElement = doc.createElement("Exams");
+
+        firstNameElement.appendChild(doc.createTextNode(this.getFirstName()));
+        lastNameElement.appendChild(doc.createTextNode(this.getLastName()));
+        gradeElement.appendChild(doc.createTextNode(this.getGrade()));
+        isGroupMemberElement.appendChild(doc.createTextNode("" + this.isGroupMember()));
+        for (Exam exam:exams) {
+            examsElement=exam.appendExam(doc, examsElement);
+        }
+
+        contestantElement.appendChild(firstNameElement);
+        contestantElement.appendChild(lastNameElement);
+        contestantElement.appendChild(gradeElement);
+        contestantElement.appendChild(isGroupMemberElement);
+        contestantElement.appendChild(examsElement);
+
+        return contestantElement;
     }
 }

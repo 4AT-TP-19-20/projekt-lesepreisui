@@ -46,4 +46,14 @@ public class IntegerPropertyArray {
             property.addListener(changeListener);
         }
     }
+
+    public String toCompactString() {
+        String ret = "";
+
+        for(IntegerProperty property : properties) {
+            ret += String.valueOf(property.get());
+        }
+
+        return ret;
+    }
 }
