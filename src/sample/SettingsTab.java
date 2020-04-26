@@ -2,29 +2,36 @@ package sample;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class SettingsTab {
-    //General
+    //Exam
     private static IntegerProperty maxAnswersCount = new SimpleIntegerProperty(6);
     private static IntegerProperty minCorrectAnswers = new SimpleIntegerProperty(4);
 
     //Drawing
-    private static IntegerProperty minBookCount = new SimpleIntegerProperty(3);
+    private static IntegerProperty minBookCount = new SimpleIntegerProperty(1);
     private static IntegerProperty maxBookCount = new SimpleIntegerProperty(40);
     private static IntegerProperty maxPicks = new SimpleIntegerProperty(3);
     private static IntegerProperty prizeCount = new SimpleIntegerProperty(10);
+    private static LocalDate groupContestStartDate;
 
-    //Languages
-    //Date Group
+    //Book
+    private static ObservableList<String> languages;
 
     public static GridPane generate() {
         GridPane gridPane = new GridPane();
 
-        gridPane.add(new Label("Generelle Einstellugen"),0,0);
+        gridPane.add(new Label("Prüfungeneinstellungen"),0,0);
         gridPane.add(new Label("Anzahl an gestellten Fragen"),0,1);
         TextField txt_maxAnswerCount = new TextField();
         txt_maxAnswerCount.textProperty().bindBidirectional(maxAnswersCount, new StringToInt());
@@ -33,8 +40,10 @@ public class SettingsTab {
         TextField txt_minCorrectAnswers = new TextField();
         txt_minCorrectAnswers.textProperty().bindBidirectional(minCorrectAnswers, new StringToInt());
         gridPane.add(txt_minCorrectAnswers,1,2);
+
         gridPane.add(new Canvas(1,20),0,3);
-        gridPane.add(new Label("Einstellungen für die Verlosung"),0,4);
+
+        gridPane.add(new Label("Verlosungseinstellungen"),0,4);
         gridPane.add(new Label("Mindestanzahl gelesener Bücher"),0,5);
         TextField txt_minBookCount = new TextField();
         txt_minBookCount.textProperty().bindBidirectional(minBookCount, new StringToInt());
@@ -52,6 +61,14 @@ public class SettingsTab {
         txt_prizeCount.textProperty().bindBidirectional(prizeCount, new StringToInt());
         gridPane.add(txt_prizeCount,1,8);
 
+        gridPane.add(new Canvas(1,20),0,9);
+
+        gridPane.add(new Label("Bucheinstellungen"),0,10);
+        gridPane.add(new Label("Sprachen"),0,11);
+
+        gridPane.setPadding(new Insets(10));
+        gridPane.setVgap(5);
+        gridPane.setHgap(5);
         return gridPane;
     }
 
@@ -125,5 +142,21 @@ public class SettingsTab {
 
     public static void setPrizeCount(int prizeCount) {
         SettingsTab.prizeCount.set(prizeCount);
+    }
+
+    public static String getGroupContestStartDate() {
+        return groupContestStartDate.format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+    }
+
+    public static void setGroupContestStartDate(LocalDate date) {
+        SettingsTab.groupContestStartDate = date;
+    }
+
+    public static ObservableList<String> getLanguages() {
+        return languages;
+    }
+
+    public static void setLanguages(ObservableList<String> languages) {
+        SettingsTab.languages = languages;
     }
 }
