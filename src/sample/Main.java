@@ -30,14 +30,13 @@ public class Main extends Application {
         root.getTabs().add(new Tab("Einstellungen"));
         root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
-
         primaryStage.setTitle("LesePreisUI");
         //Get Screen Height
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
         //Loading Screen
         StackPane loadingPane = loadingScreen();
-        Scene loading = new Scene(loadingPane, 1280, screenBounds.getHeight()-25);
+        Scene loading = new Scene(loadingPane, 1280, screenBounds.getHeight() - 25);
         primaryStage.setScene(loading);
         primaryStage.show();
 
@@ -58,21 +57,19 @@ public class Main extends Application {
         fadeIn.setCycleCount(1);
         fadeIn.play();
         loadingPane.getChildren().add(startBtn);
-        startBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                //Main Screen
-                Scene main = new Scene(root, 1280, screenBounds.getHeight()-25);
-                main.getStylesheets().add("stylesheet.css");
-                primaryStage.setScene(main);
-                root.requestFocus();
-            }
+        startBtn.setOnAction(actionEvent -> {
+            //Main Screen
+            Scene main = new Scene(root, 1280, screenBounds.getHeight() - 25);
+            main.getStylesheets().add("stylesheet.css");
+            primaryStage.setScene(main);
+            root.requestFocus();
         });
 
     }
 
     public static ProgressBar bar = new ProgressBar();
-    public StackPane loadingScreen() throws InterruptedException {
+
+    public StackPane loadingScreen() {
         StackPane loadingPane = new StackPane();
         loadingPane.setId("loadingPane");
         //Logo
@@ -90,15 +87,12 @@ public class Main extends Application {
         fadeIn.play();
         loadingPane.getChildren().add(logo);
 
-
-
         //ProgressBar
         bar.setProgress(0);
         bar.setStyle("-fx-accent: rgb(0,125,67)");
         bar.setId("progressBar");
         bar.setTranslateY(150);
         loadingPane.getChildren().add(bar);
-
 
         Task<Void> sleeper = new Task<Void>() {
             @Override
@@ -110,8 +104,6 @@ public class Main extends Application {
 
         return loadingPane;
     }
-
-
 
     public static void main(String[] args) {
         launch(args);
