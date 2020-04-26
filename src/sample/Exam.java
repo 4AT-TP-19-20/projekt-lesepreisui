@@ -21,7 +21,7 @@ public class Exam {
 
     public Exam(Book book, int[] initialAnswers, String librarian, LocalDate date) {
         this.book = book;
-        this.answers = new IntegerPropertyArray(Data.answerCount, initialAnswers);
+        this.answers = new IntegerPropertyArray(SettingsTab.getMaxAnswersCount(), initialAnswers);
         this.librarian = new SimpleStringProperty(librarian);
         this.date = date;
 

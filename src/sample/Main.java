@@ -33,7 +33,7 @@ public class Main extends Application {
         root.getTabs().add(new Tab("Prüfungen"));
         root.getTabs().add(new Tab("Bücher", BookTab.generate()));
         root.getTabs().add(new Tab("Verlosung", DrawingTab.generate()));
-        root.getTabs().add(new Tab("Einstellungen"));
+        root.getTabs().add(new Tab("Einstellungen", SettingsTab.generate()));
         root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         base = generateTopBar(base, root, primaryStage);
 

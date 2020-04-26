@@ -9,13 +9,7 @@ import java.util.*;
 
 public class Data {
     public static ObservableList<Contestant> contestants;
-    public static Contestant[] winners;
     public static ObservableList<Book> books;
-    public static int answerCount = 6;
-    public static int prizeCount = 10;
-
-    public static int minBookCount = 1; //3
-    public static int maxPicks = 3;
     public static String currentUser = "Dorothea";
 
     public static void init() {
@@ -40,46 +34,5 @@ public class Data {
         contestants.get(2).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
         contestants.get(2).addExam(new Exam(books.get(2), new int[]{0,0,1,1,1,1}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
         contestants.get(3).addExam(new Exam(books.get(2), new int[]{1,0,1,1,1,2}, "Dorothea", LocalDate.parse("22.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-
-    }
-
-    public static void pickWinners() {
-        int totalPoints = 0;
-        ArrayList<Map.Entry<Contestant, Integer>> qualifiedContestants = new ArrayList<>();
-
-        for(Contestant contestant : contestants) {
-            if(contestant.getBookCount() >= minBookCount) {
-                qualifiedContestants.add(new AbstractMap.SimpleEntry<>(contestant, 0));
-                totalPoints += contestant.getPoints();
-            }
-        }
-
-        Random random = new Random();
-        winners = new Contestant[prizeCount];
-        for(int i = 0; i < prizeCount; i++) {
-            int winningEntry = random.nextInt(totalPoints);
-            int currentPos = 0;
-            for(Map.Entry<Contestant, Integer> contestant : qualifiedContestants) {
-                if(winningEntry < currentPos + contestant.getKey().getPoints()) {
-                    if(contestant.getValue() < 3) {
-                        winners[i] = contestant.getKey();
-                        System.out.println(contestant);
-                        contestant.setValue(contestant.getValue() + 1);
-                        break;
-                    }
-                    else {
-                        i--;
-                        break;
-                    }
-                }
-                else {
-                    currentPos += contestant.getKey().getPoints();
-                }
-            }
-        }
-
-        for(Contestant contestant : winners) {
-            System.out.println(contestant.getFirstName() + " has won!");
-        }
     }
 }
