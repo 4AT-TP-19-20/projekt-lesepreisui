@@ -23,3 +23,13 @@
     -fx-font: 20px "Century Gothic";
     -fx-text-fill: white;
 }
+#loadingPane{
+    -fx-background-color: #282828;
+}
+#progressBar{
+    -fx-min-width: 900px;
+    -fx-border-radius: 50px;
+    -fx-border-color: black;
+    -fx-border-width: 5;
+    -fx-background-color: #282828;
+}
