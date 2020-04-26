@@ -9,9 +9,11 @@ import java.util.*;
 
 public class Data {
     public static ObservableList<Contestant> contestants;
+    public static Contestant[] winners;
     public static ObservableList<Book> books;
     public static int answerCount = 6;
     public static int prizeCount = 10;
+
     public static int minBookCount = 1; //3
     public static int maxPicks = 3;
 
@@ -52,7 +54,7 @@ public class Data {
         }
 
         Random random = new Random();
-        Contestant[] winners = new Contestant[prizeCount];
+        winners = new Contestant[prizeCount];
         for(int i = 0; i < prizeCount; i++) {
             int winningEntry = random.nextInt(totalPoints);
             int currentPos = 0;
@@ -73,7 +75,6 @@ public class Data {
                     currentPos += contestant.getKey().getPoints();
                 }
             }
-            //prizeCount--;
         }
 
         for(Contestant contestant : winners) {

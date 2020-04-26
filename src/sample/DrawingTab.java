@@ -15,18 +15,41 @@ import java.io.File;
 
 public class DrawingTab {
         public static StackPane stackPane = new StackPane();
-
+        public static int remainingPrizes = Data.prizeCount;
+        public static String[] winner = new String[Data.prizeCount];
+        public static int i=0;
 
         public static StackPane generate() {
+            String remainingTxt="";
+
+            //START Animation BTN
             stackPane.setId("black-background");
             Button startBtn = new Button("Gewinner Auslosen");
             startBtn.setId("drawing-button");
-            stackPane.getChildren().add(startBtn);
+
+            //Remaining Prizes
+            if(remainingPrizes>0){
+                remainingTxt = "Verbleibende Preise: "+ remainingPrizes;
+                stackPane.getChildren().add(startBtn);
+            }
+            else{
+                remainingTxt = "Alle Preise wurden verlost!";
+            }
+            Label remainingLbl = new Label(String.valueOf(remainingTxt));
+            remainingLbl.setId("remaining");
+            remainingLbl.setTranslateY(350);
+            stackPane.getChildren().add(remainingLbl);
+
             //StartBTN EventHandler
             startBtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
+                    if(remainingPrizes==Data.prizeCount) {
+                        Data.pickWinners();
+                    }
                     stackPane = startAnimation(stackPane);
+                    stackPane.getChildren().remove(remainingLbl);
+                    remainingPrizes--;
                 }
             });
             return stackPane;
@@ -39,20 +62,12 @@ public class DrawingTab {
             mediaPlayer.setAutoPlay(true);
             stackPane.getChildren().add(mediaView);
 
-            //On End of Animation
-            mediaPlayer.setOnEndOfMedia(() -> {
-                mediaView.setVisible(false);
-                mediaPlayer.stop();
-                mediaPlayer.dispose();
-                generate();
-            });
-
             //DELAY to show Name
             Task<Void> sleeper = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(5100);
                     } catch (InterruptedException e) {
                     }
                     return null;
@@ -66,19 +81,27 @@ public class DrawingTab {
             });
             new Thread(sleeper).start();
 
+            //On End of Animation
+            mediaPlayer.setOnEndOfMedia(() -> {
+                mediaView.setVisible(false);
+                mediaPlayer.stop();
+                mediaPlayer.dispose();
+                stackPane.getChildren().clear();
+                generate();
+            });
+
             return stackPane;
         }
 
 
         public static void showWinner(StackPane stackPane) {
-            Data.pickWinners();
-            String winnerName = "JEFF";
-
-            Label winner = new Label("Gewinner:\n"+ winnerName.toUpperCase());
-            winner.setId("winner");
-            winner.setTranslateY(-50);
-            winner.setTranslateX(-50);
-            stackPane.getChildren().add(winner);
+            winner[i] = Data.winners[i].getFirstName() +" "+ Data.winners[i].getLastName() +"\n"+ Data.winners[i].getGrade();
+           Label winnerLbl = new Label("Gewinner:\n"+ winner[i]);
+            winnerLbl.setId("winner");
+            winnerLbl.setTranslateY(-50);
+            winnerLbl.setTranslateX(-70);
+            stackPane.getChildren().add(winnerLbl);
+            i++;
         }
 
 }

@@ -19,3 +19,7 @@
 #black-background{
     -fx-background-color: black;
 }
+#remaining{
+    -fx-font: 20px "Century Gothic";
+    -fx-text-fill: white;
+}
