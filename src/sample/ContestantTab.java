@@ -1,13 +1,13 @@
 package sample;
 
 
-import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -59,6 +59,7 @@ public class ContestantTab {
 
         //Bottom
         Button btn_addContestant = new Button("Neuer Teilnehmer");
+        btn_addContestant.setId("custom-button");
         btn_addContestant.setMaxWidth(10000);
         borderPane.setBottom(btn_addContestant);
 

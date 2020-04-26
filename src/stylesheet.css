@@ -5,15 +5,22 @@
     -fx-background-color: #007d43;
     -fx-text-fill: white;
 }
+#custom-button{
+    -fx-font: 20px "Century Gothic";
+    -fx-padding: 15px;
+    -fx-border-radius: 50px;
+    -fx-background-color: #007d43;
+    -fx-text-fill: white;
+}
+#custom-button:hover, #drawing-button:hover{
+    -fx-background-color: #004d26;
+}
 #winner{
     -fx-text-fill: black;
     -fx-font: 80px "Century Gothic";
     -fx-text-alignment: center;
 
     -fx-stroke: 10px;
-}
-#drawing-button:hover{
-    -fx-background-color: #004d26;
 }
 
 #black-background{
@@ -32,4 +39,13 @@
     -fx-border-color: black;
     -fx-border-width: 5;
     -fx-background-color: #282828;
+}
+#topBar{
+    -fx-background-color: #282828;
+    -fx-pref-height: 50px;
+}
+
+.tab-pane{
+    -fx-font-size:  13px;
+    -fx-font-family: "Century Gothic";
 }
