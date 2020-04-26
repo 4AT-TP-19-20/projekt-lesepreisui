@@ -77,5 +77,6 @@ public class ExamDetailWindow {
         stage.setTitle("Detailansicht Prüfung");
         stage.setScene(new Scene(gridPane, 410, 300));
         stage.show();
+        gridPane.requestFocus();
     }
 }

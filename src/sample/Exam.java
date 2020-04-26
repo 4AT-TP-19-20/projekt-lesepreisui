@@ -32,6 +32,10 @@ public class Exam {
         points.bind(Bindings.when(passed.isEqualTo(1)).then(book.pointsProperty()).otherwise(0));
     }
 
+    public Exam(Book book) {
+        this(book, new int[]{-1}, Data.currentUser, LocalDate.now());
+    }
+
     public Book getBook() {
         return book;
     }

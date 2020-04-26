@@ -8,16 +8,13 @@ public class IntegerPropertyArray {
     private int size;
     private IntegerProperty[] properties;
 
-    IntegerPropertyArray(int size) {
-        this(size, new int[size]);
-    }
-
     IntegerPropertyArray(int size, int[] initialValues) {
         this.size = size;
+        boolean isEmpty = initialValues[0] == -1;
         properties = new IntegerProperty[size];
 
         for(int i = 0; i < size; i++) {
-            properties[i] = new SimpleIntegerProperty(initialValues[i]);
+            properties[i] = new SimpleIntegerProperty(isEmpty ? 2 : initialValues[i]);
         }
     }
 

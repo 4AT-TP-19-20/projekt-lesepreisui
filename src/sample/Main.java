@@ -65,6 +65,7 @@ public class Main extends Application {
                 Scene main = new Scene(root, 1280, screenBounds.getHeight()-25);
                 main.getStylesheets().add("stylesheet.css");
                 primaryStage.setScene(main);
+                root.requestFocus();
             }
         });
 

@@ -1,10 +1,10 @@
 package sample;
 
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -68,10 +68,10 @@ public class ContestantDetailWindow {
         TableColumn<Exam, String> column_title = new TableColumn<>("Titel");
         column_title.setCellFactory(param -> new AlignedTableCell<>());
         column_title.setCellValueFactory(param -> param.getValue().getBook().titleProperty());
-        TableColumn<Exam, String> column_authorFirstName = new TableColumn<>("Vorname Author");
+        TableColumn<Exam, String> column_authorFirstName = new TableColumn<>("Vorname Autor");
         column_authorFirstName.setCellFactory(param -> new AlignedTableCell<>());
         column_authorFirstName.setCellValueFactory(param -> param.getValue().getBook().authorFirstNameProperty());
-        TableColumn<Exam, String> column_authorLastName = new TableColumn<>("Nachname Author");
+        TableColumn<Exam, String> column_authorLastName = new TableColumn<>("Nachname Autor");
         column_authorLastName.setCellFactory(param -> new AlignedTableCell<>());
         column_authorLastName.setCellValueFactory(param -> param.getValue().getBook().authorLastNameProperty());
         TableColumn<Exam, String> column_language = new TableColumn<>("Sprache");
@@ -113,6 +113,20 @@ public class ContestantDetailWindow {
         //Bottom
         Button btn_addExam = new Button("Neue Prüfung");
         btn_addExam.setMaxWidth(10000);
+        btn_addExam.setOnAction(e->{
+            Stage bookSelectionStage = new Stage();
+            bookSelectionStage.setTitle("Buch auswählen");
+            BorderPane bookStageRoot = BookTab.generate(true, bookSelectionStage);
+            bookSelectionStage.setScene(new Scene(bookStageRoot));
+            bookStageRoot.requestFocus();
+            bookSelectionStage.showAndWait();
+            Book selectedBook = BookTab.getSelectedBook();
+            if(selectedBook != null) {
+                Exam toAdd = new Exam(selectedBook);
+                contestant.addExam(toAdd);
+                ExamDetailWindow.showNewWindow(toAdd);
+            }
+        });
         borderPane.setBottom(btn_addExam);
 
         borderPane.setPadding(new Insets(10));
@@ -120,6 +134,7 @@ public class ContestantDetailWindow {
         stage.setTitle("Detailansicht Teilnehmer");
         stage.setScene(new Scene(borderPane, 1280, 1000));
         stage.show();
+        borderPane.requestFocus();
     }
 
     private static void setEditable(boolean editable)

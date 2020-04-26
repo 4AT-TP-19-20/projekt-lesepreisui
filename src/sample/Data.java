@@ -16,6 +16,7 @@ public class Data {
 
     public static int minBookCount = 1; //3
     public static int maxPicks = 3;
+    public static String currentUser = "Dorothea";
 
     public static void init() {
         contestants = FXCollections.observableArrayList();
