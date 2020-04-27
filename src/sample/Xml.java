@@ -38,7 +38,7 @@ public class Xml {
                     mainRootElement.appendChild(contestant.getXMLNode(doc));
                 }
             }else if(type.equals("Settings")){
-                //mainRootElement.appendChild(SettingsTab.getXMLNode(doc));
+                mainRootElement.appendChild(SettingsTab.getXMLNode(doc));
             }
 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();

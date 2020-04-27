@@ -5,10 +5,11 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -158,5 +159,43 @@ public class SettingsTab {
 
     public static void setLanguages(ObservableList<String> languages) {
         SettingsTab.languages = languages;
+    }
+
+    public static Element getXMLNode(Document doc){
+        Element settings = doc.createElement("Settings");
+        Element prizeCountElement = doc.createElement("PrizeCount");
+        Element maxPicksElement = doc.createElement("MaxPicks");
+        Element maxAnswersCountElement = doc.createElement("MaxAnswersCount");
+        Element minCorrectAnswersElement = doc.createElement("MinCorrectAnswers");
+        Element minBookCountElement = doc.createElement("MinBookCount");
+        Element maxBookCountElement = doc.createElement("MaxBookCount");
+        Element groupContestStartDateElement = doc.createElement("GroupContestStartDate");
+        Element languagesElement = doc.createElement("Languages");
+        Element languageElement = doc.createElement("Language");
+
+        prizeCountElement.appendChild(doc.createTextNode("" + SettingsTab.getPrizeCount()));
+        maxPicksElement.appendChild(doc.createTextNode(SettingsTab.getMaxPicks() + ""));
+        maxAnswersCountElement.appendChild(doc.createTextNode(SettingsTab.getMaxAnswersCount() + ""));
+        minCorrectAnswersElement.appendChild(doc.createTextNode(SettingsTab.getMinCorrectAnswers() + ""));
+        minBookCountElement.appendChild(doc.createTextNode(SettingsTab.getMinBookCount() + ""));
+        maxBookCountElement.appendChild(doc.createTextNode(SettingsTab.getMaxBookCount() + ""));
+        groupContestStartDateElement.appendChild(doc.createTextNode(SettingsTab.getGroupContestStartDate()));
+
+        ObservableList<String> languages = SettingsTab.getLanguages();
+        for (String language: languages) {
+            languageElement.appendChild(doc.createTextNode(language));
+            languagesElement.appendChild(languageElement);
+        }
+
+        settings.appendChild(prizeCountElement);
+        settings.appendChild(maxPicksElement);
+        settings.appendChild(maxAnswersCountElement);
+        settings.appendChild(minCorrectAnswersElement);
+        settings.appendChild(minBookCountElement);
+        settings.appendChild(maxBookCountElement);
+        settings.appendChild(groupContestStartDateElement);
+        settings.appendChild(languagesElement);
+
+        return settings;
     }
 }
