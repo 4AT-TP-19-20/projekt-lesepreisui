@@ -38,7 +38,7 @@ public class Xml {
                     mainRootElement.appendChild(contestant.getXMLNode(doc));
                 }
             }else if(type.equals("Settings")){
-                //mainRootElement.appendChild(Settings.getXMLNode(doc));
+                //mainRootElement.appendChild(SettingsTab.getXMLNode(doc));
             }
 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -97,7 +97,7 @@ public class Xml {
                     contestant.setGroupMember(Boolean.parseBoolean(isGroupMember));
 
                     NodeList examsNodeList = currentContestantElement.getElementsByTagName("Exam");
-                    ObservableList<Exam> exams = FXCollections.observableArrayList();;
+                    ObservableList<Exam> exams = FXCollections.observableArrayList();
                     for (int j = 0; j < examsNodeList.getLength(); j++) {
                         Node currentExam = examsNodeList.item(j);
                         if (currentExam.getNodeType() == Node.ELEMENT_NODE) {
@@ -127,6 +127,34 @@ public class Xml {
             }
         }catch (Exception e){
             System.out.println("[System] Error while reading the contestants-file!");
+        }
+    }
+
+    public static void getSettings(String path){
+        try{
+            File xmlFile = new File(path);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(xmlFile);
+            NodeList settingsNodeList = doc.getElementsByTagName("Settings");
+
+            Element currentSettingElement = (Element) settingsNodeList.item(0);
+            SettingsTab.setPrizeCount(Integer.parseInt(currentSettingElement.getElementsByTagName("PrizeAmount").item(0).getTextContent()));
+            SettingsTab.setMaxPicks(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxPicks").item(0).getTextContent()));
+            SettingsTab.setMaxAnswersCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxAnswersCount").item(0).getTextContent()));
+            SettingsTab.setMinCorrectAnswers(Integer.parseInt(currentSettingElement.getElementsByTagName("MinCorrectAnswers").item(0).getTextContent()));
+            SettingsTab.setMinBookCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MinBookCount").item(0).getTextContent()));
+            SettingsTab.setMaxBookCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxBookCount").item(0).getTextContent()));
+            SettingsTab.setGroupContestStartDate(LocalDate.parse(currentSettingElement.getElementsByTagName("GroupContestStartDate").item(0).getTextContent(), DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+
+            NodeList languageNodeList = doc.getElementsByTagName("Language");
+            ObservableList<String> languages = FXCollections.observableArrayList();
+            for (int i = 0; i < languageNodeList.getLength(); i++) {
+                languages.add(((Element)languageNodeList.item(i)).getElementsByTagName("Language").item(0).getTextContent());
+            }
+            SettingsTab.setLanguages(languages);
+        }catch (Exception e){
+            System.out.println("[System] Error while reading the settings-file!");
         }
     }
 }
