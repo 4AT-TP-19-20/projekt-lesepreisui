@@ -10,6 +10,7 @@ import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class BookTab {
@@ -63,9 +64,20 @@ public class BookTab {
         borderPane.setCenter(tbv_books);
 
         //Bottom
+        VBox bottomItems = new VBox();
         Button btn_addBook = new Button("Buch hinzufügen");
-        btn_addBook.setMaxWidth(10000);
-        borderPane.setBottom(btn_addBook);
+        btn_addBook.setId("custom-button");
+        btn_addBook.setOnAction(e->{
+
+        });
+        Button btn_removeBook = new Button("Buch löschen");
+        btn_removeBook.setId("custom-button");
+        btn_removeBook.setOnAction(e->{
+
+        });
+        bottomItems.getChildren().addAll(btn_addBook, btn_removeBook);
+        bottomItems.setSpacing(5);
+        borderPane.setBottom(bottomItems);
 
         BorderPane.setMargin(borderPane.getCenter(), new Insets(10, 0, 10, 0));
         borderPane.setPadding(new Insets(10));

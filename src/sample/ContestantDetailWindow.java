@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ContestantDetailWindow {
@@ -112,13 +113,16 @@ public class ContestantDetailWindow {
         borderPane.setCenter(tbv_exams);
 
         //Bottom
+        VBox bottomItems = new VBox();
         Button btn_addExam = new Button("Neue Prüfung");
-        btn_addExam.setMaxWidth(10000);
+        btn_addExam.setId("custom-button");
         btn_addExam.setOnAction(e->{
             Stage bookSelectionStage = new Stage();
             bookSelectionStage.setTitle("Buch auswählen");
             BorderPane bookStageRoot = BookTab.generate(true, bookSelectionStage);
-            bookSelectionStage.setScene(new Scene(bookStageRoot));
+            Scene bookSelectionScene = new Scene(bookStageRoot,1280,1024);
+            bookSelectionScene.getStylesheets().add("stylesheet.css");
+            bookSelectionStage.setScene(bookSelectionScene);
             bookStageRoot.requestFocus();
             bookSelectionStage.showAndWait();
             Book selectedBook = BookTab.getSelectedBook();
@@ -128,12 +132,25 @@ public class ContestantDetailWindow {
                 ExamDetailWindow.showNewWindow(toAdd);
             }
         });
-        borderPane.setBottom(btn_addExam);
+        Button btn_removeExam = new Button("Prüfung löschen");
+        btn_removeExam.setId("custom-button");
+        btn_removeExam.setOnAction(e->{
+            Exam selected = tbv_exams.getSelectionModel().getSelectedItem();
+            if(selected != null) {
+                contestant.removeExam(selected);
+            }
+        });
+        bottomItems.getChildren().addAll(btn_addExam, btn_removeExam);
+        bottomItems.setSpacing(5);
+        borderPane.setBottom(bottomItems);
 
         borderPane.setPadding(new Insets(10));
         BorderPane.setMargin(borderPane.getCenter(), new Insets(10,0,10,0));
+
+        Scene scene = new Scene(borderPane, 1280, 1000);
+        scene.getStylesheets().add("stylesheet.css");
         stage.setTitle("Detailansicht Teilnehmer");
-        stage.setScene(new Scene(borderPane, 1280, 1000));
+        stage.setScene(scene);
         stage.show();
         borderPane.requestFocus();
     }

@@ -125,6 +125,8 @@ public class Contestant {
         exam.pointsProperty().removeListener(param -> pointsUpdate());
         exam.passedProperty().removeListener(param -> bookCountUpdate());
         exams.remove(exam);
+        pointsUpdate();
+        bookCountUpdate();
     }
 
     private void pointsUpdate() {

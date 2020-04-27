@@ -11,6 +11,7 @@ import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 public class ContestantTab {
     private static TableView<Contestant> tbv_contestants = new TableView<>();
@@ -58,10 +59,27 @@ public class ContestantTab {
         borderPane.setCenter(tbv_contestants);
 
         //Bottom
+        VBox bottomItems = new VBox();
         Button btn_addContestant = new Button("Neuer Teilnehmer");
         btn_addContestant.setId("custom-button");
-        btn_addContestant.setMaxWidth(10000);
-        borderPane.setBottom(btn_addContestant);
+        btn_addContestant.setOnAction(e->{
+            Contestant toAdd = new Contestant();
+            Data.contestants.add(toAdd);
+            textChangeListener(txt_search.getText());
+            ContestantDetailWindow.showNewWindow(toAdd);
+        });
+        Button btn_removeContestant = new Button("Teilnehmer löschen");
+        btn_removeContestant.setId("custom-button");
+        btn_removeContestant.setOnAction(e->{
+            Contestant selected = tbv_contestants.getSelectionModel().getSelectedItem();
+            if(selected != null) {
+                Data.contestants.remove(selected);
+                textChangeListener(txt_search.getText());
+            }
+        });
+        bottomItems.getChildren().addAll(btn_addContestant, btn_removeContestant);
+        bottomItems.setSpacing(5);
+        borderPane.setBottom(bottomItems);
 
         BorderPane.setMargin(borderPane.getCenter(), new Insets(10, 0, 10, 0));
         borderPane.setPadding(new Insets(10));
