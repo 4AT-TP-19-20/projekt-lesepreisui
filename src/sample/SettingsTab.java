@@ -2,6 +2,7 @@ package sample;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
@@ -15,6 +16,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class SettingsTab {
+    //General
+    public static ObservableList<String> users = FXCollections.observableArrayList("Dorothea", "Petra");
+
     //Exam
     private static IntegerProperty maxAnswersCount = new SimpleIntegerProperty(6);
     private static IntegerProperty minCorrectAnswers = new SimpleIntegerProperty(4);
@@ -27,7 +31,7 @@ public class SettingsTab {
     private static LocalDate groupContestStartDate;
 
     //Book
-    private static ObservableList<String> languages;
+    private static ObservableList<String> languages = FXCollections.observableArrayList("Deutsch", "Englisch", "Italienisch", "Französisch", "Russisch");
 
     public static GridPane generate() {
         GridPane gridPane = new GridPane();
@@ -41,7 +45,6 @@ public class SettingsTab {
         TextField txt_minCorrectAnswers = new TextField();
         txt_minCorrectAnswers.textProperty().bindBidirectional(minCorrectAnswers, new StringToInt());
         gridPane.add(txt_minCorrectAnswers,1,2);
-
         gridPane.add(new Canvas(1,20),0,3);
 
         gridPane.add(new Label("Verlosungseinstellungen"),0,4);
@@ -65,7 +68,12 @@ public class SettingsTab {
         gridPane.add(new Canvas(1,20),0,9);
 
         gridPane.add(new Label("Bucheinstellungen"),0,10);
-        gridPane.add(new Label("Sprachen"),0,11);
+        gridPane.add(new EditableListView("Sprachen", "Neue Sprache", languages),0,11);
+
+        gridPane.add(new Canvas(1,20),0,12);
+
+        gridPane.add(new Label("Generelle Einstellugen"),0,13);
+        gridPane.add(new EditableListView("Benutzer", "Neuer Benutzer", users),0,14);
 
         gridPane.setPadding(new Insets(10));
         gridPane.setVgap(5);

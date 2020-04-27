@@ -54,9 +54,12 @@ public class BookTab {
                 tbv_books.getSelectionModel().clearSelection();
             }
             else if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                if(tbv_books.getSelectionModel().getSelectedItem() != null) {
+                if(!tbv_books.getSelectionModel().isEmpty()) {
                     if(returnOnSelection) {
                         parent.close();
+                    }
+                    else {
+                        BookDetailWindow.showNewWindow(tbv_books.getSelectionModel().getSelectedItem());
                     }
                 }
             }
