@@ -45,6 +45,7 @@ public class SettingsTab {
         TextField txt_minCorrectAnswers = new TextField();
         txt_minCorrectAnswers.textProperty().bindBidirectional(minCorrectAnswers, new StringToInt());
         gridPane.add(txt_minCorrectAnswers,1,2);
+
         gridPane.add(new Canvas(1,20),0,3);
 
         gridPane.add(new Label("Verlosungseinstellungen"),0,4);

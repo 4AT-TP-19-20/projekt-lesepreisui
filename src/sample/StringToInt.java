@@ -10,9 +10,10 @@ public class StringToInt extends StringConverter<Number> {
 
     @Override
     public Number fromString(String string) {
-        if(string.trim().isEmpty()) {
+        try {
+            return Integer.parseInt(string);
+        } catch (NumberFormatException ex) {
             return 0;
         }
-        return Integer.parseInt(string);
     }
 }
