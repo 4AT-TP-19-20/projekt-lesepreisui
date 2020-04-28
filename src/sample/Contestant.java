@@ -116,6 +116,7 @@ public class Contestant {
     public void addExam(Exam exam) {
         exam.pointsProperty().addListener(param -> pointsUpdate());
         exam.passedProperty().addListener(param -> bookCountUpdate());
+        exam.setContestant(this);
         exams.add(exam);
         pointsUpdate();
         bookCountUpdate();

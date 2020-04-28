@@ -97,7 +97,6 @@ public class Xml {
                     contestant.setGroupMember(Boolean.parseBoolean(isGroupMember));
 
                     NodeList examsNodeList = currentContestantElement.getElementsByTagName("Exam");
-                    ObservableList<Exam> exams = FXCollections.observableArrayList();
                     for (int j = 0; j < examsNodeList.getLength(); j++) {
                         Node currentExam = examsNodeList.item(j);
                         if (currentExam.getNodeType() == Node.ELEMENT_NODE) {
@@ -118,10 +117,9 @@ public class Xml {
                             String librarian = currentExamElement.getElementsByTagName("Librarian").item(0).getTextContent();
                             String date = currentExamElement.getElementsByTagName("Date").item(0).getTextContent();
 
-                            exams.add(new Exam(book, answerIntArray, librarian, LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
+                            contestant.addExam(new Exam(book, answerIntArray, librarian, LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
                         }
                     }
-                    contestant.setExams(exams);
                     Data.contestants.add(contestant);
                 }
             }

@@ -30,7 +30,7 @@ public class Main extends Application {
         TabPane root = new TabPane();
         Data.init();
         root.getTabs().add(new Tab("Teilnehmer", ContestantTab.generate()));
-        root.getTabs().add(new Tab("Prüfungen"));
+        root.getTabs().add(new Tab("Prüfungen", ExamTab.generate()));
         root.getTabs().add(new Tab("Bücher", BookTab.generate()));
         root.getTabs().add(new Tab("Verlosung", DrawingTab.generate()));
         root.getTabs().add(new Tab("Einstellungen", SettingsTab.generate()));

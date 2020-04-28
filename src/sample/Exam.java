@@ -18,6 +18,7 @@ public class Exam {
     private IntegerProperty points;
     private StringProperty librarian;
     private LocalDate date;
+    private Contestant contestant;
 
     public Exam(Book book, int[] initialAnswers, String librarian, LocalDate date) {
         this.book = book;
@@ -90,6 +91,14 @@ public class Exam {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public void setContestant(Contestant contestant) {
+        this.contestant = contestant;
+    }
+
+    public Contestant getContestant() {
+        return contestant;
     }
 
     private void onAnswerChangeListener() {
