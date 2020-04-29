@@ -23,7 +23,16 @@
 
     -fx-stroke: 10px;
 }
-
+.text-field {
+    -fx-max-width: 150px;
+}
+#h1{
+    -fx-alignment: center;
+    -fx-font-size: 35px;
+}
+#h2{
+    -fx-font-size: 20px;
+}
 #black-background{
     -fx-background-color: black;
 }
