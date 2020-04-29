@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 public class ExamTab {
     public static BorderPane generate() {
@@ -47,9 +48,9 @@ public class ExamTab {
         TableColumn<Exam, String> column_points = new TableColumn<>("Punkte");
         column_points.setCellFactory(param -> new AlignedTableCell<>());
         column_points.setCellValueFactory(new PropertyValueFactory<>("points"));
-        TableColumn<Exam, String> column_passed = new TableColumn<>("Bestanden");
+        TableColumn<Exam, StackPane> column_passed = new TableColumn<>("Bestanden");
         column_passed.setCellFactory(param -> new AlignedTableCell<>());
-        column_passed.setCellValueFactory(new PropertyValueFactory<>("passed"));
+        column_passed.setCellValueFactory(param -> new SwitchBox(param.getValue().passedProperty(), "small", false, true));
         TableColumn<Exam, String> column_librarian = new TableColumn<>("BibliothekarIn");
         column_librarian.setCellFactory(param -> new AlignedTableCell<>());
         column_librarian.setCellValueFactory(new PropertyValueFactory<>("librarian"));
@@ -68,6 +69,8 @@ public class ExamTab {
         for(Contestant contestant : Data.contestants) {
             tbv_exams.getItems().addAll(contestant.getExams());
         }
+        tbv_exams.getSortOrder().add(column_date);
+        tbv_exams.sort();
         BorderPane.setMargin(borderPane.getCenter(), new Insets(10,0,10,0));
         borderPane.setPadding(new Insets(10));
 

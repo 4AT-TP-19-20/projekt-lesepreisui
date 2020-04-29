@@ -1,15 +1,18 @@
 package sample;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-public class SwitchBox extends VBox {
+public class SwitchBox extends StackPane implements ObservableValue<StackPane> {
     private StackPane stackPane;
     private IntegerProperty state;
     private int stateCount;
@@ -25,29 +28,30 @@ public class SwitchBox extends VBox {
         state.bindBidirectional(stateProperty);
     }
 
-    SwitchBox(int initialState, String size, boolean editable, boolean canBeEmpty) {
-        int height = size.equals("small") ? 15 : 50;
+
+    SwitchBox(int initialState, String sizeMode, boolean editable, boolean canBeEmpty) {
+        super();
+        int size = sizeMode.equals("small") ? 15 : 50;
 
         images = new ImageView[3];
         images[0] = new ImageView("file:no.png");
-        images[0].setFitHeight(height);
+        images[0].setFitHeight(size);
         images[0].setPreserveRatio(true);
         images[1] = new ImageView("file:yes.png");
-        images[1].setFitHeight(height);
+        images[1].setFitHeight(size);
         images[1].setPreserveRatio(true);
         images[2] = new ImageView("file:empty.png");
-        images[2].setFitHeight(height);
+        images[2].setFitHeight(size);
         images[2].setPreserveRatio(true);
 
-        stackPane = new StackPane(images);
         this.state = new SimpleIntegerProperty(initialState);
         state.addListener((observable, oldValue, newValue) -> updateImages());
         this.editable = new SimpleBooleanProperty(editable);
-        stackPane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(size.equals("small") ? 1 : 3))));
-        stackPane.setOnMouseClicked(e -> mouseAction());
+        this.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(sizeMode.equals("small") ? 1 : 3))));
+        this.setMaxSize(size, size);
+        this.setOnMouseClicked(e -> mouseAction());
         setCanBeEmpty(canBeEmpty);
-        this.setAlignment(Pos.CENTER);
-        this.getChildren().add(stackPane);
+        this.getChildren().addAll(images);
 
         updateImages();
     }
@@ -100,5 +104,30 @@ public class SwitchBox extends VBox {
         if(editable.get()) {
             nextState();
         }
+    }
+
+    @Override
+    public void addListener(ChangeListener<? super StackPane> listener) {
+
+    }
+
+    @Override
+    public void removeListener(ChangeListener<? super StackPane> listener) {
+
+    }
+
+    @Override
+    public StackPane getValue() {
+        return this;
+    }
+
+    @Override
+    public void addListener(InvalidationListener listener) {
+
+    }
+
+    @Override
+    public void removeListener(InvalidationListener listener) {
+
     }
 }
