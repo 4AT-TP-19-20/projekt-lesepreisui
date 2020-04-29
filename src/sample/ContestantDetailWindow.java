@@ -8,10 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class ContestantDetailWindow {
@@ -88,9 +85,9 @@ public class ContestantDetailWindow {
         TableColumn<Exam, String> column_points = new TableColumn<>("Punkte");
         column_points.setCellFactory(param -> new AlignedTableCell<>());
         column_points.setCellValueFactory(new PropertyValueFactory<>("points"));
-        TableColumn<Exam, String> column_passed = new TableColumn<>("Bestanden");
+        TableColumn<Exam, StackPane> column_passed = new TableColumn<>("Bestanden");
         column_passed.setCellFactory(param -> new AlignedTableCell<>());
-        column_passed.setCellValueFactory(new PropertyValueFactory<>("passed"));
+        column_passed.setCellValueFactory(param -> new SwitchBox(param.getValue().passedProperty(), "small", false, true));
         TableColumn<Exam, HBox> column_answers = new TableColumn<>("Antworten");
         column_answers.setCellFactory(param -> new AlignedTableCell<>());
         column_answers.setCellValueFactory(param -> new AnswerBoxes(param.getValue().answersProperty(), false, "small"));
