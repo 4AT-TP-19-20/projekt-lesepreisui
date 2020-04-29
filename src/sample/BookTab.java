@@ -1,12 +1,12 @@
 package sample;
 
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -71,12 +71,19 @@ public class BookTab {
         Button btn_addBook = new Button("Buch hinzufügen");
         btn_addBook.setId("custom-button");
         btn_addBook.setOnAction(e->{
-
+            Book toAdd = new Book();
+            Data.books.add(toAdd);
+            tbv_books.getItems().add(toAdd);
+            BookDetailWindow.showNewWindow(toAdd);
         });
         Button btn_removeBook = new Button("Buch löschen");
         btn_removeBook.setId("red-button");
         btn_removeBook.setOnAction(e->{
-
+            if(!tbv_books.getSelectionModel().isEmpty()) {
+                Book selected = tbv_books.getSelectionModel().getSelectedItem();
+                Data.books.remove(selected);
+                tbv_books.getItems().remove(selected);
+            }
         });
         bottomItems.getChildren().addAll(btn_addBook, btn_removeBook);
         bottomItems.setSpacing(5);

@@ -13,7 +13,11 @@ public class Book {
     private StringProperty authorLastName;
     private StringProperty language;
     private IntegerProperty points;
-    
+
+    Book() {
+        this("Titel", "Vorname", "Nachname", "Sprache", 0);
+    }
+
     public Book(String title, String authorFirstName, String authorLastName, String language, int points) {
         this.title = new SimpleStringProperty(title);
         this.authorFirstName = new SimpleStringProperty(authorFirstName);

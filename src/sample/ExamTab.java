@@ -65,7 +65,6 @@ public class ExamTab {
         borderPane.setBottom(btn_removeExam);
 
         tbv_exams.getColumns().addAll(column_firstName, column_lastName, column_grade, column_title, column_authorFirstName, column_authorLastName, column_language, column_date, column_points, column_passed, column_answers);
-        tbv_exams.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         for(Contestant contestant : Data.contestants) {
             tbv_exams.getItems().addAll(contestant.getExams());
         }

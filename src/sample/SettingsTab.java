@@ -31,7 +31,7 @@ public class SettingsTab {
     private static IntegerProperty maxBookCount = new SimpleIntegerProperty(40);
     private static IntegerProperty maxPicks = new SimpleIntegerProperty(3);
     private static IntegerProperty prizeCount = new SimpleIntegerProperty(10);
-    private static LocalDate groupContestStartDate;
+    private static LocalDate groupContestStartDate = LocalDate.parse("01.01.2021", DateTimeFormatter.ofPattern("dd.MM.uuuu"));
 
     //Book
     private static ObservableList<String> languages = FXCollections.observableArrayList("Deutsch", "Englisch", "Italienisch", "Französisch", "Russisch");
@@ -224,6 +224,14 @@ public class SettingsTab {
 
     public static void setLanguages(ObservableList<String> languages) {
         SettingsTab.languages = languages;
+    }
+
+    public static ObservableList<String> getUsers() {
+        return users;
+    }
+
+    public static void setUsers(ObservableList<String> users) {
+        SettingsTab.users = users;
     }
 
     public static Element getXMLNode(Document doc){

@@ -11,6 +11,7 @@ public class Contestant {
     private StringProperty lastName;
     private StringProperty grade;
     private BooleanProperty isGroupMember;
+    private BooleanProperty isQualified;
     private IntegerProperty points;
     private IntegerProperty bookCount;
     private ObservableList<Exam> exams;
@@ -22,11 +23,12 @@ public class Contestant {
         this.points = new SimpleIntegerProperty();
         this.bookCount = new SimpleIntegerProperty();
         this.isGroupMember = new SimpleBooleanProperty(false);
+        this.isQualified = new SimpleBooleanProperty();
         exams = FXCollections.observableArrayList();
     }
 
     public Contestant() {
-        this("", "", "");
+        this("Vorname", "Nachname", "Klasse");
     }
 
     public String getFirstName() {

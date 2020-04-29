@@ -6,10 +6,7 @@ import javafx.concurrent.Task;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -84,6 +81,23 @@ public class Main extends Application {
             main.getStylesheets().add("stylesheet.css");
             primaryStage.setScene(main);
             root.requestFocus();
+
+            //Login Pane
+            Stage loginStage = new Stage();
+            HBox loginItems = new HBox();
+            ComboBox<String> cbx_user = new ComboBox<>(SettingsTab.getUsers());
+            Button btn_login = new Button("Login");
+            btn_login.setOnAction(e->{
+                if(!cbx_user.getSelectionModel().isEmpty()) {
+                    Data.currentUser = cbx_user.getSelectionModel().getSelectedItem();
+                    base.setCenter(root);
+                    loginStage.hide();
+                }
+            });
+            loginItems.getChildren().addAll(cbx_user, btn_login);
+            loginItems.setSpacing(10);
+            loginStage.setScene(new Scene(loginItems,160,30));
+            loginStage.show();
         });
 
     }

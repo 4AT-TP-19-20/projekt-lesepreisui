@@ -1,16 +1,17 @@
 package sample;
 
 
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class ContestantTab {
@@ -43,8 +44,10 @@ public class ContestantTab {
         TableColumn<Contestant, Integer> column_points = new TableColumn<>("Punkte");
         column_points.setCellFactory(param -> new AlignedTableCell<>());
         column_points.setCellValueFactory(new PropertyValueFactory<>("points"));
+        TableColumn<Contestant, StackPane> column_qualified = new TableColumn<>("Qualifiziert");
+        //column_qualified.setCellValueFactory();
+        column_qualified.setCellFactory(param -> new AlignedTableCell<>());
         tbv_contestants.getColumns().addAll(column_firstName, column_lastName, column_grade, column_bookCount, column_points);
-        tbv_contestants.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tbv_contestants.getItems().addAll(Data.contestants);
         tbv_contestants.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
