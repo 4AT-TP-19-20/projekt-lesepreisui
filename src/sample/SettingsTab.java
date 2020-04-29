@@ -207,7 +207,7 @@ public class SettingsTab {
     }
 
     public static void setPrizeCount(int prizeCount) {
-        SettingsTab.prizeCount.set(prizeCount);
+        SettingsTab.prizeCount = new SimpleIntegerProperty(prizeCount);
     }
 
     public static String getGroupContestStartDate() {
@@ -226,16 +226,15 @@ public class SettingsTab {
         SettingsTab.languages = languages;
     }
 
-    public static ObservableList<String> getUsers() {
+    public static ObservableList<String> getUsers(){
         return users;
     }
 
-    public static void setUsers(ObservableList<String> users) {
+    public static void setUsers(ObservableList<String> users){
         SettingsTab.users = users;
     }
 
-    public static Element getXMLNode(Document doc){
-        Element settings = doc.createElement("Settings");
+    public static Element getXMLNode(Document doc, Element settings){
         Element prizeCountElement = doc.createElement("PrizeCount");
         Element maxPicksElement = doc.createElement("MaxPicks");
         Element maxAnswersCountElement = doc.createElement("MaxAnswersCount");
@@ -244,7 +243,7 @@ public class SettingsTab {
         Element maxBookCountElement = doc.createElement("MaxBookCount");
         Element groupContestStartDateElement = doc.createElement("GroupContestStartDate");
         Element languagesElement = doc.createElement("Languages");
-        Element languageElement = doc.createElement("Language");
+        Element usersElement = doc.createElement("Users");
 
         prizeCountElement.appendChild(doc.createTextNode("" + SettingsTab.getPrizeCount()));
         maxPicksElement.appendChild(doc.createTextNode(SettingsTab.getMaxPicks() + ""));
@@ -256,8 +255,16 @@ public class SettingsTab {
 
         ObservableList<String> languages = SettingsTab.getLanguages();
         for (String language: languages) {
+            Element languageElement = doc.createElement("Language");
             languageElement.appendChild(doc.createTextNode(language));
             languagesElement.appendChild(languageElement);
+        }
+
+        ObservableList<String> users = SettingsTab.getUsers();
+        for (String user: users) {
+            Element userElement = doc.createElement("User");
+            userElement.appendChild(doc.createTextNode(user));
+            languagesElement.appendChild(userElement);
         }
 
         settings.appendChild(prizeCountElement);
@@ -268,6 +275,7 @@ public class SettingsTab {
         settings.appendChild(maxBookCountElement);
         settings.appendChild(groupContestStartDateElement);
         settings.appendChild(languagesElement);
+        settings.appendChild(usersElement);
 
         return settings;
     }

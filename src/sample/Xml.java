@@ -38,7 +38,7 @@ public class Xml {
                     mainRootElement.appendChild(contestant.getXMLNode(doc));
                 }
             }else if(type.equals("Settings")){
-                mainRootElement.appendChild(SettingsTab.getXMLNode(doc));
+                SettingsTab.getXMLNode(doc, mainRootElement);
             }
 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -137,7 +137,7 @@ public class Xml {
             NodeList settingsNodeList = doc.getElementsByTagName("Settings");
 
             Element currentSettingElement = (Element) settingsNodeList.item(0);
-            SettingsTab.setPrizeCount(Integer.parseInt(currentSettingElement.getElementsByTagName("PrizeAmount").item(0).getTextContent()));
+            SettingsTab.setPrizeCount(Integer.parseInt(currentSettingElement.getElementsByTagName("PrizeCount").item(0).getTextContent()));
             SettingsTab.setMaxPicks(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxPicks").item(0).getTextContent()));
             SettingsTab.setMaxAnswersCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxAnswersCount").item(0).getTextContent()));
             SettingsTab.setMinCorrectAnswers(Integer.parseInt(currentSettingElement.getElementsByTagName("MinCorrectAnswers").item(0).getTextContent()));
@@ -151,6 +151,13 @@ public class Xml {
                 languages.add(((Element)languageNodeList.item(i)).getElementsByTagName("Language").item(0).getTextContent());
             }
             SettingsTab.setLanguages(languages);
+
+            NodeList userNodeList = doc.getElementsByTagName("User");
+            ObservableList<String> users = FXCollections.observableArrayList();
+            for (int i = 0; i < userNodeList.getLength(); i++) {
+                users.add(((Element)userNodeList.item(i)).getElementsByTagName("User").item(0).getTextContent());
+            }
+            SettingsTab.setUsers(users);
         }catch (Exception e){
             System.out.println("[System] Error while reading the settings-file!");
         }
