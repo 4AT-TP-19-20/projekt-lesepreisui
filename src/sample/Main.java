@@ -156,6 +156,7 @@ public class Main extends Application {
         //Window Controls Handler
             //On Click
         close.setOnMouseClicked(ActionEvent->{
+            Data.save();
             primaryStage.close();
         });
         minimize.setOnMouseClicked(ActionEvent->{
