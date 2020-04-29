@@ -17,49 +17,69 @@ import java.util.Map;
 import java.util.Random;
 
 public class DrawingTab {
-    private static StackPane stackPane = new StackPane();
-    private static int remainingPrizes = SettingsTab.getPrizeCount();
+    private static StackPane stackPane;
+    private static int remainingPrizes;
     private static Contestant[] winners;
-    private static int currentWinner = 0;
+    private static int currentWinner;
+    private static Label lbl_remainingPrices;
+    private static Label lbl_winner;
+    private static Button btn_start;
+    private static MediaPlayer mediaPlayer;
+    private static MediaView mediaView;
 
     public static StackPane generate() {
+        stackPane = new StackPane();
+        remainingPrizes = SettingsTab.getPrizeCount();
         String remainingPricesText;
+        currentWinner = 0;
 
-        //START Animation BTN
+        //BTN START Animation
         stackPane.setId("black-background");
-        Button startBtn = new Button("Gewinner Auslosen");
-        startBtn.setId("drawing-button");
+        btn_start = new Button("Gewinner Auslosen");
+        btn_start.setId("drawing-button");
 
         //Remaining Prizes
         if (remainingPrizes > 0) {
             remainingPricesText = "Verbleibende Preise: " + remainingPrizes;
-            stackPane.getChildren().add(startBtn);
+            stackPane.getChildren().add(btn_start);
         } else {
             remainingPricesText = "Alle Preise wurden verlost!";
         }
-        Label lbl_remainingPrices = new Label(remainingPricesText);
+        lbl_remainingPrices = new Label(remainingPricesText);
         lbl_remainingPrices.setId("remaining");
         lbl_remainingPrices.setTranslateY(350);
         stackPane.getChildren().add(lbl_remainingPrices);
 
-        //StartBTN EventHandler
-        startBtn.setOnAction(actionEvent -> {
+        //btn_start EventHandler
+        btn_start.setOnAction(actionEvent -> {
             if (remainingPrizes == SettingsTab.getPrizeCount()) {
                 pickWinners();
             }
-            stackPane = startAnimation(stackPane);
-            stackPane.getChildren().remove(lbl_remainingPrices);
+            startAnimation();
+            lbl_remainingPrices.setVisible(false);
             remainingPrizes--;
         });
+
+        //Media Player and Viewer initialisation
+        mediaPlayer = new MediaPlayer(new Media(new File("LesePreisUIAnimation720p.mp4").toURI().toString()));
+        mediaView = new MediaView(mediaPlayer);
+        mediaView.setVisible(false);
+        stackPane.getChildren().add(mediaView);
+
+        //Label winner initialisation
+        lbl_winner = new Label();
+        lbl_winner.setId("winner");
+        lbl_winner.setTranslateY(-50);
+        lbl_winner.setTranslateX(-70);
+        lbl_winner.setVisible(false);
+        stackPane.getChildren().add(lbl_winner);
+
         return stackPane;
     }
 
-    private static StackPane startAnimation(StackPane stackPane) {
-        Media media = new Media(new File("LesePreisUIAnimation720p.mp4").toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        MediaView mediaView = new MediaView(mediaPlayer);
-        mediaPlayer.setAutoPlay(true);
-        stackPane.getChildren().add(mediaView);
+    private static void startAnimation() {
+        mediaView.setVisible(true);
+        mediaPlayer.play();
 
         //DELAY to show Name
         Task<Void> sleeper = new Task<Void>() {
@@ -71,33 +91,27 @@ public class DrawingTab {
                 return null;
             }
         };
-        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                showWinner(stackPane);
-            }
-        });
+        sleeper.setOnSucceeded(event -> showWinner());
         new Thread(sleeper).start();
 
         //On End of Animation
         mediaPlayer.setOnEndOfMedia(() -> {
             mediaView.setVisible(false);
             mediaPlayer.stop();
-            mediaPlayer.dispose();
-            stackPane.getChildren().clear();
-            generate();
+            lbl_winner.setVisible(false);
+            lbl_remainingPrices.setVisible(true);
+            if (remainingPrizes > 0) {
+                lbl_remainingPrices.setText("Verbleibende Preise: " + remainingPrizes);
+            } else {
+                lbl_remainingPrices.setText("Alle Preise wurden verlost!");
+                btn_start.setVisible(false);
+            }
         });
-
-        return stackPane;
     }
 
-    private static void showWinner(StackPane stackPane) {
-        String winnerText = winners[currentWinner].getFirstName() + " " + winners[currentWinner].getLastName() + "\n" + winners[currentWinner].getGrade();
-        Label lbl_winner = new Label("Gewinner:\n" + winnerText);
-        lbl_winner.setId("winner");
-        lbl_winner.setTranslateY(-50);
-        lbl_winner.setTranslateX(-70);
-        stackPane.getChildren().add(lbl_winner);
+    private static void showWinner() {
+        lbl_winner.setText("Gewinner:\n" + winners[currentWinner].getFirstName() + " " + winners[currentWinner].getLastName() + "\n" + winners[currentWinner].getGrade());
+        lbl_winner.setVisible(true);
         currentWinner++;
     }
 

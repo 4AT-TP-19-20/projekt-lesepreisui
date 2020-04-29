@@ -29,11 +29,21 @@ public class Main extends Application {
         base = new BorderPane();
         TabPane root = new TabPane();
         Data.init();
-        root.getTabs().add(new Tab("Teilnehmer", ContestantTab.generate()));
-        root.getTabs().add(new Tab("Prüfungen", ExamTab.generate()));
-        root.getTabs().add(new Tab("Bücher", BookTab.generate()));
-        root.getTabs().add(new Tab("Verlosung", DrawingTab.generate()));
-        root.getTabs().add(new Tab("Einstellungen", SettingsTab.generate()));
+        Tab tab_contestants = new Tab("Teilnehmer", ContestantTab.generate());
+        tab_contestants.setOnSelectionChanged(e-> tab_contestants.setContent(ContestantTab.generate()));
+        root.getTabs().add(tab_contestants);
+        Tab tab_exams = new Tab("Prüfungen", ExamTab.generate());
+        tab_exams.setOnSelectionChanged(e-> tab_exams.setContent(ExamTab.generate()));
+        root.getTabs().add(tab_exams);
+        Tab tab_books = new Tab("Bücher", BookTab.generate());
+        tab_books.setOnSelectionChanged(e-> tab_books.setContent(BookTab.generate()));
+        root.getTabs().add(tab_books);
+        Tab tab_drawing = new Tab("Verlosung", DrawingTab.generate());
+        tab_drawing.setOnSelectionChanged(e-> tab_drawing.setContent(DrawingTab.generate()));
+        root.getTabs().add(tab_drawing);
+        Tab tab_settings = new Tab("Einstellungen", SettingsTab.generate());
+        tab_settings.setOnSelectionChanged(e-> tab_settings.setContent(SettingsTab.generate()));
+        root.getTabs().add(tab_settings);
         root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         base = generateTopBar(base, root, primaryStage);
 

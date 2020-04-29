@@ -14,9 +14,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 public class ContestantTab {
-    private static TableView<Contestant> tbv_contestants = new TableView<>();
+    private static TableView<Contestant> tbv_contestants;
 
     public static BorderPane generate() {
+        tbv_contestants = new TableView<>();
         BorderPane borderPane = new BorderPane();
 
         //Top
