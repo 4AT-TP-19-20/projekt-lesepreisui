@@ -16,6 +16,17 @@
 #custom-button:hover, #drawing-button:hover{
     -fx-background-color: #004d26;
 }
+#red-button{
+    -fx-font: 20px "Century Gothic";
+    -fx-padding: 15px;
+    -fx-border-radius: 50px;
+    -fx-background-color: #7d0008;
+    -fx-text-fill: white;
+    -fx-max-width: 10000
+}
+#red-button:hover{
+    -fx-background-color: #4f000a;
+}
 #winner{
     -fx-text-fill: black;
     -fx-font: 80px "Century Gothic";
@@ -23,7 +34,7 @@
 
     -fx-stroke: 10px;
 }
-.text-field {
+#tf{
     -fx-max-width: 150px;
 }
 #h1{

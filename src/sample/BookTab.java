@@ -74,7 +74,7 @@ public class BookTab {
 
         });
         Button btn_removeBook = new Button("Buch löschen");
-        btn_removeBook.setId("custom-button");
+        btn_removeBook.setId("red-button");
         btn_removeBook.setOnAction(e->{
 
         });

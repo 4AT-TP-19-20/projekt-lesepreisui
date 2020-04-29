@@ -62,10 +62,12 @@ public class SettingsTab {
 
         vBox.getChildren().add(new Label("Anzahl an gestellten Fragen"));
         TextField txt_maxAnswerCount = new TextField();
+        txt_maxAnswerCount.setId("tf");
         txt_maxAnswerCount.textProperty().bindBidirectional(maxAnswersCount, new StringToInt());
         vBox.getChildren().add(txt_maxAnswerCount);
         vBox.getChildren().add(new Label("Mindestanzahl an richtigen Antworten"));
         TextField txt_minCorrectAnswers = new TextField();
+        txt_minCorrectAnswers.setId("tf");
         txt_minCorrectAnswers.textProperty().bindBidirectional(minCorrectAnswers, new StringToInt());
         vBox.getChildren().add(txt_minCorrectAnswers);
 
@@ -82,18 +84,22 @@ public class SettingsTab {
 
         vBox.getChildren().add(new Label("Mindestanzahl gelesener Bücher"));
         TextField txt_minBookCount = new TextField();
+        txt_minBookCount.setId("tf");
         txt_minBookCount.textProperty().bindBidirectional(minBookCount, new StringToInt());
         vBox.getChildren().add(txt_minBookCount);
         vBox.getChildren().add(new Label("Maximalanzahl gelesener Bücher"));
         TextField txt_maxBookCount = new TextField();
+        txt_maxBookCount.setId("tf");
         txt_maxBookCount.textProperty().bindBidirectional(maxBookCount, new StringToInt());
         vBox.getChildren().add(txt_maxBookCount);
         vBox.getChildren().add(new Label("Maximale Anzahl an Ziehungen pro Person"));
         TextField txt_maxPicks = new TextField();
+        txt_maxPicks.setId("tf");
         txt_maxPicks.textProperty().bindBidirectional(maxPicks, new StringToInt());
         vBox.getChildren().add(txt_maxPicks);
         vBox.getChildren().add(new Label("Anzahl vorhandener Preise"));
         TextField txt_prizeCount = new TextField();
+        txt_prizeCount.setId("tf");
         txt_prizeCount.textProperty().bindBidirectional(prizeCount, new StringToInt());
         vBox.getChildren().add(txt_prizeCount);
 

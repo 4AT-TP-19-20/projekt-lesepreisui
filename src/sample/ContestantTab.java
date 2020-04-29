@@ -70,7 +70,7 @@ public class ContestantTab {
             ContestantDetailWindow.showNewWindow(toAdd);
         });
         Button btn_removeContestant = new Button("Teilnehmer löschen");
-        btn_removeContestant.setId("custom-button");
+        btn_removeContestant.setId("red-button");
         btn_removeContestant.setOnAction(e->{
             Contestant selected = tbv_contestants.getSelectionModel().getSelectedItem();
             if(selected != null) {

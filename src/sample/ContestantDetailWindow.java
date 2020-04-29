@@ -2,14 +2,20 @@ package sample;
 
 
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.TableColumnHeader;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class ContestantDetailWindow {
     private static Stage stage;
@@ -20,9 +26,13 @@ public class ContestantDetailWindow {
     private static TextField txt_points;
     private static TextField txt_bookCount;
 
+
+
     public static void showNewWindow(Contestant contestant) {
         stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
         BorderPane borderPane = new BorderPane();
+        borderPane = generateBar(borderPane);
 
         //Top
         GridPane topItems = new GridPane();
@@ -60,10 +70,13 @@ public class ContestantDetailWindow {
 
         topItems.setHgap(5);
         topItems.setVgap(5);
-        borderPane.setTop(topItems);
+
+        borderPane.setCenter(topItems);
+
 
         //Center
         TableView<Exam> tbv_exams = new TableView<>();
+        tbv_exams.setPadding(new Insets(10));
         TableColumn<Exam, String> column_title = new TableColumn<>("Titel");
         column_title.setCellFactory(param -> new AlignedTableCell<>());
         column_title.setCellValueFactory(param -> param.getValue().getBook().titleProperty());
@@ -117,7 +130,8 @@ public class ContestantDetailWindow {
             Stage bookSelectionStage = new Stage();
             bookSelectionStage.setTitle("Buch auswählen");
             BorderPane bookStageRoot = BookTab.generate(true, bookSelectionStage);
-            Scene bookSelectionScene = new Scene(bookStageRoot,1280,1024);
+            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+            Scene bookSelectionScene = new Scene(bookStageRoot,1280, screenBounds.getHeight());
             bookSelectionScene.getStylesheets().add("stylesheet.css");
             bookSelectionStage.setScene(bookSelectionScene);
             bookStageRoot.requestFocus();
@@ -130,7 +144,7 @@ public class ContestantDetailWindow {
             }
         });
         Button btn_removeExam = new Button("Prüfung löschen");
-        btn_removeExam.setId("custom-button");
+        btn_removeExam.setId("red-button");
         btn_removeExam.setOnAction(e->{
             Exam selected = tbv_exams.getSelectionModel().getSelectedItem();
             if(selected != null) {
@@ -139,12 +153,13 @@ public class ContestantDetailWindow {
         });
         bottomItems.getChildren().addAll(btn_addExam, btn_removeExam);
         bottomItems.setSpacing(5);
+        bottomItems.setPadding(new Insets(10));
         borderPane.setBottom(bottomItems);
 
-        borderPane.setPadding(new Insets(10));
-        BorderPane.setMargin(borderPane.getCenter(), new Insets(10,0,10,0));
+        //BorderPane.setMargin(borderPane.getCenter(), new Insets(0,0,0,0));
 
-        Scene scene = new Scene(borderPane, 1280, 1000);
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        Scene scene = new Scene(borderPane, 1280, screenBounds.getHeight());
         scene.getStylesheets().add("stylesheet.css");
         stage.setTitle("Detailansicht Teilnehmer");
         stage.setScene(scene);
@@ -161,4 +176,46 @@ public class ContestantDetailWindow {
         txt_points.setEditable(editable);
         txt_bookCount.setEditable(editable);
     }
+
+    public static BorderPane generateBar(BorderPane base){
+        //TOP BAR
+
+        HBox topBar = new HBox();
+        topBar.setId("topBar");
+        ImageView smallLogo = new ImageView(new Image("ForcePlateLogo.png"));
+        smallLogo.setId("smallLogo");
+        smallLogo.setTranslateX(20);
+        smallLogo.setTranslateY(10);
+        smallLogo.setPreserveRatio(true);
+        smallLogo.setFitWidth(130);
+        topBar.getChildren().add(smallLogo);
+        base.setTop(topBar);
+
+        //WindowControls
+        ImageView minimize = new ImageView(new Image("minimize.png"));
+        minimize.setPreserveRatio(true);
+        minimize.setFitHeight(20);
+        ImageView close = new ImageView(new Image("close.png"));
+        close.setPreserveRatio(true);
+        close.setFitHeight(20);
+        close.setTranslateX(30);
+        Group controls = new Group(close, minimize);
+        controls.setTranslateX(1080);
+        controls.setTranslateY(15);
+        topBar.getChildren().add(controls);
+
+
+        //Window Controls Handler
+        //On Click
+        close.setOnMouseClicked(ActionEvent->{
+            stage.close();
+        });
+        minimize.setOnMouseClicked(ActionEvent->{
+            stage.setIconified(true);
+        });
+
+        return base;
+    }
+
+
 }

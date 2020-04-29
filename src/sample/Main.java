@@ -80,7 +80,7 @@ public class Main extends Application {
         loadingPane.getChildren().add(startBtn);
         startBtn.setOnAction(actionEvent -> {
             //Main Screen
-            Scene main = new Scene(base, 1280, screenBounds.getHeight() - 25);
+            Scene main = new Scene(base, 1280, screenBounds.getHeight());
             main.getStylesheets().add("stylesheet.css");
             primaryStage.setScene(main);
             root.requestFocus();
@@ -161,25 +161,6 @@ public class Main extends Application {
         minimize.setOnMouseClicked(ActionEvent->{
             primaryStage.setIconified(true);
         });
-            //On Hover
-        close.setOnMouseEntered(ActionEvent ->{
-            close.setScaleX(1.2);
-            close.setScaleY(1.2);
-        });
-        close.setOnMouseExited(ActionEvent ->{
-            close.setScaleX(1);
-            close.setScaleY(1);
-        });
-        minimize.setOnMouseEntered(ActionEvent ->{
-            minimize.setScaleX(1.2);
-            minimize.setScaleY(1.2);
-        });
-        minimize.setOnMouseExited(ActionEvent ->{
-            minimize.setScaleX(1);
-            minimize.setScaleY(1);
-        });
-
-
 
         return base;
     }
