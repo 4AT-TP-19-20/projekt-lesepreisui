@@ -148,14 +148,14 @@ public class Xml {
             NodeList languageNodeList = doc.getElementsByTagName("Language");
             ObservableList<String> languages = FXCollections.observableArrayList();
             for (int i = 0; i < languageNodeList.getLength(); i++) {
-                languages.add(((Element)languageNodeList.item(i)).getElementsByTagName("Language").item(0).getTextContent());
+                languages.add(((Element)languageNodeList.item(i)).getTextContent());
             }
             SettingsTab.setLanguages(languages);
 
             NodeList userNodeList = doc.getElementsByTagName("User");
             ObservableList<String> users = FXCollections.observableArrayList();
             for (int i = 0; i < userNodeList.getLength(); i++) {
-                users.add(((Element)userNodeList.item(i)).getElementsByTagName("User").item(0).getTextContent());
+                users.add(((Element)userNodeList.item(i)).getTextContent());
             }
             SettingsTab.setUsers(users);
         }catch (Exception e){

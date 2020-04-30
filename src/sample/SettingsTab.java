@@ -147,7 +147,7 @@ public class SettingsTab {
     }
 
     public static void setMaxAnswersCount(int maxAnswersCount) {
-        SettingsTab.maxAnswersCount.set(maxAnswersCount);
+        SettingsTab.maxAnswersCount = new SimpleIntegerProperty(maxAnswersCount);
     }
 
     public static int getMinCorrectAnswers() {
@@ -159,7 +159,7 @@ public class SettingsTab {
     }
 
     public static void setMinCorrectAnswers(int minCorrectAnswers) {
-        SettingsTab.minCorrectAnswers.set(minCorrectAnswers);
+        SettingsTab.minCorrectAnswers = new SimpleIntegerProperty(minCorrectAnswers);
     }
 
     public static int getMinBookCount() {
@@ -171,7 +171,7 @@ public class SettingsTab {
     }
 
     public static void setMinBookCount(int minBookCount) {
-        SettingsTab.minBookCount.set(minBookCount);
+        SettingsTab.minBookCount = new SimpleIntegerProperty(minBookCount);
     }
 
     public static int getMaxBookCount() {
@@ -183,7 +183,7 @@ public class SettingsTab {
     }
 
     public static void setMaxBookCount(int maxBookCount) {
-        SettingsTab.maxBookCount.set(maxBookCount);
+        SettingsTab.maxBookCount = new SimpleIntegerProperty(maxBookCount);
     }
 
     public static int getMaxPicks() {
@@ -195,7 +195,7 @@ public class SettingsTab {
     }
 
     public static void setMaxPicks(int maxPicks) {
-        SettingsTab.maxPicks.set(maxPicks);
+        SettingsTab.maxPicks = new SimpleIntegerProperty(maxPicks);
     }
 
     public static int getPrizeCount() {
@@ -215,6 +215,7 @@ public class SettingsTab {
     }
 
     public static void setGroupContestStartDate(LocalDate date) {
+        SettingsTab.groupContestStartDate = LocalDate.parse("01.01.2021", DateTimeFormatter.ofPattern("dd.MM.uuuu"));
         SettingsTab.groupContestStartDate = date;
     }
 
@@ -223,6 +224,7 @@ public class SettingsTab {
     }
 
     public static void setLanguages(ObservableList<String> languages) {
+        SettingsTab.languages = FXCollections.observableArrayList();
         SettingsTab.languages = languages;
     }
 
@@ -264,7 +266,7 @@ public class SettingsTab {
         for (String user: users) {
             Element userElement = doc.createElement("User");
             userElement.appendChild(doc.createTextNode(user));
-            languagesElement.appendChild(userElement);
+            usersElement.appendChild(userElement);
         }
 
         settings.appendChild(prizeCountElement);
