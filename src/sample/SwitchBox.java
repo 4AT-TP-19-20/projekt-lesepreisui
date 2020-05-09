@@ -7,13 +7,11 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 public class SwitchBox extends StackPane implements ObservableValue<StackPane> {
-    private StackPane stackPane;
     private IntegerProperty state;
     private int stateCount;
     private BooleanProperty editable;
@@ -27,7 +25,6 @@ public class SwitchBox extends StackPane implements ObservableValue<StackPane> {
         this(stateProperty.get(), size, editable, canBeEmpty);
         state.bindBidirectional(stateProperty);
     }
-
 
     SwitchBox(int initialState, String sizeMode, boolean editable, boolean canBeEmpty) {
         super();

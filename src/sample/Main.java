@@ -22,24 +22,25 @@ public class Main extends Application {
     public static BorderPane base;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         base = new BorderPane();
         TabPane root = new TabPane();
         Data.init();
-        Tab tab_contestants = new Tab("Teilnehmer", ContestantTab.generate());
-        tab_contestants.setOnSelectionChanged(e-> tab_contestants.setContent(ContestantTab.generate()));
+        Tab tab_contestants = new Tab("Teilnehmer");
+        tab_contestants.setContent(new ContestantTab(tab_contestants));
+        tab_contestants.setOnSelectionChanged(e -> tab_contestants.setContent(new ContestantTab(tab_contestants)));
         root.getTabs().add(tab_contestants);
-        Tab tab_exams = new Tab("Prüfungen", ExamTab.generate());
-        tab_exams.setOnSelectionChanged(e-> tab_exams.setContent(ExamTab.generate()));
+        Tab tab_exams = new Tab("Prüfungen", new ExamTab());
+        tab_exams.setOnSelectionChanged(e -> tab_exams.setContent(new ExamTab()));
         root.getTabs().add(tab_exams);
-        Tab tab_books = new Tab("Bücher", BookTab.generate());
-        tab_books.setOnSelectionChanged(e-> tab_books.setContent(BookTab.generate()));
+        Tab tab_books = new Tab("Bücher", new BookTab());
+        tab_books.setOnSelectionChanged(e -> tab_books.setContent(new BookTab()));
         root.getTabs().add(tab_books);
-        Tab tab_drawing = new Tab("Verlosung", DrawingTab.generate());
-        tab_drawing.setOnSelectionChanged(e-> tab_drawing.setContent(DrawingTab.generate()));
+        Tab tab_drawing = new Tab("Verlosung", new DrawingTab());
+        tab_drawing.setOnSelectionChanged(e -> tab_drawing.setContent(new DrawingTab()));
         root.getTabs().add(tab_drawing);
-        Tab tab_settings = new Tab("Einstellungen", SettingsTab.generate());
-        tab_settings.setOnSelectionChanged(e-> tab_settings.setContent(SettingsTab.generate()));
+        Tab tab_settings = new Tab("Einstellungen", new SettingsTab());
+        tab_settings.setOnSelectionChanged(e -> tab_settings.setContent(new SettingsTab()));
         root.getTabs().add(tab_settings);
         root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         base = generateTopBar(base, root, primaryStage);
@@ -50,6 +51,7 @@ public class Main extends Application {
 
         //Get Screen Height
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        Scene main = new Scene(base, 1280, screenBounds.getHeight());
 
         //Loading Screen
         StackPane loadingPane = loadingScreen();
@@ -77,7 +79,6 @@ public class Main extends Application {
         loadingPane.getChildren().add(startBtn);
         startBtn.setOnAction(actionEvent -> {
             //Main Screen
-            Scene main = new Scene(base, 1280, screenBounds.getHeight());
             main.getStylesheets().add("stylesheet.css");
             primaryStage.setScene(main);
             root.requestFocus();

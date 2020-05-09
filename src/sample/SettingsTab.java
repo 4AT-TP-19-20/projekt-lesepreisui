@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class SettingsTab {
+public class SettingsTab extends VBox{
     //General
     public static ObservableList<String> users = FXCollections.observableArrayList("Dorothea", "Petra");
 
@@ -36,9 +36,7 @@ public class SettingsTab {
     //Book
     private static ObservableList<String> languages = FXCollections.observableArrayList("Deutsch", "Englisch", "Italienisch", "Französisch", "Russisch");
 
-    public static VBox generate() {
-        VBox vBox = new VBox();
-        vBox.setAlignment(Pos.TOP_CENTER);
+    public SettingsTab() {
         Label einstellungen = new Label("Einstellungen");
         einstellungen.setId("h1");
         einstellungen.setPadding(new Insets(0,0,0,15));
@@ -47,7 +45,7 @@ public class SettingsTab {
         settingsIcon.setPreserveRatio(true);
         HBox heading = new HBox(settingsIcon, einstellungen);
         heading.setAlignment(Pos.TOP_CENTER);
-        vBox.getChildren().add(heading);
+        this.getChildren().add(heading);
 
         Label prüfungsEinstellungen = new Label("Prüfungeneinstellungen");
         prüfungsEinstellungen.setId("h2");
@@ -58,18 +56,18 @@ public class SettingsTab {
         HBox prüfungsBox = new HBox(prüfungIcon, prüfungsEinstellungen);
         prüfungsBox.setAlignment(Pos.TOP_CENTER);
         prüfungsBox.setPadding(new Insets(30,0,0,0));
-        vBox.getChildren().add(prüfungsBox);
+        this.getChildren().add(prüfungsBox);
 
-        vBox.getChildren().add(new Label("Anzahl an gestellten Fragen"));
+        this.getChildren().add(new Label("Anzahl an gestellten Fragen"));
         TextField txt_maxAnswerCount = new TextField();
         txt_maxAnswerCount.setId("tf");
         txt_maxAnswerCount.textProperty().bindBidirectional(maxAnswersCount, new StringToInt());
-        vBox.getChildren().add(txt_maxAnswerCount);
-        vBox.getChildren().add(new Label("Mindestanzahl an richtigen Antworten"));
+        this.getChildren().add(txt_maxAnswerCount);
+        this.getChildren().add(new Label("Mindestanzahl an richtigen Antworten"));
         TextField txt_minCorrectAnswers = new TextField();
         txt_minCorrectAnswers.setId("tf");
         txt_minCorrectAnswers.textProperty().bindBidirectional(minCorrectAnswers, new StringToInt());
-        vBox.getChildren().add(txt_minCorrectAnswers);
+        this.getChildren().add(txt_minCorrectAnswers);
 
         Label verlosungsEinstellungen = new Label("Verlosungseinstellungen");
         verlosungsEinstellungen.setId("h2");
@@ -80,28 +78,28 @@ public class SettingsTab {
         HBox verlosungsBox = new HBox(verlosungsIcon, verlosungsEinstellungen);
         verlosungsBox.setAlignment(Pos.TOP_CENTER);
         verlosungsBox.setPadding(new Insets(30,0,0,0));
-        vBox.getChildren().add(verlosungsBox);
+        this.getChildren().add(verlosungsBox);
 
-        vBox.getChildren().add(new Label("Mindestanzahl gelesener Bücher"));
+        this.getChildren().add(new Label("Mindestanzahl gelesener Bücher"));
         TextField txt_minBookCount = new TextField();
         txt_minBookCount.setId("tf");
         txt_minBookCount.textProperty().bindBidirectional(minBookCount, new StringToInt());
-        vBox.getChildren().add(txt_minBookCount);
-        vBox.getChildren().add(new Label("Maximalanzahl gelesener Bücher"));
+        this.getChildren().add(txt_minBookCount);
+        this.getChildren().add(new Label("Maximalanzahl gelesener Bücher"));
         TextField txt_maxBookCount = new TextField();
         txt_maxBookCount.setId("tf");
         txt_maxBookCount.textProperty().bindBidirectional(maxBookCount, new StringToInt());
-        vBox.getChildren().add(txt_maxBookCount);
-        vBox.getChildren().add(new Label("Maximale Anzahl an Ziehungen pro Person"));
+        this.getChildren().add(txt_maxBookCount);
+        this.getChildren().add(new Label("Maximale Anzahl an Ziehungen pro Person"));
         TextField txt_maxPicks = new TextField();
         txt_maxPicks.setId("tf");
         txt_maxPicks.textProperty().bindBidirectional(maxPicks, new StringToInt());
-        vBox.getChildren().add(txt_maxPicks);
-        vBox.getChildren().add(new Label("Anzahl vorhandener Preise"));
+        this.getChildren().add(txt_maxPicks);
+        this.getChildren().add(new Label("Anzahl vorhandener Preise"));
         TextField txt_prizeCount = new TextField();
         txt_prizeCount.setId("tf");
         txt_prizeCount.textProperty().bindBidirectional(prizeCount, new StringToInt());
-        vBox.getChildren().add(txt_prizeCount);
+        this.getChildren().add(txt_prizeCount);
 
         Label buchEinstellungen = new Label("Bucheinstellungen");
         buchEinstellungen.setId("h2");
@@ -112,11 +110,11 @@ public class SettingsTab {
         HBox buchBox = new HBox(buchIcon, buchEinstellungen);
         buchBox.setAlignment(Pos.TOP_CENTER);
         buchBox.setPadding(new Insets(30,0,0,0));
-        vBox.getChildren().add(buchBox);
+        this.getChildren().add(buchBox);
 
         EditableListView languageList = new EditableListView("Sprachen", "Neue Sprache", languages, "icons8-language-100.png");
         languageList.setMaxWidth(400);
-        vBox.getChildren().add(languageList);
+        this.getChildren().add(languageList);
 
         Label generalEinstellungen = new Label("Generelle Einstellungen");
         generalEinstellungen.setId("h2");
@@ -127,15 +125,15 @@ public class SettingsTab {
         HBox generalBox = new HBox(generalIcon, generalEinstellungen);
         generalBox.setAlignment(Pos.TOP_CENTER);
         generalBox.setPadding(new Insets(30,0,0,0));
-        vBox.getChildren().add(generalBox);
+        this.getChildren().add(generalBox);
 
         EditableListView userList = new EditableListView("Benutzer", "Neuer Benutzer", users, "icons8-user-100.png");
         userList.setMaxWidth(400);
-        vBox.getChildren().add(userList);
+        this.getChildren().add(userList);
 
-        vBox.setPadding(new Insets(10));
-        vBox.setSpacing(5);
-        return vBox;
+        this.setAlignment(Pos.TOP_CENTER);
+        this.setPadding(new Insets(10));
+        this.setSpacing(5);
     }
 
     public static int getMaxAnswersCount() {

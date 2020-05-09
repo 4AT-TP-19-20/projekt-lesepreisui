@@ -3,6 +3,9 @@ package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Data {
     public static ObservableList<Contestant> contestants;
     public static ObservableList<Book> books;
@@ -18,7 +21,6 @@ public class Data {
         Xml.getContestants(path + "contestants.xml");
 
         //Temporary static lists, replace with files
-        /*
         contestants.add(new Contestant("Manuel", "Ploner", "4AT"));
         contestants.add(new Contestant("Mattia", "Galiani", "4AT"));
         contestants.add(new Contestant("Maximilian", "Mitterrutzner", "4AT"));
@@ -36,7 +38,6 @@ public class Data {
         contestants.get(2).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
         contestants.get(2).addExam(new Exam(books.get(2), new int[]{0,0,1,1,1,1}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
         contestants.get(3).addExam(new Exam(books.get(2), new int[]{1,0,1,1,1,2}, "Dorothea", LocalDate.parse("22.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-        */
     }
 
     public static void save() {

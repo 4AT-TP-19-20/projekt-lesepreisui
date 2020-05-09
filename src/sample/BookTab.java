@@ -3,7 +3,6 @@ package sample;
 import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -11,60 +10,39 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-public class BookTab {
-    private static TableView<Book> tbv_books;
+public class BookTab extends BorderPane {
+    private static CustomTableView<Book> tbv_books;
 
-    public static BorderPane generate() {
-        return generate(false, new Stage());
-    }
-
-    public static BorderPane generate(boolean returnOnSelection, Stage parent) {
-        BorderPane borderPane = new BorderPane();
-
+    public BookTab() {
         //Top
         TextField txt_search = new TextField();
         txt_search.setPromptText("Suche nach Titel, Autor, Sprache, ...");
         txt_search.textProperty().addListener((observable, oldValue, newValue) -> textChangeListener(newValue));
-        borderPane.setTop(txt_search);
+        this.setTop(txt_search);
 
         //Center
-        tbv_books = new TableView<>();
-        TableColumn<Book, String> column_title = new TableColumn<>("Titel");
-        column_title.setCellFactory(param -> new AlignedTableCell<>());
-        column_title.setCellValueFactory(new PropertyValueFactory<>("title"));
-        TableColumn<Book, String> column_authorFirstName = new TableColumn<>("Vorname Author");
-        column_authorFirstName.setCellFactory(param -> new AlignedTableCell<>());
-        column_authorFirstName.setCellValueFactory(new PropertyValueFactory<>("authorFirstName"));
-        TableColumn<Book, String> column_authorLastName = new TableColumn<>("Nachname Author");
-        column_authorLastName.setCellFactory(param -> new AlignedTableCell<>());
-        column_authorLastName.setCellValueFactory(new PropertyValueFactory<>("authorLastName"));
-        TableColumn<Book, String> column_language = new TableColumn<>("Sprache");
-        column_language.setCellFactory(param -> new AlignedTableCell<>());
-        column_language.setCellValueFactory(new PropertyValueFactory<>("language"));
-        TableColumn<Book, Integer> column_points = new TableColumn<>("Punkte");
-        column_points.setCellFactory(param -> new AlignedTableCell<>());
-        column_points.setCellValueFactory(new PropertyValueFactory<>("points"));
-        tbv_books.getColumns().addAll(column_title, column_authorFirstName, column_authorLastName, column_language, column_points);
+        tbv_books = new CustomTableView<>();
+
+        tbv_books.addColumn("Titel", "", new PropertyValueFactory<>("title"));
+        tbv_books.addColumn("Vorname Author", "", new PropertyValueFactory<>("authorFirstName"));
+        tbv_books.addColumn("Nachname Author", "", new PropertyValueFactory<>("authorLastName"));
+        tbv_books.addColumn("Sprache", "", new PropertyValueFactory<>("language"));
+        tbv_books.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
+
         tbv_books.getItems().addAll(Data.books);
         tbv_books.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tbv_books.setOnMouseClicked((MouseEvent event)->{
+        tbv_books.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
                 tbv_books.getSelectionModel().clearSelection();
             }
             else if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 if(!tbv_books.getSelectionModel().isEmpty()) {
-                    if(returnOnSelection) {
-                        parent.close();
-                    }
-                    else {
-                        BookDetailWindow.showNewWindow(tbv_books.getSelectionModel().getSelectedItem());
-                    }
+                    onSelection();
                 }
             }
         });
-        borderPane.setCenter(tbv_books);
+        this.setCenter(tbv_books);
 
         //Bottom
         VBox bottomItems = new VBox();
@@ -74,7 +52,8 @@ public class BookTab {
             Book toAdd = new Book();
             Data.books.add(toAdd);
             tbv_books.getItems().add(toAdd);
-            BookDetailWindow.showNewWindow(toAdd);
+            BookDetailWindow bookDetailWindow = new BookDetailWindow(toAdd);
+            bookDetailWindow.show();
         });
         Button btn_removeBook = new Button("Buch löschen");
         btn_removeBook.setId("red-button");
@@ -87,18 +66,17 @@ public class BookTab {
         });
         bottomItems.getChildren().addAll(btn_addBook, btn_removeBook);
         bottomItems.setSpacing(5);
-        borderPane.setBottom(bottomItems);
+        this.setBottom(bottomItems);
 
-        BorderPane.setMargin(borderPane.getCenter(), new Insets(10, 0, 10, 0));
-        borderPane.setPadding(new Insets(10));
-        return borderPane;
+        BorderPane.setMargin(this.getCenter(), new Insets(10, 0, 10, 0));
+        this.setPadding(new Insets(10));
     }
 
-    public static Book getSelectedBook() {
+    public Book getSelectedBook() {
         return tbv_books.getSelectionModel().getSelectedItem();
     }
 
-    private static void textChangeListener(String newValue) {
+    private void textChangeListener(String newValue) {
         newValue = newValue.trim().toLowerCase();
         tbv_books.getItems().clear();
 
@@ -115,5 +93,10 @@ public class BookTab {
                 tbv_books.getItems().add(book);
             }
         }
+    }
+
+    protected void onSelection() {
+        BookDetailWindow bookDetailWindow = new BookDetailWindow(tbv_books.getSelectionModel().getSelectedItem());
+        bookDetailWindow.show();
     }
 }

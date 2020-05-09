@@ -1,25 +1,14 @@
 package sample;
 
 import javafx.geometry.Insets;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 
-public class BookDetailWindow {
-    private static Stage stage;
-
-    public static void showNewWindow(Book book) {
-        stage = new Stage();
-
+public class BookDetailWindow extends CustomStage {
+    public BookDetailWindow(Book book) {
         GridPane gridPane = new GridPane();
 
         gridPane.add(new Label("Titel"),0,0);
@@ -55,49 +44,6 @@ public class BookDetailWindow {
         gridPane.setHgap(5);
         gridPane.setVgap(5);
 
-        Stage stage = new Stage();
-        stage.setTitle("Detailfenster Buch");
-        stage.setScene(new Scene(gridPane, 450,170));
-        stage.show();
-    }
-
-    public static BorderPane generateBar(BorderPane base){
-        //TOP BAR
-
-        HBox topBar = new HBox();
-        topBar.setId("topBar");
-        ImageView smallLogo = new ImageView(new Image("ForcePlateLogo.png"));
-        smallLogo.setId("smallLogo");
-        smallLogo.setTranslateX(20);
-        smallLogo.setTranslateY(10);
-        smallLogo.setPreserveRatio(true);
-        smallLogo.setFitWidth(130);
-        topBar.getChildren().add(smallLogo);
-        base.setTop(topBar);
-
-        //WindowControls
-        ImageView minimize = new ImageView(new Image("minimize.png"));
-        minimize.setPreserveRatio(true);
-        minimize.setFitHeight(20);
-        ImageView close = new ImageView(new Image("close.png"));
-        close.setPreserveRatio(true);
-        close.setFitHeight(20);
-        close.setTranslateX(30);
-        Group controls = new Group(close, minimize);
-        controls.setTranslateX(1080);
-        controls.setTranslateY(15);
-        topBar.getChildren().add(controls);
-
-
-        //Window Controls Handler
-        //On Click
-        close.setOnMouseClicked(ActionEvent->{
-            stage.close();
-        });
-        minimize.setOnMouseClicked(ActionEvent->{
-            stage.setIconified(true);
-        });
-
-        return base;
+        this.setScene(gridPane, 450, 220);
     }
 }

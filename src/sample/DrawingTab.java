@@ -1,8 +1,6 @@
 package sample;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -16,39 +14,37 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-public class DrawingTab {
-    private static StackPane stackPane;
-    private static int remainingPrizes;
-    private static Contestant[] winners;
-    private static int currentWinner;
-    private static Label lbl_remainingPrices;
-    private static Label lbl_winner;
-    private static Button btn_start;
-    private static MediaPlayer mediaPlayer;
-    private static MediaView mediaView;
+public class DrawingTab extends StackPane{
+    private int remainingPrizes;
+    private Contestant[] winners;
+    private int currentWinner;
+    private Label lbl_remainingPrices;
+    private Label lbl_winner;
+    private Button btn_start;
+    private MediaPlayer mediaPlayer;
+    private MediaView mediaView;
 
-    public static StackPane generate() {
-        stackPane = new StackPane();
+    public DrawingTab() {
         remainingPrizes = SettingsTab.getPrizeCount();
         String remainingPricesText;
         currentWinner = 0;
 
         //BTN START Animation
-        stackPane.setId("black-background");
+        this.setId("black-background");
         btn_start = new Button("Gewinner Auslosen");
         btn_start.setId("drawing-button");
 
         //Remaining Prizes
         if (remainingPrizes > 0) {
             remainingPricesText = "Verbleibende Preise: " + remainingPrizes;
-            stackPane.getChildren().add(btn_start);
+            this.getChildren().add(btn_start);
         } else {
             remainingPricesText = "Alle Preise wurden verlost!";
         }
         lbl_remainingPrices = new Label(remainingPricesText);
         lbl_remainingPrices.setId("remaining");
         lbl_remainingPrices.setTranslateY(350);
-        stackPane.getChildren().add(lbl_remainingPrices);
+        this.getChildren().add(lbl_remainingPrices);
 
         //btn_start EventHandler
         btn_start.setOnAction(actionEvent -> {
@@ -64,7 +60,7 @@ public class DrawingTab {
         mediaPlayer = new MediaPlayer(new Media(new File("LesePreisUIAnimation720p.mp4").toURI().toString()));
         mediaView = new MediaView(mediaPlayer);
         mediaView.setVisible(false);
-        stackPane.getChildren().add(mediaView);
+        this.getChildren().add(mediaView);
 
         //Label winner initialisation
         lbl_winner = new Label();
@@ -72,12 +68,10 @@ public class DrawingTab {
         lbl_winner.setTranslateY(-50);
         lbl_winner.setTranslateX(-70);
         lbl_winner.setVisible(false);
-        stackPane.getChildren().add(lbl_winner);
-
-        return stackPane;
+        this.getChildren().add(lbl_winner);
     }
 
-    private static void startAnimation() {
+    private void startAnimation() {
         mediaView.setVisible(true);
         mediaPlayer.play();
 
@@ -109,13 +103,13 @@ public class DrawingTab {
         });
     }
 
-    private static void showWinner() {
+    private void showWinner() {
         lbl_winner.setText("Gewinner:\n" + winners[currentWinner].getFirstName() + " " + winners[currentWinner].getLastName() + "\n" + winners[currentWinner].getGrade());
         lbl_winner.setVisible(true);
         currentWinner++;
     }
 
-    private static void pickWinners() {
+    private void pickWinners() {
         int totalPoints = 0;
         ArrayList<Map.Entry<Contestant, Integer>> qualifiedContestants = new ArrayList<>();
 
