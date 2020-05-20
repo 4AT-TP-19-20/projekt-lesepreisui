@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -19,6 +21,11 @@ public class SwitchBox extends StackPane implements ObservableValue<StackPane> {
 
     SwitchBox(String size) {
         this(2, size, true, true);
+    }
+
+    SwitchBox(BooleanBinding binding, String size, boolean editable, boolean canBeEmpty) {
+        this(binding.get() ? 1 : 0, size, editable, canBeEmpty);
+        binding.addListener(e -> state.set(binding.get() ? 1 : 0));
     }
 
     SwitchBox(IntegerProperty stateProperty, String size, boolean editable, boolean canBeEmpty) {

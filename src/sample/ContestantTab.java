@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -9,6 +10,7 @@ import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class ContestantTab extends BorderPane {
@@ -30,7 +32,7 @@ public class ContestantTab extends BorderPane {
         tbv_contestants.addColumn("Klasse", "", new PropertyValueFactory<>("grade"));
         tbv_contestants.addColumn("Gelesene Bücher", 0, new PropertyValueFactory<>("bookCount"));
         tbv_contestants.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
-        //tbv_contestants.addColumn("Qualifiziert", "", ...);
+        tbv_contestants.addColumn("Qualifiziert", new StackPane(), param -> new SwitchBox(Bindings.greaterThanOrEqual(param.getValue().bookCountProperty(), SettingsTab.minBookCountProperty()), "small", false, false));
 
         tbv_contestants.getItems().addAll(Data.contestants);
         tbv_contestants.setOnMouseClicked((MouseEvent event) -> {
@@ -42,7 +44,7 @@ public class ContestantTab extends BorderPane {
                 if(tbv_contestants.getSelectionModel().getSelectedItem() != null) {
                     parent.setContent(new ContestantDetailView(tbv_contestants.getSelectionModel().getSelectedItem(), parent));
                     stage.enableGoBack(e -> {
-                        parent.setContent(this);
+                        parent.setContent(new ContestantTab(parent, stage));
                         stage.disableGoBack();
                     });
                 }
@@ -60,7 +62,7 @@ public class ContestantTab extends BorderPane {
             textChangeListener(txt_search.getText());
             parent.setContent(new ContestantDetailView(toAdd, parent));
             stage.enableGoBack(ee -> {
-                parent.setContent(this);
+                parent.setContent(new ContestantTab(parent, stage));
                 stage.disableGoBack();
             });
         });
