@@ -8,7 +8,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-public class ContestantDetailView extends BorderPane{
+public class ContestantDetailView extends BorderPane {
     private static TextField txt_firstName;
     private static TextField txt_lastName;
     private static TextField txt_grade;
@@ -119,15 +119,5 @@ public class ContestantDetailView extends BorderPane{
 
         BorderPane.setMargin(this.getCenter(), new Insets(10,0,10,0));
         this.setPadding(new Insets(10));
-    }
-
-    private static void setEditable(boolean editable)
-    {
-        txt_firstName.setEditable(editable);
-        txt_lastName.setEditable(editable);
-        txt_grade.setEditable(editable);
-        txt_group.setEditable(editable);
-        txt_points.setEditable(editable);
-        txt_bookCount.setEditable(editable);
     }
 }
