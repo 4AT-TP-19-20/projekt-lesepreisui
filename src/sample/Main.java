@@ -3,70 +3,37 @@ package sample;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.concurrent.Task;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class Main extends Application {
-
-    public static BorderPane base;
-
     @Override
-    public void start(Stage primaryStage) {
-        base = new BorderPane();
+    public void start(Stage unused) {
+        CustomStage primaryStage = new CustomStage();
         TabPane root = new TabPane();
         Data.init();
-        Tab tab_contestants = new Tab("Teilnehmer");
-        tab_contestants.setContent(new ContestantTab(tab_contestants));
-        tab_contestants.setOnSelectionChanged(e -> tab_contestants.setContent(new ContestantTab(tab_contestants)));
-        root.getTabs().add(tab_contestants);
-        Tab tab_exams = new Tab("Prüfungen", new ExamTab());
-        tab_exams.setOnSelectionChanged(e -> tab_exams.setContent(new ExamTab()));
-        root.getTabs().add(tab_exams);
-        Tab tab_books = new Tab("Bücher", new BookTab());
-        tab_books.setOnSelectionChanged(e -> tab_books.setContent(new BookTab()));
-        root.getTabs().add(tab_books);
-        Tab tab_drawing = new Tab("Verlosung", new DrawingTab());
-        tab_drawing.setOnSelectionChanged(e -> tab_drawing.setContent(new DrawingTab()));
-        root.getTabs().add(tab_drawing);
-        Tab tab_settings = new Tab("Einstellungen", new SettingsTab());
-        tab_settings.setOnSelectionChanged(e -> tab_settings.setContent(new SettingsTab()));
-        root.getTabs().add(tab_settings);
-        root.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        base = generateTopBar(base, root, primaryStage);
-
-        //CENTER
-        base.setCenter(root);
-        primaryStage.setTitle("LesePreisUI");
+        initializeTabs(root, primaryStage);
 
         //Get Screen Height
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        Scene main = new Scene(base, 1280, screenBounds.getHeight());
 
         //Loading Screen
-        StackPane loadingPane = loadingScreen();
-        Scene loading = new Scene(loadingPane, 1280, screenBounds.getHeight());
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setScene(loading);
+        VBox loadingPane = loadingScreen();
+        primaryStage.setScene(loadingPane, 1280, screenBounds.getHeight());
         primaryStage.show();
-
-        //Link CSS Stylesheet
-        loading.getStylesheets().add("stylesheet.css");
 
         //Button
         Button startBtn = new Button("LesePreisUI starten");
         startBtn.setId("drawing-button");
-        startBtn.setTranslateY(350);
 
         //Button FadeIN
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(3));
@@ -79,8 +46,7 @@ public class Main extends Application {
         loadingPane.getChildren().add(startBtn);
         startBtn.setOnAction(actionEvent -> {
             //Main Screen
-            main.getStylesheets().add("stylesheet.css");
-            primaryStage.setScene(main);
+            primaryStage.setScene(root, 1280, screenBounds.getHeight());
             root.requestFocus();
 
             //Login Pane
@@ -91,7 +57,6 @@ public class Main extends Application {
             btn_login.setOnAction(e->{
                 if(!cbx_user.getSelectionModel().isEmpty()) {
                     Data.currentUser = cbx_user.getSelectionModel().getSelectedItem();
-                    base.setCenter(root);
                     loginStage.hide();
                 }
             });
@@ -100,13 +65,10 @@ public class Main extends Application {
             loginStage.setScene(new Scene(loginItems,160,30));
             loginStage.show();
         });
-
     }
 
-    public static ProgressBar bar = new ProgressBar();
-
-    public StackPane loadingScreen() {
-        StackPane loadingPane = new StackPane();
+    private VBox loadingScreen() {
+        VBox loadingPane = new VBox();
         loadingPane.setId("loadingPane");
         //Logo
         ImageView logo = new ImageView(new Image("ForcePlateLogo.png"));
@@ -124,10 +86,10 @@ public class Main extends Application {
         loadingPane.getChildren().add(logo);
 
         //ProgressBar
+        ProgressBar bar = new ProgressBar();
         bar.setProgress(0);
         bar.setStyle("-fx-accent: rgb(0,125,67)");
         bar.setId("progressBar");
-        bar.setTranslateY(150);
         loadingPane.getChildren().add(bar);
 
         Task<Void> sleeper = new Task<Void>() {
@@ -138,47 +100,31 @@ public class Main extends Application {
         };
         bar.progressProperty().bind(sleeper.progressProperty());
 
+        loadingPane.setSpacing(200);
+        loadingPane.setAlignment(Pos.CENTER);
+        loadingPane.setPadding(new Insets(100));
         return loadingPane;
     }
 
-    public BorderPane generateTopBar(BorderPane base, TabPane root, Stage primaryStage){
-        //TOP BAR
-        HBox topBar = new HBox();
-        topBar.setId("topBar");
-        ImageView smallLogo = new ImageView(new Image("ForcePlateLogo.png"));
-        smallLogo.setId("smallLogo");
-        smallLogo.setTranslateX(20);
-        smallLogo.setTranslateY(10);
-        smallLogo.setPreserveRatio(true);
-        smallLogo.setFitWidth(130);
-        topBar.getChildren().add(smallLogo);
-        base.setTop(topBar);
+    private static void initializeTabs(TabPane parent, CustomStage stage) {
+        Tab tab_contestants = new Tab("Teilnehmer");
+        tab_contestants.setContent(new ContestantTab(tab_contestants, stage));
+        tab_contestants.setOnSelectionChanged(e -> tab_contestants.setContent(new ContestantTab(tab_contestants, stage)));
 
-        //WindowControls
-        ImageView minimize = new ImageView(new Image("minimize.png"));
-        minimize.setPreserveRatio(true);
-        minimize.setFitHeight(20);
-        ImageView close = new ImageView(new Image("close.png"));
-        close.setPreserveRatio(true);
-        close.setFitHeight(20);
-        close.setTranslateX(30);
-        Group controls = new Group(close, minimize);
-        controls.setTranslateX(1080);
-        controls.setTranslateY(15);
-        topBar.getChildren().add(controls);
+        Tab tab_exams = new Tab("Prüfungen", new ExamTab());
+        tab_exams.setOnSelectionChanged(e -> tab_exams.setContent(new ExamTab()));
 
+        Tab tab_books = new Tab("Bücher", new BookTab());
+        tab_books.setOnSelectionChanged(e -> tab_books.setContent(new BookTab()));
 
-        //Window Controls Handler
-            //On Click
-        close.setOnMouseClicked(ActionEvent->{
-            Data.save();
-            primaryStage.close();
-        });
-        minimize.setOnMouseClicked(ActionEvent->{
-            primaryStage.setIconified(true);
-        });
+        Tab tab_drawing = new Tab("Verlosung", new DrawingTab());
+        tab_drawing.setOnSelectionChanged(e -> tab_drawing.setContent(new DrawingTab()));
 
-        return base;
+        Tab tab_settings = new Tab("Einstellungen", new SettingsTab());
+        tab_settings.setOnSelectionChanged(e -> tab_settings.setContent(new SettingsTab()));
+
+        parent.getTabs().addAll(tab_contestants, tab_exams, tab_books, tab_drawing, tab_settings);
+        parent.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
     }
 
     public static void main(String[] args) {
