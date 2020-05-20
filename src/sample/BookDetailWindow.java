@@ -44,6 +44,7 @@ public class BookDetailWindow extends CustomStage {
         gridPane.setHgap(5);
         gridPane.setVgap(5);
 
+        this.enableBlocking();
         this.setScene(gridPane, 450, 220);
     }
 }

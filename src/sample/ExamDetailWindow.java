@@ -60,6 +60,7 @@ public class ExamDetailWindow extends CustomStage {
         gridPane.setVgap(5);
         gridPane.setPadding(new Insets(10));
 
+        this.enableBlocking();
         this.setScene(gridPane, 410, 350);
     }
 }

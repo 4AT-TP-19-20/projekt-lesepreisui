@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -77,5 +78,9 @@ public class CustomStage extends Stage {
 
     void disableGoBack() {
         back.setVisible(false);
+    }
+
+    void enableBlocking() {
+        initModality(Modality.APPLICATION_MODAL);
     }
 }
