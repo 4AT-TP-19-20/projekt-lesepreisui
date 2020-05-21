@@ -32,7 +32,7 @@ public class ContestantTab extends BorderPane {
         tbv_contestants.addColumn("Klasse", "", new PropertyValueFactory<>("grade"));
         tbv_contestants.addColumn("Gelesene Bücher", 0, new PropertyValueFactory<>("bookCount"));
         tbv_contestants.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
-        tbv_contestants.addColumn("Qualifiziert", new StackPane(), param -> new SwitchBox(Bindings.greaterThanOrEqual(param.getValue().bookCountProperty(), SettingsTab.minBookCountProperty()), "small", false, false));
+        tbv_contestants.addColumn("Qualifiziert", new StackPane(), param -> new SwitchBox(param.getValue().qualifiedProperty(), "small", false));
 
         tbv_contestants.getItems().addAll(Data.contestants);
         tbv_contestants.setOnMouseClicked((MouseEvent event) -> {

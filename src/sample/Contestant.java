@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +25,7 @@ public class Contestant {
         this.bookCount = new SimpleIntegerProperty();
         this.isGroupMember = new SimpleBooleanProperty(false);
         this.isQualified = new SimpleBooleanProperty();
+        isQualified.bind(Bindings.greaterThanOrEqual(bookCount, SettingsTab.minBookCountProperty()));
         exams = FXCollections.observableArrayList();
     }
 
@@ -77,6 +79,14 @@ public class Contestant {
 
     public void setGroupMember(boolean groupMember) {
         isGroupMember.set(groupMember);
+    }
+
+    public boolean isQualified() {
+        return isQualified.get();
+    }
+
+    public BooleanProperty qualifiedProperty() {
+        return isQualified;
     }
 
     public int getPoints() {
