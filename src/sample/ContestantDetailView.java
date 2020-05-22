@@ -12,7 +12,7 @@ public class ContestantDetailView extends BorderPane {
     private static TextField txt_firstName;
     private static TextField txt_lastName;
     private static TextField txt_grade;
-    private static TextField txt_group;
+    private static SwitchBox sbx_groupMember;
     private static TextField txt_points;
     private static TextField txt_bookCount;
 
@@ -36,8 +36,8 @@ public class ContestantDetailView extends BorderPane {
         topItems.add(txt_grade,1,2);
 
         topItems.add(new Label("Gruppe"),2,2);
-        txt_group = new TextField("TODO");
-        topItems.add(txt_group,3,2);
+        sbx_groupMember = new SwitchBox(contestant.groupMemberProperty(), "small", true);
+        topItems.add(sbx_groupMember,3,2);
 
         topItems.add(new Label("Gesamtpunkte"),0,3);
         txt_points = new TextField();

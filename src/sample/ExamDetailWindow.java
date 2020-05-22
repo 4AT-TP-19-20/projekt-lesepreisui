@@ -30,7 +30,7 @@ public class ExamDetailWindow extends CustomStage {
         gridPane.add(txt_language, 1, 2,3,1);
 
         gridPane.add(new Label("Datum"), 0, 3);
-        TextField txt_date = new TextField(exam.getDate());
+        TextField txt_date = new TextField(exam.getDateAsString());
         txt_date.setEditable(false);
         gridPane.add(txt_date,1,3,3,1);
 

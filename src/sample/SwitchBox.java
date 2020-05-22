@@ -23,7 +23,7 @@ public class SwitchBox extends StackPane implements ObservableValue<StackPane> {
 
     SwitchBox(BooleanProperty booleanState, String size, boolean editable) {
         this(booleanState.get() ? 1 : 0, size, editable, false);
-        booleanState.addListener(e -> state.set(booleanState.get() ? 1 : 0));
+        new BooleanIntegerBinding(state, booleanState);
     }
 
     SwitchBox(IntegerProperty stateProperty, String size, boolean editable, boolean canBeEmpty) {

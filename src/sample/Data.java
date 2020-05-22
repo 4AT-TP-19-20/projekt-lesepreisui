@@ -5,16 +5,19 @@ import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 public class Data {
     public static ObservableList<Contestant> contestants;
     public static ObservableList<Book> books;
+    public static HashMap<String, Group> groups;
     public static String currentUser = "Dorothea";
     private static String path = ".\\";
 
     public static void init() {
         contestants = FXCollections.observableArrayList();
         books = FXCollections.observableArrayList();
+        groups = new HashMap<>();
 
         Xml.getSettings(path + "settings.xml");
         Xml.getBooks(path + "books.xml");
@@ -44,5 +47,14 @@ public class Data {
         Xml.set(path + "settings.xml", "Settings");
         Xml.set(path + "books.xml", "Books");
         Xml.set(path + "contestants.xml", "Contestants");
+    }
+
+    public static Group getGroupByGrade(String grade) {
+        if(groups.containsKey(grade)) {
+            return groups.get(grade);
+        }
+        Group toAdd = new Group();
+        groups.put(grade, toAdd);
+        return toAdd;
     }
 }

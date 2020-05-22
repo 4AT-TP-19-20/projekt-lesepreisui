@@ -31,7 +31,10 @@ public class SettingsTab extends VBox{
     private static IntegerProperty maxBookCount = new SimpleIntegerProperty(40);
     private static IntegerProperty maxPicks = new SimpleIntegerProperty(3);
     private static IntegerProperty prizeCount = new SimpleIntegerProperty(10);
-    private static LocalDate groupContestStartDate = LocalDate.parse("01.01.2021", DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+
+    //Group contest
+    private static LocalDate groupContestStartDate = LocalDate.parse("01.01.2020", DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+    private static IntegerProperty minMembers = new SimpleIntegerProperty(2);
 
     //Book
     private static ObservableList<String> languages = FXCollections.observableArrayList("Deutsch", "Englisch", "Italienisch", "Französisch", "Russisch");
@@ -208,12 +211,15 @@ public class SettingsTab extends VBox{
         SettingsTab.prizeCount = new SimpleIntegerProperty(prizeCount);
     }
 
-    public static String getGroupContestStartDate() {
+    public static LocalDate getGroupContestStartDate() {
+        return groupContestStartDate;
+    }
+
+    public static String getGroupContestStartDateAsString() {
         return groupContestStartDate.format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
     }
 
     public static void setGroupContestStartDate(LocalDate date) {
-        SettingsTab.groupContestStartDate = LocalDate.parse("01.01.2021", DateTimeFormatter.ofPattern("dd.MM.uuuu"));
         SettingsTab.groupContestStartDate = date;
     }
 
@@ -251,7 +257,7 @@ public class SettingsTab extends VBox{
         minCorrectAnswersElement.appendChild(doc.createTextNode(SettingsTab.getMinCorrectAnswers() + ""));
         minBookCountElement.appendChild(doc.createTextNode(SettingsTab.getMinBookCount() + ""));
         maxBookCountElement.appendChild(doc.createTextNode(SettingsTab.getMaxBookCount() + ""));
-        groupContestStartDateElement.appendChild(doc.createTextNode(SettingsTab.getGroupContestStartDate()));
+        groupContestStartDateElement.appendChild(doc.createTextNode(SettingsTab.getGroupContestStartDateAsString()));
 
         ObservableList<String> languages = SettingsTab.getLanguages();
         for (String language: languages) {
@@ -278,5 +284,17 @@ public class SettingsTab extends VBox{
         settings.appendChild(usersElement);
 
         return settings;
+    }
+
+    public static int getMinMembers() {
+        return minMembers.get();
+    }
+
+    public static IntegerProperty minMembersProperty() {
+        return minMembers;
+    }
+
+    public static void setMinMembers(int minMembers) {
+        SettingsTab.minMembers.set(minMembers);
     }
 }

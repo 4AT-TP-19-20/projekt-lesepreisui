@@ -85,7 +85,11 @@ public class Exam {
         this.librarian.set(librarian);
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public String getDateAsString() {
         return date.format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
     }
 
@@ -135,7 +139,7 @@ public class Exam {
         bookTitleElement.appendChild(doc.createTextNode(this.book.getTitle()));
         answersElement.appendChild(doc.createTextNode(this.answers.toCompactString()));
         librarianElement.appendChild(doc.createTextNode(this.getLibrarian()));
-        dateElement.appendChild(doc.createTextNode(this.getDate()));
+        dateElement.appendChild(doc.createTextNode(this.getDateAsString()));
 
         examElement.appendChild(bookTitleElement);
         examElement.appendChild(answersElement);
