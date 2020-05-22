@@ -112,8 +112,8 @@ public class Main extends Application {
         tab_contestants.setOnSelectionChanged(e -> tab_contestants.setContent(new ContestantTab(tab_contestants, stage)));
 
         Tab tab_groups = new Tab("Gruppen");
-        tab_groups.setContent(new GroupTab());
-        tab_groups.setOnSelectionChanged(e -> tab_groups.setContent(new GroupTab()));
+        tab_groups.setContent(new GroupTab(tab_groups, stage));
+        tab_groups.setOnSelectionChanged(e -> tab_groups.setContent(new GroupTab(tab_groups, stage)));
 
         Tab tab_exams = new Tab("Prüfungen", new ExamTab());
         tab_exams.setOnSelectionChanged(e -> tab_exams.setContent(new ExamTab()));
