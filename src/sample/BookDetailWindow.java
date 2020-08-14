@@ -45,6 +45,7 @@ public class BookDetailWindow extends CustomStage {
         gridPane.setVgap(5);
 
         this.enableBlocking();
-        this.setScene(gridPane, 450, 220);
+        this.setTitle("Buch bearbeiten");
+        this.setScene(gridPane, 450, 170);
     }
 }

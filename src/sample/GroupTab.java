@@ -9,13 +9,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.util.Map;
 
 public class GroupTab extends BorderPane {
     private CustomTableView<Map.Entry<String, Group>> tbv_groups;
 
-    public GroupTab(Tab parent, CustomStage stage) {
+    public GroupTab(Tab parent, Stage stage) {
         //Top
         TextField txt_search = new TextField();
         txt_search.setPromptText("Suche nach Klasse, ...");
@@ -37,10 +38,10 @@ public class GroupTab extends BorderPane {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 if(tbv_groups.getSelectionModel().getSelectedItem() != null) {
                     parent.setContent(new GroupDetailView(tbv_groups.getSelectionModel().getSelectedItem()));
-                    stage.enableGoBack(e -> {
+                    /*stage.enableGoBack(e -> {
                         parent.setContent(new GroupTab(parent, stage));
                         stage.disableGoBack();
-                    });
+                    });*/
                 }
             }
         });

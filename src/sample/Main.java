@@ -19,6 +19,7 @@ public class Main extends Application {
     @Override
     public void start(Stage unused) {
         CustomStage primaryStage = new CustomStage();
+        primaryStage.setTitle("LesePreisUI");
         TabPane root = new TabPane();
         Data.init();
         initializeTabs(root, primaryStage);
@@ -28,7 +29,7 @@ public class Main extends Application {
 
         //Loading Screen
         VBox loadingPane = loadingScreen();
-        primaryStage.setScene(loadingPane, 1280, screenBounds.getHeight());
+        primaryStage.setScene(loadingPane, 1280, screenBounds.getHeight() - 30);
         primaryStage.show();
 
         //Button
@@ -46,7 +47,7 @@ public class Main extends Application {
         loadingPane.getChildren().add(startBtn);
         startBtn.setOnAction(actionEvent -> {
             //Main Screen
-            primaryStage.setScene(root, 1280, screenBounds.getHeight());
+            primaryStage.setScene(root, 1280, screenBounds.getHeight() - 30);
             root.requestFocus();
 
             //Login Pane
@@ -106,7 +107,7 @@ public class Main extends Application {
         return loadingPane;
     }
 
-    private static void initializeTabs(TabPane parent, CustomStage stage) {
+    private static void initializeTabs(TabPane parent, Stage stage) {
         Tab tab_contestants = new Tab("Teilnehmer");
         tab_contestants.setContent(new ContestantTab(tab_contestants, stage));
         tab_contestants.setOnSelectionChanged(e -> tab_contestants.setContent(new ContestantTab(tab_contestants, stage)));

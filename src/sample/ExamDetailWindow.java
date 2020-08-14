@@ -61,6 +61,7 @@ public class ExamDetailWindow extends CustomStage {
         gridPane.setPadding(new Insets(10));
 
         this.enableBlocking();
-        this.setScene(gridPane, 410, 350);
+        this.setTitle("Prüfung bearbeiten");
+        this.setScene(gridPane, 410, 280);
     }
 }

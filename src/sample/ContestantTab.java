@@ -12,11 +12,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class ContestantTab extends BorderPane {
     private CustomTableView<Contestant> tbv_contestants;
 
-    public ContestantTab(Tab parent, CustomStage stage) {
+    public ContestantTab(Tab parent, Stage stage) {
         tbv_contestants = new CustomTableView<>();
 
         //Top
@@ -43,10 +44,10 @@ public class ContestantTab extends BorderPane {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 if(tbv_contestants.getSelectionModel().getSelectedItem() != null) {
                     parent.setContent(new ContestantDetailView(tbv_contestants.getSelectionModel().getSelectedItem(), parent));
-                    stage.enableGoBack(e -> {
+                    /*stage.enableGoBack(e -> {
                         parent.setContent(new ContestantTab(parent, stage));
                         stage.disableGoBack();
-                    });
+                    });*/
                 }
             }
         });
@@ -61,10 +62,10 @@ public class ContestantTab extends BorderPane {
             Data.contestants.add(toAdd);
             textChangeListener(txt_search.getText());
             parent.setContent(new ContestantDetailView(toAdd, parent));
-            stage.enableGoBack(ee -> {
+            /*stage.enableGoBack(ee -> {
                 parent.setContent(new ContestantTab(parent, stage));
                 stage.disableGoBack();
-            });
+            });*/
         });
         Button btn_removeContestant = new Button("Teilnehmer löschen");
         btn_removeContestant.setId("red-button");
