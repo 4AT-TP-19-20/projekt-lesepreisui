@@ -1,11 +1,7 @@
 package sample;
 
-import javafx.animation.FadeTransition;
 import javafx.application.Application;
-import javafx.concurrent.Task;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -13,98 +9,51 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class Main extends Application {
     @Override
     public void start(Stage unused) {
-        CustomStage primaryStage = new CustomStage();
-        primaryStage.setTitle("LesePreisUI");
-        TabPane root = new TabPane();
         Data.init();
-        initializeTabs(root, primaryStage);
 
-        //Get Screen Height
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        CustomStage mainStage = new CustomStage();
+        CustomStage loginStage = new CustomStage();
+        StackPane loginItems = new StackPane();
+        TabPane root = new TabPane();
+        initializeTabs(root, mainStage);
 
-        //Loading Screen
-        VBox loadingPane = loadingScreen();
-        primaryStage.setScene(loadingPane, 1280, screenBounds.getHeight() - 30);
-        primaryStage.show();
-
-        //Button
-        Button startBtn = new Button("LesePreisUI starten");
-        startBtn.setId("drawing-button");
-
-        //Button FadeIN
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(3));
-        fadeIn.setNode(startBtn);
-        fadeIn.setFromValue(0);
-        fadeIn.setToValue(1);
-        fadeIn.setAutoReverse(false);
-        fadeIn.setCycleCount(1);
-        fadeIn.play();
-        loadingPane.getChildren().add(startBtn);
-        startBtn.setOnAction(actionEvent -> {
-            //Main Screen
-            primaryStage.setScene(root, 1280, screenBounds.getHeight() - 30);
-            root.requestFocus();
-
-            //Login Pane
-            Stage loginStage = new Stage();
-            HBox loginItems = new HBox();
-            ComboBox<String> cbx_user = new ComboBox<>(SettingsTab.getUsers());
-            Button btn_login = new Button("Login");
-            btn_login.setOnAction(e->{
-                if(!cbx_user.getSelectionModel().isEmpty()) {
-                    Data.currentUser = cbx_user.getSelectionModel().getSelectedItem();
-                    loginStage.hide();
-                }
-            });
-            loginItems.getChildren().addAll(cbx_user, btn_login);
-            loginItems.setSpacing(10);
-            loginStage.setScene(new Scene(loginItems,160,30));
-            loginStage.show();
-        });
-    }
-
-    private VBox loadingScreen() {
-        VBox loadingPane = new VBox();
-        loadingPane.setId("loadingPane");
-        //Logo
-        ImageView logo = new ImageView(new Image("ForcePlateLogo.png"));
-        logo.setFitWidth(900);
+        ImageView logo = new ImageView(new Image("login.png"));
+        logo.setFitWidth(350);
         logo.setPreserveRatio(true);
+        loginItems.getChildren().add(logo);
 
-        //Logo FadeIN
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(3));
-        fadeIn.setNode(logo);
-        fadeIn.setFromValue(0);
-        fadeIn.setToValue(1);
-        fadeIn.setAutoReverse(false);
-        fadeIn.setCycleCount(1);
-        fadeIn.play();
-        loadingPane.getChildren().add(logo);
+        HBox controls = new HBox(30);
 
-        //ProgressBar
-        ProgressBar bar = new ProgressBar();
-        bar.setProgress(0);
-        bar.setStyle("-fx-accent: rgb(0,125,67)");
-        bar.setId("progressBar");
-        loadingPane.getChildren().add(bar);
+        ComboBox<String> cbx_user = new ComboBox<>(SettingsTab.getUsers());
+        controls.getChildren().add(cbx_user);
 
-        Task<Void> sleeper = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                return null;
+        Button btn_login = new Button("Anmelden");
+        btn_login.setOnAction(e->{
+            if(!cbx_user.getSelectionModel().isEmpty()) {
+                loginStage.close();
+                Data.currentUser = cbx_user.getSelectionModel().getSelectedItem();
+                mainStage.setScene(root, 1280, Screen.getPrimary().getVisualBounds().getHeight() - 30);
+                mainStage.setTitle("LesePreisUI");
+                mainStage.show();
+                root.requestFocus();
             }
-        };
-        bar.progressProperty().bind(sleeper.progressProperty());
+        });
+        controls.getChildren().add(btn_login);
 
-        loadingPane.setSpacing(200);
-        loadingPane.setAlignment(Pos.CENTER);
-        loadingPane.setPadding(new Insets(100));
-        return loadingPane;
+        controls.setAlignment(Pos.CENTER);
+        controls.setTranslateY(110);
+        loginItems.getChildren().add(controls);
+
+        loginStage.setScene(new Scene(loginItems));
+        loginStage.setTitle("Anmelden");
+        loginStage.setWidth(350);
+        loginStage.setHeight(320);
+        loginStage.setResizable(false);
+        loginStage.show();
     }
 
     private static void initializeTabs(TabPane parent, Stage stage) {
