@@ -7,6 +7,8 @@ import javafx.collections.ObservableList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.Comparator;
+
 public class Contestant {
     private StringProperty firstName;
     private StringProperty lastName;
@@ -39,6 +41,29 @@ public class Contestant {
 
     public Contestant() {
         this("Vorname", "Nachname", "Klasse");
+    }
+
+    public Contestant getCopy() {
+        Contestant copy = new Contestant(getFirstName(), getLastName(), getGrade());
+        copy.setGroupMember(isGroupMember());
+        copy.copyExams(getExams());
+        return copy;
+    }
+
+    public boolean equals(Contestant other) {
+        return this.getFirstName().equals(other.getFirstName())
+            && this.getLastName().equals(other.getLastName())
+            && this.getGrade().equals(other.getGrade())
+            && this.isGroupMember() == other.isGroupMember()
+            && this.examsEqual(other.getExams());
+    }
+
+    public void setValues(Contestant other) {
+        this.setFirstName(other.getFirstName());
+        this.setLastName(other.getLastName());
+        this.setGrade(other.getGrade());
+        this.setGroupMember(other.isGroupMember());
+        this.copyExams(other.getExams());
     }
 
     public String getFirstName() {
@@ -125,12 +150,19 @@ public class Contestant {
         return exams;
     }
 
-    public void setExams(ObservableList<Exam> exams) {
-        for(Exam exam : exams) {
-            exam.pointsProperty().addListener(param -> pointsUpdate());
-            exam.passedProperty().addListener(param -> bookCountUpdate());
+    public void copyExams(ObservableList<Exam> examsToCopy) {
+        clearExams();
+
+        for(Exam exam : examsToCopy) {
+            Exam newExam = exam.getCopy();
+            newExam.pointsProperty().addListener(param -> pointsUpdate());
+            newExam.passedProperty().addListener(param -> bookCountUpdate());
+            newExam.setContestant(exam.getContestant());
+            exams.add(newExam);
         }
-        this.exams = exams;
+
+        pointsUpdate();
+        bookCountUpdate();
     }
 
     public void addExam(Exam exam) {
@@ -148,6 +180,46 @@ public class Contestant {
         exams.remove(exam);
         pointsUpdate();
         bookCountUpdate();
+    }
+
+    public void clearExams() {
+        for(Exam exam : exams) {
+            exam.pointsProperty().removeListener(param -> pointsUpdate());
+            exam.passedProperty().removeListener(param -> bookCountUpdate());
+        }
+        exams.clear();
+        pointsUpdate();
+        bookCountUpdate();
+    }
+
+    public boolean examsEqual(ObservableList<Exam> otherExams) {
+        Comparator<Exam> examComparator = (exam1, exam2) -> {
+            Book book1 = exam1.getBook();
+            Book book2 = exam2.getBook();
+
+            if(!book1.getTitle().equals(book2.getTitle())) {
+                return book1.getTitle().compareTo(book2.getTitle());
+            }
+            else if(!book1.getAuthorLastName().equals(book2.getAuthorLastName())) {
+                return book1.getAuthorLastName().compareTo(book2.getAuthorLastName());
+            }
+            else {
+                return book1.getAuthorFirstName().compareTo(book2.getAuthorFirstName());
+            }
+        };
+
+        ObservableList<Exam> ownSorted = exams.sorted(examComparator);
+        ObservableList<Exam> othersSorted = otherExams.sorted(examComparator);
+
+        if(ownSorted.size() == othersSorted.size()) {
+            for(int i = 0; i < this.exams.size(); i++) {
+                if(!ownSorted.get(i).equals(othersSorted.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     private void pointsUpdate() {

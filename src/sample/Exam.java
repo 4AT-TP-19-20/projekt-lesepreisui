@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 public class Exam {
     private Book book;
@@ -35,6 +36,28 @@ public class Exam {
 
     public Exam(Book book) {
         this(book, new int[]{-1}, Data.currentUser, LocalDate.now());
+    }
+
+    public Exam getCopy() {
+        Exam copy = new Exam(this.getBook(), this.getAnswers(), this.getLibrarian(), this.getDate());
+        copy.setContestant(this.getContestant());
+        return copy;
+    }
+
+    public boolean equals(Exam other) {
+        return this.getBook() == other.getBook()
+                && Arrays.equals(this.getAnswers(), other.getAnswers())
+                && this.getLibrarian().equals(other.getLibrarian())
+                && this.getDate() == other.getDate()
+                && this.getContestant() == other.getContestant();
+    }
+
+    public void setValues(Exam other) {
+        this.setBook(other.getBook());
+        this.setAnswers(other.getAnswers());
+        this.setLibrarian(other.getLibrarian());
+        this.setDate(other.getDate());
+        this.setContestant(other.getContestant());
     }
 
     public Book getBook() {
