@@ -10,12 +10,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.util.Optional;
-
 public class ContestantTab extends BorderPane {
     private CustomTableView<Contestant> tbv_contestants;
-    private Contestant selected;
-    private Contestant old;
 
     public ContestantTab(Tab parent) {
         tbv_contestants = new CustomTableView<>();
@@ -42,32 +38,9 @@ public class ContestantTab extends BorderPane {
                 return;
             }
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                selected = tbv_contestants.getSelectionModel().getSelectedItem();
+                Contestant selected = tbv_contestants.getSelectionModel().getSelectedItem();
                 if(selected != null) {
                     parent.setContent(new ContestantDetailView(selected, parent));
-                    old = selected.getCopy();
-                    Main.enableBack(e -> {
-                        if(!selected.equals(old)) {
-                            SaveAlert saveAlert = new SaveAlert();
-                            Optional<ButtonType> picked = saveAlert.showAndWait();
-
-                            if(picked.isPresent()) {
-                                switch (picked.get().getButtonData()) {
-                                    case YES:
-                                        old.setValues(selected);
-                                    break;
-                                    case NO:
-                                        selected.setValues(old);
-                                    break;
-                                    case CANCEL_CLOSE:
-                                        return;
-                                }
-                            }
-                        }
-                        parent.setContent(new ContestantTab(parent));
-                        Main.disableButtons();
-                    });
-                    Main.enableSaveDiscard(save -> old.setValues(selected), discard -> selected.setValues(old));
                 }
             }
         });

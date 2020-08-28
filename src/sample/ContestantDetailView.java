@@ -8,45 +8,40 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-public class ContestantDetailView extends BorderPane {
-    private static TextField txt_firstName;
-    private static TextField txt_lastName;
-    private static TextField txt_grade;
-    private static SwitchBox sbx_groupMember;
-    private static TextField txt_points;
-    private static TextField txt_bookCount;
+import java.util.Optional;
 
+public class ContestantDetailView extends BorderPane {
     public ContestantDetailView(Contestant contestant, Tab container) {
         //Top
         GridPane topItems = new GridPane();
 
         topItems.add(new Label("Vorname"),0,0);
-        txt_firstName = new TextField();
+        TextField txt_firstName = new TextField();
         txt_firstName.textProperty().bindBidirectional(contestant.firstNameProperty());
         topItems.add(txt_firstName, 1,0,3,1);
 
         topItems.add(new Label("Nachname"),0,1);
-        txt_lastName = new TextField();
+        TextField txt_lastName = new TextField();
         txt_lastName.textProperty().bindBidirectional(contestant.lastNameProperty());
         topItems.add(txt_lastName, 1,1,3,1);
 
         topItems.add(new Label("Klasse"),0,2);
-        txt_grade = new TextField();
+        TextField txt_grade = new TextField();
         txt_grade.textProperty().bindBidirectional(contestant.gradeProperty());
         topItems.add(txt_grade,1,2);
 
         topItems.add(new Label("Gruppe"),2,2);
-        sbx_groupMember = new SwitchBox(contestant.groupMemberProperty(), "small", true);
+        SwitchBox sbx_groupMember = new SwitchBox(contestant.groupMemberProperty(), "small", true);
         topItems.add(sbx_groupMember,3,2);
 
         topItems.add(new Label("Gesamtpunkte"),0,3);
-        txt_points = new TextField();
+        TextField txt_points = new TextField();
         txt_points.textProperty().bindBidirectional(contestant.pointsProperty(), new StringToInt());
         txt_points.setEditable(false);
         topItems.add(txt_points, 1, 3);
 
         topItems.add(new Label("Gelesene Bücher"),2,3);
-        txt_bookCount = new TextField();
+        TextField txt_bookCount = new TextField();
         txt_bookCount.textProperty().bindBidirectional(contestant.bookCountProperty(), new StringToInt());
         txt_bookCount.setEditable(false);
         topItems.add(txt_bookCount, 3, 3);
@@ -119,5 +114,29 @@ public class ContestantDetailView extends BorderPane {
 
         BorderPane.setMargin(this.getCenter(), new Insets(10,0,10,0));
         this.setPadding(new Insets(10));
+
+        Contestant copy = contestant.getCopy();
+        Main.enableBack(e -> {
+            if(!contestant.equals(copy)) {
+                SaveAlert saveAlert = new SaveAlert();
+                Optional<ButtonType> picked = saveAlert.showAndWait();
+
+                if(picked.isPresent()) {
+                    switch (picked.get().getButtonData()) {
+                        case YES:
+                            copy.setValues(contestant);
+                            break;
+                        case NO:
+                            contestant.setValues(copy);
+                            break;
+                        case CANCEL_CLOSE:
+                            return;
+                    }
+                }
+            }
+            container.setContent(new ContestantTab(container));
+            Main.disableButtons();
+        });
+        Main.enableSaveDiscard(save -> copy.setValues(contestant), discard -> contestant.setValues(copy));
     }
 }
