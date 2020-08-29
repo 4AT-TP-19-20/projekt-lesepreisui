@@ -3,7 +3,6 @@ package sample;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.control.skin.TableColumnHeader;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -13,14 +12,17 @@ import javafx.scene.layout.StackPane;
 import java.util.Map;
 
 public class GroupTab extends BorderPane {
+    private BorderPane content;
     private CustomTableView<Map.Entry<String, Group>> tbv_groups;
 
-    public GroupTab(Tab parent) {
+    public GroupTab() {
+        content = new BorderPane();
+
         //Top
         TextField txt_search = new TextField();
         txt_search.setPromptText("Suche nach Klasse, ...");
         txt_search.textProperty().addListener((observable, oldValue, newValue) -> textChangeListener(newValue));
-        this.setTop(txt_search);
+        content.setTop(txt_search);
 
         //Center
         tbv_groups = new CustomTableView<>();
@@ -36,18 +38,23 @@ public class GroupTab extends BorderPane {
             }
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 if(tbv_groups.getSelectionModel().getSelectedItem() != null) {
-                    parent.setContent(new GroupDetailView(tbv_groups.getSelectionModel().getSelectedItem()));
+                    this.setCenter(new GroupDetailView(tbv_groups.getSelectionModel().getSelectedItem()));
                     Main.enableBack(e -> {
-                        parent.setContent(new GroupTab(parent));
+                        this.showContent();
                         Main.disableButtons();
                     });
                 }
             }
         });
-        this.setCenter(tbv_groups);
+        content.setCenter(tbv_groups);
 
-        BorderPane.setMargin(this.getCenter(), new Insets(10, 0, 0, 0));
-        this.setPadding(new Insets(10));
+        BorderPane.setMargin(content.getCenter(), new Insets(10, 0, 0, 0));
+        content.setPadding(new Insets(10));
+        this.showContent();
+    }
+
+    void showContent() {
+        this.setCenter(content);
     }
 
     private void textChangeListener(String newValue) {

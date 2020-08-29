@@ -11,9 +11,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class ContestantTab extends BorderPane {
+    private BorderPane content;
     private CustomTableView<Contestant> tbv_contestants;
 
-    public ContestantTab(Tab parent) {
+    public ContestantTab() {
+        content = new BorderPane();
         tbv_contestants = new CustomTableView<>();
 
         //Top
@@ -21,7 +23,7 @@ public class ContestantTab extends BorderPane {
         txt_search.setPromptText("Suche nach Name, Klasse, ...");
         txt_search.setMaxWidth(10000);
         txt_search.textProperty().addListener((observable, oldValue, newValue) -> textChangeListener(newValue));
-        this.setTop(txt_search);
+        content.setTop(txt_search);
 
         //Center
         tbv_contestants.addColumn("Vorname", "", new PropertyValueFactory<>("firstName"));
@@ -40,11 +42,11 @@ public class ContestantTab extends BorderPane {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 Contestant selected = tbv_contestants.getSelectionModel().getSelectedItem();
                 if(selected != null) {
-                    parent.setContent(new ContestantDetailView(selected, parent));
+                    this.setCenter(new ContestantDetailView(selected, this));
                 }
             }
         });
-        this.setCenter(tbv_contestants);
+        content.setCenter(tbv_contestants);
 
         //Bottom
         VBox bottomItems = new VBox();
@@ -54,11 +56,7 @@ public class ContestantTab extends BorderPane {
             Contestant toAdd = new Contestant();
             Data.contestants.add(toAdd);
             textChangeListener(txt_search.getText());
-            parent.setContent(new ContestantDetailView(toAdd, parent));
-            Main.enableBack(ee -> {
-                parent.setContent(new ContestantTab(parent));
-                Main.disableButtons();
-            });
+            this.setCenter(new ContestantDetailView(toAdd, this));
         });
         Button btn_removeContestant = new Button("Teilnehmer löschen");
         btn_removeContestant.setId("red-button");
@@ -71,10 +69,15 @@ public class ContestantTab extends BorderPane {
         });
         bottomItems.getChildren().addAll(btn_addContestant, btn_removeContestant);
         bottomItems.setSpacing(5);
-        this.setBottom(bottomItems);
+        content.setBottom(bottomItems);
 
-        BorderPane.setMargin(this.getCenter(), new Insets(10, 0, 10, 0));
-        this.setPadding(new Insets(10));
+        BorderPane.setMargin(content.getCenter(), new Insets(10, 0, 10, 0));
+        content.setPadding(new Insets(10));
+        this.showContent();
+    }
+
+    void showContent() {
+        this.setCenter(content);
     }
 
     private void textChangeListener(String newValue) {

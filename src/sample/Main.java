@@ -81,12 +81,12 @@ public class Main extends Application {
 
     private static void initializeTabs(TabPane parent, Stage stage) {
         Tab tab_contestants = new Tab("Teilnehmer");
-        tab_contestants.setContent(new ContestantTab(tab_contestants));
-        tab_contestants.setOnSelectionChanged(e -> tab_contestants.setContent(new ContestantTab(tab_contestants)));
+        tab_contestants.setContent(new ContestantTab());
+        tab_contestants.setOnSelectionChanged(e -> tab_contestants.setContent(new ContestantTab()));
 
         Tab tab_groups = new Tab("Gruppen");
-        tab_groups.setContent(new GroupTab(tab_groups));
-        tab_groups.setOnSelectionChanged(e -> tab_groups.setContent(new GroupTab(tab_groups)));
+        tab_groups.setContent(new GroupTab());
+        tab_groups.setOnSelectionChanged(e -> tab_groups.setContent(new GroupTab()));
 
         Tab tab_exams = new Tab("Prüfungen", new ExamTab());
         tab_exams.setOnSelectionChanged(e -> tab_exams.setContent(new ExamTab()));

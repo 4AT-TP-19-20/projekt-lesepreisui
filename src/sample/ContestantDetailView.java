@@ -11,7 +11,14 @@ import javafx.scene.layout.*;
 import java.util.Optional;
 
 public class ContestantDetailView extends BorderPane {
-    public ContestantDetailView(Contestant contestant, Tab container) {
+    private Contestant contestant;
+    private Contestant copy;
+    private ContestantTab parent;
+    private BorderPane content;
+
+    public ContestantDetailView(Contestant contestant, ContestantTab parent) {
+        content = new BorderPane();
+
         //Top
         GridPane topItems = new GridPane();
 
@@ -49,7 +56,7 @@ public class ContestantDetailView extends BorderPane {
         topItems.setHgap(5);
         topItems.setVgap(5);
 
-        this.setTop(topItems);
+        content.setTop(topItems);
 
         //Center
         CustomTableView<Exam> tbv_exams = new CustomTableView<>();
@@ -79,17 +86,23 @@ public class ContestantDetailView extends BorderPane {
             }
         });
 
-        this.setCenter(tbv_exams);
+        content.setCenter(tbv_exams);
 
         //Bottom
         VBox bottomItems = new VBox();
         Button btn_addExam = new Button("Neue Prüfung");
         btn_addExam.setId("custom-button");
         ContestantDetailView outerThis = this; //TODO find intended way to do this
-        btn_addExam.setOnAction(e->{
+        btn_addExam.setOnAction(e -> {
+            Main.disableButtons();
+            Main.enableBack(ee -> {
+                showContent();
+                enableButtons();
+            });
             BookTab bookTab = new BookTab() {
                 protected void onSelection() {
-                    container.setContent(outerThis);
+                    outerThis.showContent();
+                    enableButtons();
 
                     Exam toAdd = new Exam(getSelectedBook());
                     contestant.addExam(toAdd);
@@ -97,7 +110,7 @@ public class ContestantDetailView extends BorderPane {
                     examDetailWindow.show();
                 }
             };
-            container.setContent(bookTab);
+            this.setCenter(bookTab);
             bookTab.requestFocus();
         });
         Button btn_removeExam = new Button("Prüfung löschen");
@@ -110,12 +123,23 @@ public class ContestantDetailView extends BorderPane {
         });
         bottomItems.getChildren().addAll(btn_addExam, btn_removeExam);
         bottomItems.setSpacing(5);
-        this.setBottom(bottomItems);
+        content.setBottom(bottomItems);
 
-        BorderPane.setMargin(this.getCenter(), new Insets(10,0,10,0));
-        this.setPadding(new Insets(10));
+        this.contestant = contestant;
+        this.parent = parent;
+        copy = contestant.getCopy();
+        enableButtons();
 
-        Contestant copy = contestant.getCopy();
+        BorderPane.setMargin(content.getCenter(), new Insets(10,0,10,0));
+        content.setPadding(new Insets(10));
+        this.showContent();
+    }
+
+    void showContent() {
+        this.setCenter(content);
+    }
+
+    private void enableButtons() {
         Main.enableBack(e -> {
             if(!contestant.equals(copy)) {
                 SaveAlert saveAlert = new SaveAlert();
@@ -134,7 +158,7 @@ public class ContestantDetailView extends BorderPane {
                     }
                 }
             }
-            container.setContent(new ContestantTab(container));
+            parent.showContent();
             Main.disableButtons();
         });
         Main.enableSaveDiscard(save -> copy.setValues(contestant), discard -> contestant.setValues(copy));
