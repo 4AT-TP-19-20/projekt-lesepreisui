@@ -8,14 +8,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.util.concurrent.Callable;
 
 public class Main extends Application {
     private static Button btn_back;
     private static Button btn_save;
     private static Button btn_discard;
+    private static TabPane tabPane;
+    private static Callable<Boolean> canLeave;
 
     @Override
     public void start(Stage unused) {
@@ -24,17 +30,30 @@ public class Main extends Application {
         CustomStage mainStage = new CustomStage();
         CustomStage loginStage = new CustomStage();
         StackPane loginItems = new StackPane();
-        TabPane tabPane = new TabPane();
         StackPane root = new StackPane();
         HBox buttons = new HBox(5);
+        tabPane = new TabPane();
 
-        initializeTabs(tabPane, mainStage);
+        initializeTabs();
 
         btn_back = new Button("Zurück");
         btn_back.setMinWidth(100);
         btn_save = new Button("Änderungen speichern");
         btn_discard = new Button("Änderungen verwerfen");
         disableButtons();
+
+        tabPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            if(event.getTarget().getClass().getName().contains("TabPaneSkin")
+            || (event.getTarget() instanceof Text && event.getY() <= 33)) { //To make sure it is text in the tab header
+                try {
+                    if(!canLeave.call()) {
+                        event.consume();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         buttons.setTranslateX(-5);
         buttons.setTranslateY(4);
@@ -79,7 +98,7 @@ public class Main extends Application {
         loginStage.show();
     }
 
-    private static void initializeTabs(TabPane parent, Stage stage) {
+    private static void initializeTabs() {
         Tab tab_contestants = new Tab("Teilnehmer");
         tab_contestants.setContent(new ContestantTab());
         tab_contestants.setOnSelectionChanged(e -> tab_contestants.setContent(new ContestantTab()));
@@ -100,8 +119,8 @@ public class Main extends Application {
         Tab tab_settings = new Tab("Einstellungen", new SettingsTab());
         tab_settings.setOnSelectionChanged(e -> tab_settings.setContent(new SettingsTab()));
 
-        parent.getTabs().addAll(tab_contestants, tab_groups, tab_exams, tab_books, tab_drawing, tab_settings);
-        parent.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        tabPane.getTabs().addAll(tab_contestants, tab_groups, tab_exams, tab_books, tab_drawing, tab_settings);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
     }
 
     public static void main(String[] args) {
@@ -113,16 +132,29 @@ public class Main extends Application {
         btn_back.setVisible(true);
     }
 
-    static void enableSaveDiscard(EventHandler<ActionEvent> saveAction, EventHandler<ActionEvent> discardAction) {
+    static void enableSaveDiscardSystem(EventHandler<ActionEvent> saveAction,
+                                        EventHandler<ActionEvent> discardAction,
+                                        Callable<Boolean> canLeave) {
         btn_save.setOnAction(saveAction);
         btn_save.setVisible(true);
         btn_discard.setOnAction(discardAction);
         btn_discard.setVisible(true);
+        btn_back.setOnAction(e -> {
+            try {
+                canLeave.call();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        btn_back.setVisible(true);
+
+        Main.canLeave = canLeave;
     }
 
     static void disableButtons() {
         btn_back.setVisible(false);
         btn_save.setVisible(false);
         btn_discard.setVisible(false);
+        canLeave = () -> true;
     }
 }

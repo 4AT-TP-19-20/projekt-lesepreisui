@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
-public class Exam {
+public class Exam implements Saveable<Exam> {
     private Book book;
     private IntegerPropertyArray answers;
     private IntegerProperty passed;
@@ -44,7 +44,7 @@ public class Exam {
         return copy;
     }
 
-    public boolean equals(Exam other) {
+    public boolean isEqualTo(Exam other) {
         return this.getBook() == other.getBook()
                 && Arrays.equals(this.getAnswers(), other.getAnswers())
                 && this.getLibrarian().equals(other.getLibrarian())

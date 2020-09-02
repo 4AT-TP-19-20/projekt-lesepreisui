@@ -9,7 +9,7 @@ import org.w3c.dom.Element;
 
 import java.util.Comparator;
 
-public class Contestant {
+public class Contestant implements Saveable<Contestant> {
     private StringProperty firstName;
     private StringProperty lastName;
     private StringProperty grade;
@@ -50,7 +50,7 @@ public class Contestant {
         return copy;
     }
 
-    public boolean equals(Contestant other) {
+    public boolean isEqualTo(Contestant other) {
         return this.getFirstName().equals(other.getFirstName())
             && this.getLastName().equals(other.getLastName())
             && this.getGrade().equals(other.getGrade())
@@ -213,7 +213,7 @@ public class Contestant {
 
         if(ownSorted.size() == othersSorted.size()) {
             for(int i = 0; i < this.exams.size(); i++) {
-                if(!ownSorted.get(i).equals(othersSorted.get(i))) {
+                if(!ownSorted.get(i).isEqualTo(othersSorted.get(i))) {
                     return false;
                 }
             }

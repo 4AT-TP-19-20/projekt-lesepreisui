@@ -9,12 +9,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
-public class ContestantDetailView extends BorderPane {
+public class ContestantDetailView extends BorderPane implements MultiContent {
     private Contestant contestant;
     private Contestant copy;
-    private ContestantTab parent;
     private BorderPane content;
+    private Callable<Boolean> canLeave;
 
     public ContestantDetailView(Contestant contestant, ContestantTab parent) {
         content = new BorderPane();
@@ -97,12 +98,12 @@ public class ContestantDetailView extends BorderPane {
             Main.disableButtons();
             Main.enableBack(ee -> {
                 showContent();
-                enableButtons();
+                enableSaveDiscardSystem();
             });
             BookTab bookTab = new BookTab() {
                 protected void onSelection() {
                     outerThis.showContent();
-                    enableButtons();
+                    enableSaveDiscardSystem();
 
                     Exam toAdd = new Exam(getSelectedBook());
                     contestant.addExam(toAdd);
@@ -125,23 +126,8 @@ public class ContestantDetailView extends BorderPane {
         bottomItems.setSpacing(5);
         content.setBottom(bottomItems);
 
-        this.contestant = contestant;
-        this.parent = parent;
-        copy = contestant.getCopy();
-        enableButtons();
-
-        BorderPane.setMargin(content.getCenter(), new Insets(10,0,10,0));
-        content.setPadding(new Insets(10));
-        this.showContent();
-    }
-
-    void showContent() {
-        this.setCenter(content);
-    }
-
-    private void enableButtons() {
-        Main.enableBack(e -> {
-            if(!contestant.equals(copy)) {
+        canLeave = () -> {
+            if(!contestant.isEqualTo(copy)) {
                 SaveAlert saveAlert = new SaveAlert();
                 Optional<ButtonType> picked = saveAlert.showAndWait();
 
@@ -154,13 +140,31 @@ public class ContestantDetailView extends BorderPane {
                             contestant.setValues(copy);
                             break;
                         case CANCEL_CLOSE:
-                            return;
+                            return false;
                     }
                 }
             }
             parent.showContent();
             Main.disableButtons();
-        });
-        Main.enableSaveDiscard(save -> copy.setValues(contestant), discard -> contestant.setValues(copy));
+            return true;
+        };
+
+        this.contestant = contestant;
+        copy = contestant.getCopy();
+        enableSaveDiscardSystem();
+
+        BorderPane.setMargin(content.getCenter(), new Insets(10,0,10,0));
+        content.setPadding(new Insets(10));
+        this.showContent();
+    }
+
+    public void showContent() {
+        this.setCenter(content);
+    }
+
+    private void enableSaveDiscardSystem() {
+        Main.enableSaveDiscardSystem(save -> copy.setValues(contestant),
+                discard -> contestant.setValues(copy),
+                canLeave);
     }
 }

@@ -11,7 +11,7 @@ import javafx.scene.layout.StackPane;
 
 import java.util.Map;
 
-public class GroupTab extends BorderPane {
+public class GroupTab extends BorderPane implements MultiContent {
     private BorderPane content;
     private CustomTableView<Map.Entry<String, Group>> tbv_groups;
 
@@ -53,7 +53,7 @@ public class GroupTab extends BorderPane {
         this.showContent();
     }
 
-    void showContent() {
+    public void showContent() {
         this.setCenter(content);
     }
 
