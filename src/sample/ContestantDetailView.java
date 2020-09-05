@@ -17,7 +17,7 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
     private BorderPane content;
     private Callable<Boolean> canLeave;
 
-    public ContestantDetailView(Contestant contestant, ContestantTab parent) {
+    ContestantDetailView(Contestant contestant, ContestantTab parent) {
         content = new BorderPane();
 
         //Top
@@ -165,6 +165,7 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
     private void enableSaveDiscardSystem() {
         Main.enableSaveDiscardSystem(save -> copy.setValues(contestant),
                 discard -> contestant.setValues(copy),
-                canLeave);
+                canLeave,
+                true);
     }
 }

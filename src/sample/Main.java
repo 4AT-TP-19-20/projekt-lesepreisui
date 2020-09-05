@@ -34,13 +34,14 @@ public class Main extends Application {
         HBox buttons = new HBox(5);
         tabPane = new TabPane();
 
-        initializeTabs();
-
         btn_back = new Button("Zurück");
         btn_back.setMinWidth(100);
+        btn_back.managedProperty().bind(btn_back.visibleProperty());
         btn_save = new Button("Änderungen speichern");
         btn_discard = new Button("Änderungen verwerfen");
         disableButtons();
+
+        initializeTabs();
 
         tabPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if(event.getTarget().getClass().getName().contains("TabPaneSkin")
@@ -134,19 +135,22 @@ public class Main extends Application {
 
     static void enableSaveDiscardSystem(EventHandler<ActionEvent> saveAction,
                                         EventHandler<ActionEvent> discardAction,
-                                        Callable<Boolean> canLeave) {
+                                        Callable<Boolean> canLeave,
+                                        boolean hasBackButton) {
         btn_save.setOnAction(saveAction);
         btn_save.setVisible(true);
         btn_discard.setOnAction(discardAction);
         btn_discard.setVisible(true);
-        btn_back.setOnAction(e -> {
-            try {
-                canLeave.call();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-        btn_back.setVisible(true);
+        if(hasBackButton) {
+            btn_back.setOnAction(e -> {
+                try {
+                    canLeave.call();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
+            btn_back.setVisible(true);
+        }
 
         Main.canLeave = canLeave;
     }

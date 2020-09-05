@@ -1,7 +1,5 @@
 package sample;
 
-import javafx.scene.Node;
-
-interface MultiContent<T extends Node> {
+interface MultiContent {
     void showContent();
 }
