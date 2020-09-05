@@ -70,7 +70,7 @@ public class Main extends Application {
 
         HBox controls = new HBox(30);
 
-        ComboBox<String> cbx_user = new ComboBox<>(SettingsTab.getUsers());
+        ComboBox<String> cbx_user = new ComboBox<>(Data.settings.getUsers());
         controls.getChildren().add(cbx_user);
 
         Button btn_login = new Button("Anmelden");

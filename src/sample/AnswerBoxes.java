@@ -11,10 +11,10 @@ public class AnswerBoxes extends HBox implements ObservableValue<HBox> {
     private IntegerPropertyArray values;
 
     AnswerBoxes(IntegerPropertyArray valueProperties, boolean enabled, String size) {
-        switchBoxes = new SwitchBox[SettingsTab.getMaxAnswersCount()];
+        switchBoxes = new SwitchBox[Data.settings.getMaxAnswersCount()];
         values = valueProperties;
 
-        for(int i = 0; i < SettingsTab.getMaxAnswersCount(); i++) {
+        for(int i = 0; i < Data.settings.getMaxAnswersCount(); i++) {
             switchBoxes[i] = new SwitchBox(values.getByIndex(i), size, enabled, true);
         }
 

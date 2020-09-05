@@ -20,7 +20,7 @@ public class Group {
         memberCount.bind(Bindings.size(members));
         points = new SimpleIntegerProperty();
         qualified = new SimpleBooleanProperty();
-        qualified.bind(Bindings.greaterThanOrEqual(memberCount, SettingsTab.minMembersProperty()));
+        qualified.bind(Bindings.greaterThanOrEqual(memberCount, Data.settings.minMembersProperty()));
     }
 
     public int getPoints() {
@@ -80,7 +80,7 @@ public class Group {
 
         for(Contestant member : members) {
             for(Exam exam : member.getExams()) {
-                if(exam.getDate().isAfter(SettingsTab.getGroupContestStartDate()) || exam.getDate().isEqual(SettingsTab.getGroupContestStartDate())) {
+                if(exam.getDate().isAfter(Data.settings.getGroupContestStartDate()) || exam.getDate().isEqual(Data.settings.getGroupContestStartDate())) {
                     newPoints += exam.getPoints();
                 }
             }

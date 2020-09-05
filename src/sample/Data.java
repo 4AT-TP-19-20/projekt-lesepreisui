@@ -8,20 +8,25 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 public class Data {
-    public static ObservableList<Contestant> contestants;
-    public static ObservableList<Book> books;
-    public static HashMap<String, Group> groups;
-    public static String currentUser = "Dorothea";
+    static ObservableList<Contestant> contestants;
+    static ObservableList<Book> books;
+    static HashMap<String, Group> groups;
+    static String currentUser;
+    static Settings settings;
+    static Settings settingsCopy;
     private static String path = ".\\";
 
     public static void init() {
         contestants = FXCollections.observableArrayList();
         books = FXCollections.observableArrayList();
         groups = new HashMap<>();
+        settings = new Settings();
 
         Xml.getSettings(path + "settings.xml");
         Xml.getBooks(path + "books.xml");
         Xml.getContestants(path + "contestants.xml");
+
+        settingsCopy = settings.getCopy();
 
         //Temporary static lists, replace with files
         contestants.add(new Contestant("Manuel", "Ploner", "4AT"));

@@ -24,7 +24,7 @@ public class BookDetailWindow extends CustomStage {
         txt_authorLastName.textProperty().bindBidirectional(book.authorLastNameProperty());
         gridPane.add(txt_authorLastName,1,2,2,1);
         gridPane.add(new Label("Sprache"),0,3);
-        ComboBox<String> cbx_languages = new ComboBox<>(SettingsTab.getLanguages());
+        ComboBox<String> cbx_languages = new ComboBox<>(Data.settings.getLanguages());
         cbx_languages.setPrefWidth(200);
         gridPane.add(cbx_languages,1,3);
         cbx_languages.getSelectionModel().select(book.getLanguage());

@@ -35,7 +35,7 @@ public class Contestant implements Saveable<Contestant> {
             }
         });
         this.isQualified = new SimpleBooleanProperty();
-        isQualified.bind(Bindings.greaterThanOrEqual(bookCount, SettingsTab.minBookCountProperty()));
+        isQualified.bind(Bindings.greaterThanOrEqual(bookCount, Data.settings.minBookCountProperty()));
         exams = FXCollections.observableArrayList();
     }
 

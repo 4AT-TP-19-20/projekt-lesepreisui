@@ -29,16 +29,20 @@ public class Xml {
             Element mainRootElement = doc.createElement(type);
             doc.appendChild(mainRootElement);
 
-            if (type.equals("Books")){
-                for (Book book:Data.books) {
-                    mainRootElement.appendChild(book.getXMLNode(doc));
-                }
-            }else if(type.equals("Contestants")){
-                for (Contestant contestant:Data.contestants) {
-                    mainRootElement.appendChild(contestant.getXMLNode(doc));
-                }
-            }else if(type.equals("Settings")){
-                SettingsTab.getXMLNode(doc, mainRootElement);
+            switch (type) {
+                case "Books":
+                    for (Book book : Data.books) {
+                        mainRootElement.appendChild(book.getXMLNode(doc));
+                    }
+                    break;
+                case "Contestants":
+                    for (Contestant contestant : Data.contestants) {
+                        mainRootElement.appendChild(contestant.getXMLNode(doc));
+                    }
+                    break;
+                case "Settings":
+                    Data.settings.getXMLNode(doc, mainRootElement);
+                    break;
             }
 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -51,7 +55,7 @@ public class Xml {
         }
     }
 
-    public static void getBooks(String path){
+    static void getBooks(String path){
         try{
             File xmlFile = new File(path);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -77,7 +81,7 @@ public class Xml {
         }
     }
 
-    public static void getContestants(String path){
+    static void getContestants(String path){
         try{
             File xmlFile = new File(path);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -128,7 +132,7 @@ public class Xml {
         }
     }
 
-    public static void getSettings(String path){
+    static void getSettings(String path){
         try{
             File xmlFile = new File(path);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -137,27 +141,27 @@ public class Xml {
             NodeList settingsNodeList = doc.getElementsByTagName("Settings");
 
             Element currentSettingElement = (Element) settingsNodeList.item(0);
-            SettingsTab.setPrizeCount(Integer.parseInt(currentSettingElement.getElementsByTagName("PrizeCount").item(0).getTextContent()));
-            SettingsTab.setMaxPicks(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxPicks").item(0).getTextContent()));
-            SettingsTab.setMaxAnswersCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxAnswersCount").item(0).getTextContent()));
-            SettingsTab.setMinCorrectAnswers(Integer.parseInt(currentSettingElement.getElementsByTagName("MinCorrectAnswers").item(0).getTextContent()));
-            SettingsTab.setMinBookCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MinBookCount").item(0).getTextContent()));
-            SettingsTab.setMaxBookCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxBookCount").item(0).getTextContent()));
-            SettingsTab.setGroupContestStartDate(LocalDate.parse(currentSettingElement.getElementsByTagName("GroupContestStartDate").item(0).getTextContent(), DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            Data.settings.setPrizeCount(Integer.parseInt(currentSettingElement.getElementsByTagName("PrizeCount").item(0).getTextContent()));
+            Data.settings.setMaxPicks(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxPicks").item(0).getTextContent()));
+            Data.settings.setMaxAnswersCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxAnswersCount").item(0).getTextContent()));
+            Data.settings.setMinCorrectAnswers(Integer.parseInt(currentSettingElement.getElementsByTagName("MinCorrectAnswers").item(0).getTextContent()));
+            Data.settings.setMinBookCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MinBookCount").item(0).getTextContent()));
+            Data.settings.setMaxBookCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxBookCount").item(0).getTextContent()));
+            Data.settings.setGroupContestStartDate(LocalDate.parse(currentSettingElement.getElementsByTagName("GroupContestStartDate").item(0).getTextContent(), DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 
             NodeList languageNodeList = doc.getElementsByTagName("Language");
             ObservableList<String> languages = FXCollections.observableArrayList();
             for (int i = 0; i < languageNodeList.getLength(); i++) {
                 languages.add(((Element)languageNodeList.item(i)).getTextContent());
             }
-            SettingsTab.setLanguages(languages);
+            Data.settings.setLanguages(languages);
 
             NodeList userNodeList = doc.getElementsByTagName("User");
             ObservableList<String> users = FXCollections.observableArrayList();
             for (int i = 0; i < userNodeList.getLength(); i++) {
                 users.add(((Element)userNodeList.item(i)).getTextContent());
             }
-            SettingsTab.setUsers(users);
+            Data.settings.setUsers(users);
         }catch (Exception e){
             System.out.println("[System] Error while reading the settings-file!");
         }

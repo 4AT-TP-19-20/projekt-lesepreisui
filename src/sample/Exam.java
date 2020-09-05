@@ -23,7 +23,7 @@ public class Exam implements Saveable<Exam> {
 
     public Exam(Book book, int[] initialAnswers, String librarian, LocalDate date) {
         this.book = book;
-        this.answers = new IntegerPropertyArray(SettingsTab.getMaxAnswersCount(), initialAnswers);
+        this.answers = new IntegerPropertyArray(Data.settings.getMaxAnswersCount(), initialAnswers);
         this.librarian = new SimpleStringProperty(librarian);
         this.date = date;
 
@@ -141,7 +141,7 @@ public class Exam implements Saveable<Exam> {
             }
         }
 
-        if(correct >= 4) {
+        if(correct >= Data.settings.getMinCorrectAnswers()) {
             passed.set(1);
         }
         else if(allSet) {

@@ -25,7 +25,7 @@ public class DrawingTab extends StackPane{
     private MediaView mediaView;
 
     public DrawingTab() {
-        remainingPrizes = SettingsTab.getPrizeCount();
+        remainingPrizes = Data.settings.getPrizeCount();
         String remainingPricesText;
         currentWinner = 0;
 
@@ -48,7 +48,7 @@ public class DrawingTab extends StackPane{
 
         //btn_start EventHandler
         btn_start.setOnAction(actionEvent -> {
-            if (remainingPrizes == SettingsTab.getPrizeCount()) {
+            if (remainingPrizes == Data.settings.getPrizeCount()) {
                 pickWinners();
             }
             startAnimation();
@@ -114,15 +114,15 @@ public class DrawingTab extends StackPane{
         ArrayList<Map.Entry<Contestant, Integer>> qualifiedContestants = new ArrayList<>();
 
         for(Contestant contestant : Data.contestants) {
-            if(contestant.getBookCount() >= SettingsTab.getMinBookCount()) {
+            if(contestant.getBookCount() >= Data.settings.getMinBookCount()) {
                 qualifiedContestants.add(new AbstractMap.SimpleEntry<>(contestant, 0));
                 totalPoints += contestant.getPoints();
             }
         }
 
         Random random = new Random();
-        winners = new Contestant[SettingsTab.getPrizeCount()];
-        for(int i = 0; i < SettingsTab.getPrizeCount(); i++) {
+        winners = new Contestant[Data.settings.getPrizeCount()];
+        for(int i = 0; i < Data.settings.getPrizeCount(); i++) {
             int winningEntry = random.nextInt(totalPoints);
             int currentPos = 0;
             for(Map.Entry<Contestant, Integer> contestant : qualifiedContestants) {
