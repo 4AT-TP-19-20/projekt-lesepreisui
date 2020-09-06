@@ -38,7 +38,7 @@ public class BookTab extends BorderPane {
             }
             else if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 if(!tbv_books.getSelectionModel().isEmpty()) {
-                    onSelection();
+                    onItemSelected();
                 }
             }
         });
@@ -95,7 +95,7 @@ public class BookTab extends BorderPane {
         }
     }
 
-    protected void onSelection() {
+    protected void onItemSelected() {
         BookDetailWindow bookDetailWindow = new BookDetailWindow(tbv_books.getSelectionModel().getSelectedItem());
         bookDetailWindow.show();
     }

@@ -39,9 +39,9 @@ public class GroupTab extends BorderPane implements MultiContent {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 if(tbv_groups.getSelectionModel().getSelectedItem() != null) {
                     this.setCenter(new GroupDetailView(tbv_groups.getSelectionModel().getSelectedItem()));
-                    Main.enableBack(e -> {
+                    ButtonController.enableBack(e -> {
                         this.showContent();
-                        Main.disableButtons();
+                        ButtonController.disableButtons();
                     });
                 }
             }

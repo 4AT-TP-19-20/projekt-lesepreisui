@@ -95,13 +95,13 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
         btn_addExam.setId("custom-button");
         ContestantDetailView outerThis = this; //TODO find intended way to do this
         btn_addExam.setOnAction(e -> {
-            Main.disableButtons();
-            Main.enableBack(ee -> {
+            ButtonController.disableButtons();
+            ButtonController.enableBack(ee -> {
                 showContent();
                 enableSaveDiscardSystem();
             });
             BookTab bookTab = new BookTab() {
-                protected void onSelection() {
+                protected void onItemSelected() {
                     outerThis.showContent();
                     enableSaveDiscardSystem();
 
@@ -145,7 +145,7 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
                 }
             }
             parent.showContent();
-            Main.disableButtons();
+            ButtonController.disableButtons();
             return true;
         };
 
@@ -163,7 +163,7 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
     }
 
     private void enableSaveDiscardSystem() {
-        Main.enableSaveDiscardSystem(save -> copy.setValues(contestant),
+        ButtonController.enableSaveDiscardSystem(save -> copy.setValues(contestant),
                 discard -> contestant.setValues(copy),
                 canLeave,
                 true);
