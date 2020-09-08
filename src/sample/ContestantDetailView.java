@@ -8,14 +8,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-import java.util.Optional;
-import java.util.concurrent.Callable;
-
 public class ContestantDetailView extends BorderPane implements MultiContent {
-    private Contestant contestant;
-    private Contestant copy;
     private BorderPane content;
-    private Callable<Boolean> canLeave;
 
     ContestantDetailView(Contestant contestant, ContestantTab parent) {
         content = new BorderPane();
@@ -98,12 +92,12 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
             ButtonController.disableButtons();
             ButtonController.enableBack(ee -> {
                 showContent();
-                enableSaveDiscardSystem();
+                ButtonController.enableSaveDiscardSystem(contestant, true, parent);
             });
             BookTab bookTab = new BookTab() {
                 protected void onItemSelected() {
                     outerThis.showContent();
-                    enableSaveDiscardSystem();
+                    ButtonController.enableSaveDiscardSystem(contestant, true, parent);
 
                     Exam toAdd = new Exam(getSelectedBook());
                     contestant.addExam(toAdd);
@@ -126,32 +120,7 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
         bottomItems.setSpacing(5);
         content.setBottom(bottomItems);
 
-        canLeave = () -> {
-            if(!contestant.isEqualTo(copy)) {
-                SaveAlert saveAlert = new SaveAlert();
-                Optional<ButtonType> picked = saveAlert.showAndWait();
-
-                if(picked.isPresent()) {
-                    switch (picked.get().getButtonData()) {
-                        case YES:
-                            copy.setValues(contestant);
-                            break;
-                        case NO:
-                            contestant.setValues(copy);
-                            break;
-                        case CANCEL_CLOSE:
-                            return false;
-                    }
-                }
-            }
-            parent.showContent();
-            ButtonController.disableButtons();
-            return true;
-        };
-
-        this.contestant = contestant;
-        copy = contestant.getCopy();
-        enableSaveDiscardSystem();
+        ButtonController.enableSaveDiscardSystem(contestant, true, parent);
 
         BorderPane.setMargin(content.getCenter(), new Insets(10,0,10,0));
         content.setPadding(new Insets(10));
@@ -160,12 +129,5 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
 
     public void showContent() {
         this.setCenter(content);
-    }
-
-    private void enableSaveDiscardSystem() {
-        ButtonController.enableSaveDiscardSystem(save -> copy.setValues(contestant),
-                discard -> contestant.setValues(copy),
-                canLeave,
-                true);
     }
 }

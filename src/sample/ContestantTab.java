@@ -10,11 +10,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class ContestantTab extends BorderPane {
+class ContestantTab extends BorderPane implements MultiContent {
     private BorderPane content;
     private CustomTableView<Contestant> tbv_contestants;
 
-    public ContestantTab() {
+    ContestantTab() {
         content = new BorderPane();
         tbv_contestants = new CustomTableView<>();
 
@@ -76,7 +76,7 @@ public class ContestantTab extends BorderPane {
         this.showContent();
     }
 
-    void showContent() {
+    public void showContent() {
         this.setCenter(content);
     }
 

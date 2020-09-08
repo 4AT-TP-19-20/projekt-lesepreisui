@@ -4,8 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
 
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 class ButtonController {
@@ -48,13 +50,12 @@ class ButtonController {
         btn_back.setVisible(true);
     }
 
-    static void enableSaveDiscardSystem(EventHandler<ActionEvent> saveAction,
-                                            EventHandler<ActionEvent> discardAction,
-                                            Callable<Boolean> canLeave,
-                                            boolean hasBackButton) {
-        btn_save.setOnAction(saveAction);
+    static <T extends Saveable<T>> void enableSaveDiscardSystem(T saveable, boolean hasBackButton, MultiContent next) {
+        T saveableCopy = saveable.getCopy();
+
+        btn_save.setOnAction(e -> saveableCopy.setValues(saveable));
         btn_save.setVisible(true);
-        btn_discard.setOnAction(discardAction);
+        btn_discard.setOnAction(e -> saveable.setValues(saveableCopy));
         btn_discard.setVisible(true);
         if(hasBackButton) {
             btn_back.setOnAction(e -> {
@@ -67,7 +68,28 @@ class ButtonController {
             btn_back.setVisible(true);
         }
 
-        ButtonController.canLeave = canLeave;
+        canLeave = () -> {
+            if(!saveable.isEqualTo(saveableCopy)) {
+                SaveAlert saveAlert = new SaveAlert();
+                Optional<ButtonType> picked = saveAlert.showAndWait();
+
+                if(picked.isPresent()) {
+                    switch (picked.get().getButtonData()) {
+                        case YES:
+                            saveableCopy.setValues(saveable);
+                            break;
+                        case NO:
+                            saveable.setValues(saveableCopy);
+                            break;
+                        case CANCEL_CLOSE:
+                            return false;
+                    }
+                }
+            }
+            next.showContent();
+            ButtonController.disableButtons();
+            return true;
+        };
     }
 
     static void disableButtons() {
