@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 
 import java.util.Map;
 
-public class GroupDetailView extends BorderPane {
+public class GroupDetailView extends BorderPane implements TabContent {
     public GroupDetailView(Map.Entry<String, Group> entry) {
         //Top
         HBox topItems = new HBox();
@@ -36,5 +36,15 @@ public class GroupDetailView extends BorderPane {
 
         BorderPane.setMargin(this.getCenter(), new Insets(10,0,0,0));
         this.setPadding(new Insets(10));
+    }
+
+    @Override
+    public void onOpen() {
+
+    }
+
+    @Override
+    public void onClose() {
+
     }
 }

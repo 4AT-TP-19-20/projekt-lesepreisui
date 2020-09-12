@@ -8,11 +8,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-public class ContestantDetailView extends BorderPane implements MultiContent {
+public class ContestantDetailView extends BorderPane implements MultiContent, TabContent, ChildSaveable {
     private BorderPane content;
+    private Contestant contestant;
 
-    ContestantDetailView(Contestant contestant, ContestantTab parent) {
+    ContestantDetailView(Contestant contestant) {
         content = new BorderPane();
+        this.contestant = contestant;
 
         //Top
         GridPane topItems = new GridPane();
@@ -87,17 +89,10 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
         VBox bottomItems = new VBox();
         Button btn_addExam = new Button("Neue Prüfung");
         btn_addExam.setId("custom-button");
-        ContestantDetailView outerThis = this; //TODO find intended way to do this
         btn_addExam.setOnAction(e -> {
-            ButtonController.disableButtons();
-            ButtonController.enableBack(ee -> {
-                showContent();
-                ButtonController.enableSaveDiscardSystem(contestant, true, parent);
-            });
             BookTab bookTab = new BookTab() {
                 protected void onItemSelected() {
-                    outerThis.showContent();
-                    ButtonController.enableSaveDiscardSystem(contestant, true, parent);
+                    Main.getCurrentContentStack().pop();
 
                     Exam toAdd = new Exam(getSelectedBook());
                     contestant.addExam(toAdd);
@@ -105,8 +100,7 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
                     examDetailWindow.show();
                 }
             };
-            this.setCenter(bookTab);
-            bookTab.requestFocus();
+            Main.getCurrentContentStack().push(bookTab);
         });
         Button btn_removeExam = new Button("Prüfung löschen");
         btn_removeExam.setId("red-button");
@@ -120,8 +114,6 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
         bottomItems.setSpacing(5);
         content.setBottom(bottomItems);
 
-        ButtonController.enableSaveDiscardSystem(contestant, true, parent);
-
         BorderPane.setMargin(content.getCenter(), new Insets(10,0,10,0));
         content.setPadding(new Insets(10));
         this.showContent();
@@ -129,5 +121,20 @@ public class ContestantDetailView extends BorderPane implements MultiContent {
 
     public void showContent() {
         this.setCenter(content);
+    }
+
+    @Override
+    public void onOpen() {
+
+    }
+
+    @Override
+    public void onClose() {
+
+    }
+
+    @Override
+    public Saveable getSaveable() {
+        return contestant;
     }
 }

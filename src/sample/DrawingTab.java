@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-public class DrawingTab extends StackPane{
+class DrawingTab extends StackPane implements TabContent {
     private int remainingPrizes;
     private Contestant[] winners;
     private int currentWinner;
@@ -24,7 +24,7 @@ public class DrawingTab extends StackPane{
     private MediaPlayer mediaPlayer;
     private MediaView mediaView;
 
-    public DrawingTab() {
+    DrawingTab() {
         remainingPrizes = Data.settings.getPrizeCount();
         String remainingPricesText;
         currentWinner = 0;
@@ -142,6 +142,16 @@ public class DrawingTab extends StackPane{
                 }
             }
         }
+    }
+
+    @Override
+    public void onOpen() {
+
+    }
+
+    @Override
+    public void onClose() {
+
     }
 }
 

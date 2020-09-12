@@ -6,9 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -17,24 +15,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage unused) {
-        Data.init();
-
         CustomStage mainStage = new CustomStage();
         CustomStage loginStage = new CustomStage();
         StackPane loginItems = new StackPane();
         StackPane root = new StackPane();
         tabPane = new TabPane();
 
-        initializeTabs();
+        Data.init();
+        ButtonController.init(tabPane);
 
-        tabPane.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            if(event.getTarget().getClass().getName().contains("TabPaneSkin")
-            || (event.getTarget() instanceof Text && event.getY() <= 33)) { //To make sure it is text in the tab header
-                if(!ButtonController.canLeave()) {
-                    event.consume();
-                }
-            }
-        });
+        initializeTabs();
 
         root.setAlignment(Pos.TOP_RIGHT);
         root.getChildren().addAll(tabPane, ButtonController.getButtons());
@@ -74,26 +64,17 @@ public class Main extends Application {
         loginStage.show();
     }
 
+    static ContentStack getCurrentContentStack() {
+        return (ContentStack) tabPane.getSelectionModel().getSelectedItem().getContent();
+    }
+
     private static void initializeTabs() {
-        Tab tab_contestants = new Tab("Teilnehmer");
-        tab_contestants.setContent(new ContestantTab());
-        tab_contestants.setOnSelectionChanged(e -> tab_contestants.setContent(new ContestantTab()));
-
-        Tab tab_groups = new Tab("Gruppen");
-        tab_groups.setContent(new GroupTab());
-        tab_groups.setOnSelectionChanged(e -> tab_groups.setContent(new GroupTab()));
-
-        Tab tab_exams = new Tab("Prüfungen", new ExamTab());
-        tab_exams.setOnSelectionChanged(e -> tab_exams.setContent(new ExamTab()));
-
-        Tab tab_books = new Tab("Bücher", new BookTab());
-        tab_books.setOnSelectionChanged(e -> tab_books.setContent(new BookTab()));
-
-        Tab tab_drawing = new Tab("Verlosung", new DrawingTab());
-        tab_drawing.setOnSelectionChanged(e -> tab_drawing.setContent(new DrawingTab()));
-
-        Tab tab_settings = new Tab("Einstellungen", new SettingsTab());
-        tab_settings.setOnSelectionChanged(e -> tab_settings.setContent(new SettingsTab()));
+        Tab tab_contestants = new Tab("Teilnehmer", new ContentStack(new ContestantTab()));
+        Tab tab_groups = new Tab("Gruppen", new ContentStack(new GroupTab()));
+        Tab tab_exams = new Tab("Prüfungen", new ContentStack(new ExamTab()));
+        Tab tab_books = new Tab("Bücher", new ContentStack(new BookTab()));
+        Tab tab_drawing = new Tab("Verlosung", new ContentStack(new DrawingTab()));
+        Tab tab_settings = new Tab("Einstellungen", new ContentStack(new SettingsTab()));
 
         tabPane.getTabs().addAll(tab_contestants, tab_groups, tab_exams, tab_books, tab_drawing, tab_settings);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);

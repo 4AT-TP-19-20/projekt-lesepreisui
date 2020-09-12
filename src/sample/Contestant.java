@@ -9,7 +9,7 @@ import org.w3c.dom.Element;
 
 import java.util.Comparator;
 
-public class Contestant implements Saveable<Contestant> {
+public class Contestant implements Saveable {
     private StringProperty firstName;
     private StringProperty lastName;
     private StringProperty grade;
@@ -43,6 +43,7 @@ public class Contestant implements Saveable<Contestant> {
         this("Vorname", "Nachname", "Klasse");
     }
 
+    @Override
     public Contestant getCopy() {
         Contestant copy = new Contestant(getFirstName(), getLastName(), getGrade());
         copy.setGroupMember(isGroupMember());
@@ -50,20 +51,32 @@ public class Contestant implements Saveable<Contestant> {
         return copy;
     }
 
-    public boolean isEqualTo(Contestant other) {
-        return this.getFirstName().equals(other.getFirstName())
-            && this.getLastName().equals(other.getLastName())
-            && this.getGrade().equals(other.getGrade())
-            && this.isGroupMember() == other.isGroupMember()
-            && this.examsEqual(other.getExams());
+    @Override
+    public boolean equals(Object other) {
+        if(other instanceof Contestant) {
+            Contestant otherContestant = (Contestant) other;
+            return this.getFirstName().equals(otherContestant.getFirstName())
+                    && this.getLastName().equals(otherContestant.getLastName())
+                    && this.getGrade().equals(otherContestant.getGrade())
+                    && this.isGroupMember() == otherContestant.isGroupMember()
+                    && this.examsEqual(otherContestant.getExams());
+        }
+        return false;
     }
 
-    public void setValues(Contestant other) {
-        this.setFirstName(other.getFirstName());
-        this.setLastName(other.getLastName());
-        this.setGrade(other.getGrade());
-        this.setGroupMember(other.isGroupMember());
-        this.copyExams(other.getExams());
+    @Override
+    public void setValues(Saveable other) {
+        if(other instanceof Contestant) {
+            Contestant otherContestant = (Contestant) other;
+            this.setFirstName(otherContestant.getFirstName());
+            this.setLastName(otherContestant.getLastName());
+            this.setGrade(otherContestant.getGrade());
+            this.setGroupMember(otherContestant.isGroupMember());
+            this.copyExams(otherContestant.getExams());
+        }
+        else {
+            throw new RuntimeException("Passed Saveable is not instance of Contestant");
+        }
     }
 
     public String getFirstName() {
@@ -213,7 +226,7 @@ public class Contestant implements Saveable<Contestant> {
 
         if(ownSorted.size() == othersSorted.size()) {
             for(int i = 0; i < this.exams.size(); i++) {
-                if(!ownSorted.get(i).isEqualTo(othersSorted.get(i))) {
+                if(!ownSorted.get(i).equals(othersSorted.get(i))) {
                     return false;
                 }
             }

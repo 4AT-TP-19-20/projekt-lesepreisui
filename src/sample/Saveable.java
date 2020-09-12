@@ -1,9 +1,9 @@
 package sample;
 
-public interface Saveable<T> {
-    T getCopy();
+public interface Saveable {
+    Saveable getCopy();
 
-    boolean isEqualTo(T t);
+    boolean equals(Object other);
 
-    void setValues(T t);
+    void setValues(Saveable other);
 }

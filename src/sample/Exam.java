@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
-public class Exam implements Saveable<Exam> {
+public class Exam implements Saveable {
     private Book book;
     private IntegerPropertyArray answers;
     private IntegerProperty passed;
@@ -38,26 +38,39 @@ public class Exam implements Saveable<Exam> {
         this(book, new int[]{-1}, Data.currentUser, LocalDate.now());
     }
 
+    @Override
     public Exam getCopy() {
         Exam copy = new Exam(this.getBook(), this.getAnswers(), this.getLibrarian(), this.getDate());
         copy.setContestant(this.getContestant());
         return copy;
     }
 
-    public boolean isEqualTo(Exam other) {
-        return this.getBook() == other.getBook()
-                && Arrays.equals(this.getAnswers(), other.getAnswers())
-                && this.getLibrarian().equals(other.getLibrarian())
-                && this.getDate() == other.getDate()
-                && this.getContestant() == other.getContestant();
+    @Override
+    public boolean equals(Object other) {
+        if(other instanceof Exam) {
+            Exam otherExam = (Exam) other;
+            return this.getBook() == otherExam.getBook()
+                    && Arrays.equals(this.getAnswers(), otherExam.getAnswers())
+                    && this.getLibrarian().equals(otherExam.getLibrarian())
+                    && this.getDate() == otherExam.getDate()
+                    && this.getContestant() == otherExam.getContestant();
+        }
+        return false;
     }
 
-    public void setValues(Exam other) {
-        this.setBook(other.getBook());
-        this.setAnswers(other.getAnswers());
-        this.setLibrarian(other.getLibrarian());
-        this.setDate(other.getDate());
-        this.setContestant(other.getContestant());
+    @Override
+    public void setValues(Saveable other) {
+        if(other instanceof Exam) {
+            Exam otherExam = (Exam) other;
+            this.setBook(otherExam.getBook());
+            this.setAnswers(otherExam.getAnswers());
+            this.setLibrarian(otherExam.getLibrarian());
+            this.setDate(otherExam.getDate());
+            this.setContestant(otherExam.getContestant());
+        }
+        else {
+            throw new RuntimeException("Passed Saveable is not instance of Exam");
+        }
     }
 
     public Book getBook() {

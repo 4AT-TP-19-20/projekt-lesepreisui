@@ -10,7 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-class ContestantTab extends BorderPane implements MultiContent {
+class ContestantTab extends BorderPane implements MultiContent, TabContent {
     private BorderPane content;
     private CustomTableView<Contestant> tbv_contestants;
 
@@ -42,7 +42,7 @@ class ContestantTab extends BorderPane implements MultiContent {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 Contestant selected = tbv_contestants.getSelectionModel().getSelectedItem();
                 if(selected != null) {
-                    this.setCenter(new ContestantDetailView(selected, this));
+                    Main.getCurrentContentStack().push(new ContestantDetailView(selected));
                 }
             }
         });
@@ -56,7 +56,7 @@ class ContestantTab extends BorderPane implements MultiContent {
             Contestant toAdd = new Contestant();
             Data.contestants.add(toAdd);
             textChangeListener(txt_search.getText());
-            this.setCenter(new ContestantDetailView(toAdd, this));
+            Main.getCurrentContentStack().push(new ContestantDetailView(toAdd));
         });
         Button btn_removeContestant = new Button("Teilnehmer löschen");
         btn_removeContestant.setId("red-button");
@@ -96,5 +96,15 @@ class ContestantTab extends BorderPane implements MultiContent {
                 tbv_contestants.getItems().add(contestant);
             }
         }
+    }
+
+    @Override
+    public void onOpen() {
+
+    }
+
+    @Override
+    public void onClose() {
+
     }
 }

@@ -11,10 +11,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-public class BookTab extends BorderPane {
+public class BookTab extends BorderPane implements TabContent {
     private static CustomTableView<Book> tbv_books;
 
-    public BookTab() {
+    BookTab() {
         //Top
         TextField txt_search = new TextField();
         txt_search.setPromptText("Suche nach Titel, Autor, Sprache, ...");
@@ -72,7 +72,7 @@ public class BookTab extends BorderPane {
         this.setPadding(new Insets(10));
     }
 
-    public Book getSelectedBook() {
+    Book getSelectedBook() {
         return tbv_books.getSelectionModel().getSelectedItem();
     }
 
@@ -98,5 +98,15 @@ public class BookTab extends BorderPane {
     protected void onItemSelected() {
         BookDetailWindow bookDetailWindow = new BookDetailWindow(tbv_books.getSelectionModel().getSelectedItem());
         bookDetailWindow.show();
+    }
+
+    @Override
+    public void onOpen() {
+
+    }
+
+    @Override
+    public void onClose() {
+
     }
 }

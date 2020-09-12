@@ -13,7 +13,6 @@ public class Data {
     static HashMap<String, Group> groups;
     static String currentUser;
     static Settings settings;
-    static Settings settingsCopy;
     private static String path = ".\\";
 
     public static void init() {
@@ -25,8 +24,6 @@ public class Data {
         Xml.getSettings(path + "settings.xml");
         Xml.getBooks(path + "books.xml");
         Xml.getContestants(path + "contestants.xml");
-
-        settingsCopy = settings.getCopy();
 
         //Temporary static lists, replace with files
         contestants.add(new Contestant("Manuel", "Ploner", "4AT"));
@@ -54,7 +51,7 @@ public class Data {
         Xml.set(path + "contestants.xml", "Contestants");
     }
 
-    public static Group getGroupByGrade(String grade) {
+    static Group getGroupByGrade(String grade) {
         if(groups.containsKey(grade)) {
             return groups.get(grade);
         }

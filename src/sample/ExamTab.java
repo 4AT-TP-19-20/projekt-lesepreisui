@@ -8,10 +8,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-public class ExamTab extends BorderPane {
-    CustomTableView<Exam> tbv_exams;
+class ExamTab extends BorderPane implements TabContent {
+    private CustomTableView<Exam> tbv_exams;
 
-    public ExamTab() {
+    ExamTab() {
         //Top
         TextField txt_search = new TextField();
         txt_search.setPromptText("Suche nach ...");
@@ -63,5 +63,15 @@ public class ExamTab extends BorderPane {
                 }
             }
         }
+    }
+
+    @Override
+    public void onOpen() {
+
+    }
+
+    @Override
+    public void onClose() {
+
     }
 }

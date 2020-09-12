@@ -11,7 +11,7 @@ import javafx.scene.layout.StackPane;
 
 import java.util.Map;
 
-public class GroupTab extends BorderPane implements MultiContent {
+public class GroupTab extends BorderPane implements MultiContent, TabContent {
     private BorderPane content;
     private CustomTableView<Map.Entry<String, Group>> tbv_groups;
 
@@ -38,11 +38,7 @@ public class GroupTab extends BorderPane implements MultiContent {
             }
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                 if(tbv_groups.getSelectionModel().getSelectedItem() != null) {
-                    this.setCenter(new GroupDetailView(tbv_groups.getSelectionModel().getSelectedItem()));
-                    ButtonController.enableBack(e -> {
-                        this.showContent();
-                        ButtonController.disableButtons();
-                    });
+                    Main.getCurrentContentStack().push(new GroupDetailView(tbv_groups.getSelectionModel().getSelectedItem()));
                 }
             }
         });
@@ -71,5 +67,15 @@ public class GroupTab extends BorderPane implements MultiContent {
                 tbv_groups.getItems().add(entry);
             }
         }
+    }
+
+    @Override
+    public void onOpen() {
+
+    }
+
+    @Override
+    public void onClose() {
+
     }
 }

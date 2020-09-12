@@ -10,7 +10,7 @@ import org.w3c.dom.Element;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Settings implements Saveable<Settings> {
+public class Settings implements Saveable {
     //General
     private ObservableList<String> users = FXCollections.observableArrayList("Dorothea", "Petra");
 
@@ -53,35 +53,45 @@ public class Settings implements Saveable<Settings> {
     }
 
     @Override
-    public boolean isEqualTo(Settings other) {
-        return this.getUsers().equals(other.getUsers())
-            && this.getMaxAnswersCount() == other.getMaxAnswersCount()
-            && this.getMinCorrectAnswers() == other.getMinCorrectAnswers()
-            && this.getMinBookCount() == other.getMinBookCount()
-            && this.getMaxBookCount() == other.getMaxBookCount()
-            && this.getMaxPicks() == other.getMaxPicks()
-            && this.getPrizeCount() == other.getPrizeCount()
-            && this.getGroupContestStartDate().equals(other.getGroupContestStartDate())
-            && this.getMinMembers() == other.getMinMembers()
-            && this.getLanguages().equals(other.getLanguages());
+    public boolean equals(Object other) {
+        if(other instanceof Settings) {
+            Settings otherSettings = (Settings) other;
+            return this.getUsers().equals(otherSettings.getUsers())
+                    && this.getMaxAnswersCount() == otherSettings.getMaxAnswersCount()
+                    && this.getMinCorrectAnswers() == otherSettings.getMinCorrectAnswers()
+                    && this.getMinBookCount() == otherSettings.getMinBookCount()
+                    && this.getMaxBookCount() == otherSettings.getMaxBookCount()
+                    && this.getMaxPicks() == otherSettings.getMaxPicks()
+                    && this.getPrizeCount() == otherSettings.getPrizeCount()
+                    && this.getGroupContestStartDate().equals(otherSettings.getGroupContestStartDate())
+                    && this.getMinMembers() == otherSettings.getMinMembers()
+                    && this.getLanguages().equals(otherSettings.getLanguages());
+        }
+        return false;
     }
 
     @Override
-    public void setValues(Settings other) {
-        this.setUsers(other.getUsers());
+    public void setValues(Saveable other) {
+        if(other instanceof Settings) {
+            Settings otherSettings = (Settings) other;
+            this.setUsers(otherSettings.getUsers());
 
-        this.setMaxAnswersCount(other.getMaxAnswersCount());
-        this.setMinCorrectAnswers(other.getMinCorrectAnswers());
+            this.setMaxAnswersCount(otherSettings.getMaxAnswersCount());
+            this.setMinCorrectAnswers(otherSettings.getMinCorrectAnswers());
 
-        this.setMinBookCount(other.getMinBookCount());
-        this.setMaxBookCount(other.getMaxBookCount());
-        this.setMaxPicks(other.getMaxPicks());
-        this.setPrizeCount(other.getPrizeCount());
+            this.setMinBookCount(otherSettings.getMinBookCount());
+            this.setMaxBookCount(otherSettings.getMaxBookCount());
+            this.setMaxPicks(otherSettings.getMaxPicks());
+            this.setPrizeCount(otherSettings.getPrizeCount());
 
-        this.setGroupContestStartDate(other.getGroupContestStartDate());
-        this.setMinMembers(other.getMinMembers());
+            this.setGroupContestStartDate(otherSettings.getGroupContestStartDate());
+            this.setMinMembers(otherSettings.getMinMembers());
 
-        this.setLanguages(other.getLanguages());
+            this.setLanguages(otherSettings.getLanguages());
+        }
+        else {
+            throw new RuntimeException("Passed Saveable is not instance of Settings");
+        }
     }
 
     int getMaxAnswersCount() {
