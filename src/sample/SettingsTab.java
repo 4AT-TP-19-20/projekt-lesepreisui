@@ -101,7 +101,7 @@ class SettingsTab extends VBox implements TabContent, ChildSaveable {
     static class CustomTextField extends TextField {
         CustomTextField(Property<Number> property) {
             this.setId("tf");
-            this.textProperty().bindBidirectional(property, new StringToInt());
+            this.textProperty().bindBidirectional(property, StringToInt.getInstance());
         }
     }
 }

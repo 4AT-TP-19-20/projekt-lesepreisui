@@ -7,8 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 
-public class ExamDetailWindow extends CustomStage {
-    public ExamDetailWindow(Exam exam) {
+class ExamDetailWindow extends CustomStage {
+    ExamDetailWindow(Exam exam) {
         GridPane gridPane = new GridPane();
 
         gridPane.add(new Label("Titel"),0,0);
@@ -47,7 +47,7 @@ public class ExamDetailWindow extends CustomStage {
         hbx_pointsLabelAligner.setAlignment(Pos.CENTER_RIGHT);
         gridPane.add(hbx_pointsLabelAligner,2,5);
         TextField txt_points = new TextField();
-        txt_points.textProperty().bindBidirectional(exam.pointsProperty(), new StringToInt());
+        txt_points.textProperty().bindBidirectional(exam.pointsProperty(), StringToInt.getInstance());
         txt_points.setEditable(false);
         gridPane.add(txt_points,3,5);
 

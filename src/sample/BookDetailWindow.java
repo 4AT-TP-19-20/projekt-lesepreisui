@@ -7,8 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-public class BookDetailWindow extends CustomStage {
-    public BookDetailWindow(Book book) {
+class BookDetailWindow extends CustomStage {
+    BookDetailWindow(Book book) {
         GridPane gridPane = new GridPane();
 
         gridPane.add(new Label("Titel"),0,0);
@@ -37,7 +37,7 @@ public class BookDetailWindow extends CustomStage {
         gridPane.add(btn_editLanguages,2,3);
         gridPane.add(new Label("Lose"),0,4);
         TextField txt_points = new TextField();
-        txt_points.textProperty().bindBidirectional(book.pointsProperty(), new StringToInt());
+        txt_points.textProperty().bindBidirectional(book.pointsProperty(), StringToInt.getInstance());
         gridPane.add(txt_points,1,4,2,1);
 
         gridPane.setPadding(new Insets(10));

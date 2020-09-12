@@ -38,13 +38,13 @@ public class ContestantDetailView extends BorderPane implements TabContent, Chil
 
         topItems.add(new Label("Gesamtpunkte"),0,3);
         TextField txt_points = new TextField();
-        txt_points.textProperty().bindBidirectional(contestant.pointsProperty(), new StringToInt());
+        txt_points.textProperty().bindBidirectional(contestant.pointsProperty(), StringToInt.getInstance());
         txt_points.setEditable(false);
         topItems.add(txt_points, 1, 3);
 
         topItems.add(new Label("Gelesene Bücher"),2,3);
         TextField txt_bookCount = new TextField();
-        txt_bookCount.textProperty().bindBidirectional(contestant.bookCountProperty(), new StringToInt());
+        txt_bookCount.textProperty().bindBidirectional(contestant.bookCountProperty(), StringToInt.getInstance());
         txt_bookCount.setEditable(false);
         topItems.add(txt_bookCount, 3, 3);
 
