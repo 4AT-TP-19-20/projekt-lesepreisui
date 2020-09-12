@@ -8,12 +8,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-public class ContestantDetailView extends BorderPane implements MultiContent, TabContent, ChildSaveable {
-    private BorderPane content;
+public class ContestantDetailView extends BorderPane implements TabContent, ChildSaveable {
     private Contestant contestant;
 
     ContestantDetailView(Contestant contestant) {
-        content = new BorderPane();
         this.contestant = contestant;
 
         //Top
@@ -53,7 +51,7 @@ public class ContestantDetailView extends BorderPane implements MultiContent, Ta
         topItems.setHgap(5);
         topItems.setVgap(5);
 
-        content.setTop(topItems);
+        this.setTop(topItems);
 
         //Center
         CustomTableView<Exam> tbv_exams = new CustomTableView<>();
@@ -83,7 +81,7 @@ public class ContestantDetailView extends BorderPane implements MultiContent, Ta
             }
         });
 
-        content.setCenter(tbv_exams);
+        this.setCenter(tbv_exams);
 
         //Bottom
         VBox bottomItems = new VBox();
@@ -112,15 +110,10 @@ public class ContestantDetailView extends BorderPane implements MultiContent, Ta
         });
         bottomItems.getChildren().addAll(btn_addExam, btn_removeExam);
         bottomItems.setSpacing(5);
-        content.setBottom(bottomItems);
+        this.setBottom(bottomItems);
 
-        BorderPane.setMargin(content.getCenter(), new Insets(10,0,10,0));
-        content.setPadding(new Insets(10));
-        this.showContent();
-    }
-
-    public void showContent() {
-        this.setCenter(content);
+        BorderPane.setMargin(this.getCenter(), new Insets(10,0,10,0));
+        this.setPadding(new Insets(10));
     }
 
     @Override

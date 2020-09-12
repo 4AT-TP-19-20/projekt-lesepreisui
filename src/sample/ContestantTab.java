@@ -10,12 +10,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-class ContestantTab extends BorderPane implements MultiContent, TabContent {
-    private BorderPane content;
+class ContestantTab extends BorderPane implements TabContent {
     private CustomTableView<Contestant> tbv_contestants;
 
     ContestantTab() {
-        content = new BorderPane();
         tbv_contestants = new CustomTableView<>();
 
         //Top
@@ -23,7 +21,7 @@ class ContestantTab extends BorderPane implements MultiContent, TabContent {
         txt_search.setPromptText("Suche nach Name, Klasse, ...");
         txt_search.setMaxWidth(10000);
         txt_search.textProperty().addListener((observable, oldValue, newValue) -> textChangeListener(newValue));
-        content.setTop(txt_search);
+        this.setTop(txt_search);
 
         //Center
         tbv_contestants.addColumn("Vorname", "", new PropertyValueFactory<>("firstName"));
@@ -46,7 +44,7 @@ class ContestantTab extends BorderPane implements MultiContent, TabContent {
                 }
             }
         });
-        content.setCenter(tbv_contestants);
+        this.setCenter(tbv_contestants);
 
         //Bottom
         VBox bottomItems = new VBox();
@@ -69,15 +67,10 @@ class ContestantTab extends BorderPane implements MultiContent, TabContent {
         });
         bottomItems.getChildren().addAll(btn_addContestant, btn_removeContestant);
         bottomItems.setSpacing(5);
-        content.setBottom(bottomItems);
+        this.setBottom(bottomItems);
 
-        BorderPane.setMargin(content.getCenter(), new Insets(10, 0, 10, 0));
-        content.setPadding(new Insets(10));
-        this.showContent();
-    }
-
-    public void showContent() {
-        this.setCenter(content);
+        BorderPane.setMargin(this.getCenter(), new Insets(10, 0, 10, 0));
+        this.setPadding(new Insets(10));
     }
 
     private void textChangeListener(String newValue) {

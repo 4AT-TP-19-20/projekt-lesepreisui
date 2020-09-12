@@ -11,18 +11,15 @@ import javafx.scene.layout.StackPane;
 
 import java.util.Map;
 
-public class GroupTab extends BorderPane implements MultiContent, TabContent {
-    private BorderPane content;
+public class GroupTab extends BorderPane implements TabContent {
     private CustomTableView<Map.Entry<String, Group>> tbv_groups;
 
     public GroupTab() {
-        content = new BorderPane();
-
         //Top
         TextField txt_search = new TextField();
         txt_search.setPromptText("Suche nach Klasse, ...");
         txt_search.textProperty().addListener((observable, oldValue, newValue) -> textChangeListener(newValue));
-        content.setTop(txt_search);
+        this.setTop(txt_search);
 
         //Center
         tbv_groups = new CustomTableView<>();
@@ -42,15 +39,10 @@ public class GroupTab extends BorderPane implements MultiContent, TabContent {
                 }
             }
         });
-        content.setCenter(tbv_groups);
+        this.setCenter(tbv_groups);
 
-        BorderPane.setMargin(content.getCenter(), new Insets(10, 0, 0, 0));
-        content.setPadding(new Insets(10));
-        this.showContent();
-    }
-
-    public void showContent() {
-        this.setCenter(content);
+        BorderPane.setMargin(this.getCenter(), new Insets(10, 0, 0, 0));
+        this.setPadding(new Insets(10));
     }
 
     private void textChangeListener(String newValue) {
