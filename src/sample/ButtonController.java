@@ -62,16 +62,13 @@ class ButtonController {
         btn_back.setVisible(true);
     }
 
-    static void enableSaveDiscardSystem(Saveable saveable, boolean hasBackButton) {
+    static void enableSaveDiscardSystem(Saveable saveable) {
         Saveable saveableCopy = saveable.getCopy();
 
         btn_save.setOnAction(e -> saveableCopy.setValues(saveable));
         btn_save.setVisible(true);
         btn_discard.setOnAction(e -> saveable.setValues(saveableCopy));
         btn_discard.setVisible(true);
-        if(hasBackButton) {
-            btn_back.setVisible(true);
-        }
 
         canLeave = () -> {
             if(!saveable.equals(saveableCopy)) {

@@ -14,7 +14,7 @@ import java.util.Map;
 public class GroupTab extends BorderPane implements TabContent {
     private CustomTableView<Map.Entry<String, Group>> tbv_groups;
 
-    public GroupTab() {
+    GroupTab() {
         //Top
         TextField txt_search = new TextField();
         txt_search.setPromptText("Suche nach Klasse, ...");

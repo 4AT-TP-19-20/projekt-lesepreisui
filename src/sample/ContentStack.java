@@ -47,11 +47,11 @@ class ContentStack extends StackPane {
     private <T extends Node & TabContent> void open(T toOpen) {
         toOpen.onOpen();
 
-        boolean backAble = this.getChildren().size() > 1;
         if(toOpen instanceof ChildSaveable) {
-            ButtonController.enableSaveDiscardSystem(((ChildSaveable) toOpen).getSaveable(), backAble);
+            ButtonController.enableSaveDiscardSystem(((ChildSaveable) toOpen).getSaveable());
         }
-        else if(backAble) {
+
+        if(this.getChildren().size() > 1) {
             ButtonController.enableBack();
         }
 
