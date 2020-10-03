@@ -183,7 +183,7 @@ public class Settings implements Saveable {
     }
 
     void setLanguages(ObservableList<String> languages) {
-        this.languages = languages;
+        this.languages.setAll(languages);
     }
 
     ObservableList<String> getUsers(){
@@ -191,7 +191,7 @@ public class Settings implements Saveable {
     }
 
     void setUsers(ObservableList<String> users){
-        this.users = users;
+        this.users.setAll(users);
     }
 
     int getMinMembers() {
