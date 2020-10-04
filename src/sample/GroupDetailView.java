@@ -8,18 +8,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
-import java.util.Map;
-
 public class GroupDetailView extends BorderPane implements TabContent {
-    public GroupDetailView(Map.Entry<String, Group> entry) {
+    GroupDetailView(Group group) {
         //Top
         HBox topItems = new HBox();
         topItems.getChildren().add(new Label("Klasse"));
-        TextField txt_grade = new TextField(entry.getKey());
+        TextField txt_grade = new TextField(group.getGrade());
         txt_grade.setEditable(false);
         topItems.getChildren().add(txt_grade);
         topItems.getChildren().add(new Label("Qualifiziert"));
-        SwitchBox sbx_qualified = new SwitchBox(entry.getValue().qualifiedProperty(), "small", false);
+        SwitchBox sbx_qualified = new SwitchBox(group.qualifiedProperty(), "small", false);
         topItems.getChildren().add(sbx_qualified);
         topItems.setSpacing(10);
         topItems.setAlignment(Pos.CENTER_LEFT);
@@ -31,7 +29,7 @@ public class GroupDetailView extends BorderPane implements TabContent {
         tbv_members.addColumn("Nachname", "", new PropertyValueFactory<>("lastName"));
         tbv_members.addColumn("Gelesene Bücher", 0, new PropertyValueFactory<>("bookCount"));
         tbv_members.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
-        tbv_members.getItems().addAll(entry.getValue().getMembers());
+        tbv_members.getItems().addAll(group.getMembers());
         this.setCenter(tbv_members);
 
         BorderPane.setMargin(this.getCenter(), new Insets(10,0,0,0));

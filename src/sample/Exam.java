@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
-public class Exam implements Saveable {
+public class Exam implements Saveable, Comparable<Exam> {
     private Book book;
     private IntegerPropertyArray answers;
     private IntegerProperty passed;
@@ -185,5 +185,10 @@ public class Exam implements Saveable {
         nodeExams.appendChild(examElement);
 
         return nodeExams;
+    }
+
+    @Override
+    public int compareTo(Exam o) {
+        return 0;
     }
 }

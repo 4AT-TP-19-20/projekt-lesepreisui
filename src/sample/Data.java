@@ -55,7 +55,7 @@ public class Data {
         if(groups.containsKey(grade)) {
             return groups.get(grade);
         }
-        Group toAdd = new Group();
+        Group toAdd = new Group(grade);
         groups.put(grade, toAdd);
         return toAdd;
     }

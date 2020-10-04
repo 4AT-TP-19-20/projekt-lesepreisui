@@ -12,7 +12,7 @@ import javafx.scene.layout.StackPane;
 import java.util.Map;
 
 public class GroupTab extends BorderPane implements TabContent {
-    private CustomTableView<Map.Entry<String, Group>> tbv_groups;
+    private CustomTableView<Group> tbv_groups;
 
     GroupTab() {
         //Top
@@ -23,11 +23,11 @@ public class GroupTab extends BorderPane implements TabContent {
 
         //Center
         tbv_groups = new CustomTableView<>();
-        tbv_groups.addColumn("Klasse", "", param -> new SimpleStringProperty(param.getValue().getKey()));
-        tbv_groups.addColumn("Mitglieder", "", param -> new SimpleStringProperty(String.valueOf(param.getValue().getValue().getMemberCount())));
-        tbv_groups.addColumn("Qualifiziert", new StackPane(), param -> new SwitchBox(param.getValue().getValue().qualifiedProperty(), "small", false));
-        tbv_groups.addColumn("Punkte", "", param -> new SimpleStringProperty(String.valueOf(param.getValue().getValue().getPoints())));
-        tbv_groups.getItems().addAll(Data.groups.entrySet());
+        tbv_groups.addColumn("Klasse", "", param -> new SimpleStringProperty(param.getValue().getGrade()));
+        tbv_groups.addColumn("Mitglieder", "", param -> new SimpleStringProperty(String.valueOf(param.getValue().getMemberCount())));
+        tbv_groups.addColumn("Qualifiziert", new StackPane(), param -> new SwitchBox(param.getValue().qualifiedProperty(), "small", false));
+        tbv_groups.addColumn("Punkte", "", param -> new SimpleStringProperty(String.valueOf(param.getValue().getPoints())));
+        tbv_groups.getItems().addAll(Data.groups.values());
         tbv_groups.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
                 tbv_groups.getSelectionModel().clearSelection();
@@ -50,13 +50,13 @@ public class GroupTab extends BorderPane implements TabContent {
         tbv_groups.getItems().clear();
 
         if(newValue.trim().isEmpty()) {
-            tbv_groups.getItems().addAll(Data.groups.entrySet());
+            tbv_groups.getItems().addAll(Data.groups.values());
             return;
         }
 
         for(Map.Entry<String, Group> entry : Data.groups.entrySet()) {
             if(entry.getKey().toLowerCase().contains(newValue)) {
-                tbv_groups.getItems().add(entry);
+                tbv_groups.getItems().add(entry.getValue());
             }
         }
     }
