@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-class Group {
+class Group implements Comparable<Group> {
     private final String grade;
     private ObservableList<Contestant> members;
     private IntegerProperty memberCount;
@@ -93,5 +93,10 @@ class Group {
         }
 
         points.set(newPoints);
+    }
+
+    @Override
+    public int compareTo(Group other) {
+        return this.getGrade().compareTo(other.getGrade());
     }
 }

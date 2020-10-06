@@ -7,7 +7,7 @@ import javafx.beans.property.StringProperty;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class Book {
+public class Book implements Comparable<Book> {
     private StringProperty title;
     private StringProperty authorFirstName;
     private StringProperty authorLastName;
@@ -25,7 +25,6 @@ public class Book {
         this.language = new SimpleStringProperty(language);
         this.points = new SimpleIntegerProperty(points);
     }
-
 
     public String getTitle() {
         return title.get();
@@ -87,7 +86,21 @@ public class Book {
         this.points.set(points);
     }
 
-    public Element getXMLNode(Document doc){
+    @Override
+    public int compareTo(Book other) {
+        if(!this.getLanguage().equals(other.getLanguage())) {
+            return this.getLanguage().compareTo(other.getLanguage());
+        }
+        if(!this.getAuthorLastName().equals(other.getAuthorLastName())) {
+            return this.getAuthorLastName().compareTo(other.getAuthorLastName());
+        }
+        if(!this.getAuthorFirstName().equals(other.getAuthorFirstName())) {
+            return this.getAuthorFirstName().compareTo(other.getAuthorFirstName());
+        }
+        return this.getTitle().compareTo(other.getTitle());
+    }
+
+    Element getXMLNode(Document doc){
         Element book = doc.createElement("Book");
         Element titleElement = doc.createElement("Title");
         Element authorFirstNameElement = doc.createElement("AuthorFirstName");

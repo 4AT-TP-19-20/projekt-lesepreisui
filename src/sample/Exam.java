@@ -165,6 +165,13 @@ public class Exam implements Saveable, Comparable<Exam> {
         }
     }
 
+    @Override
+    public int compareTo(Exam other) {
+        //For every book only one exam can be taken by every contestant,
+        //which means every exam of a contestant has an unique book, so comparing the books is good enough
+        return this.getBook().compareTo(other.getBook());
+    }
+
     public Element appendExam(Document doc, Element nodeExams){
         Element examElement = doc.createElement("Exam");
         Element bookTitleElement = doc.createElement("BookTitle");
@@ -185,10 +192,5 @@ public class Exam implements Saveable, Comparable<Exam> {
         nodeExams.appendChild(examElement);
 
         return nodeExams;
-    }
-
-    @Override
-    public int compareTo(Exam o) {
-        return 0;
     }
 }

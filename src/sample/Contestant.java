@@ -7,9 +7,9 @@ import javafx.collections.ObservableList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import java.util.Comparator;
+import java.util.Arrays;
 
-public class Contestant implements Saveable {
+public class Contestant implements Saveable, Comparable<Contestant> {
     private StringProperty firstName;
     private StringProperty lastName;
     private StringProperty grade;
@@ -206,27 +206,14 @@ public class Contestant implements Saveable {
     }
 
     public boolean examsEqual(ObservableList<Exam> otherExams) {
-        Comparator<Exam> examComparator = (exam1, exam2) -> {
-            Book book1 = exam1.getBook();
-            Book book2 = exam2.getBook();
+        Exam[] ownSorted = exams.toArray(new Exam[0]);
+        Arrays.sort(ownSorted);
+        Exam[] otherSorted = otherExams.toArray(new Exam[0]);
+        Arrays.sort(otherSorted);
 
-            if(!book1.getTitle().equals(book2.getTitle())) {
-                return book1.getTitle().compareTo(book2.getTitle());
-            }
-            else if(!book1.getAuthorLastName().equals(book2.getAuthorLastName())) {
-                return book1.getAuthorLastName().compareTo(book2.getAuthorLastName());
-            }
-            else {
-                return book1.getAuthorFirstName().compareTo(book2.getAuthorFirstName());
-            }
-        };
-
-        ObservableList<Exam> ownSorted = exams.sorted(examComparator);
-        ObservableList<Exam> othersSorted = otherExams.sorted(examComparator);
-
-        if(ownSorted.size() == othersSorted.size()) {
-            for(int i = 0; i < this.exams.size(); i++) {
-                if(!ownSorted.get(i).equals(othersSorted.get(i))) {
+        if(ownSorted.length == otherSorted.length) {
+            for (int i = 0; i < ownSorted.length; i++) {
+                if(!ownSorted[i].equals(otherSorted[i])) {
                     return false;
                 }
             }
@@ -255,6 +242,17 @@ public class Contestant implements Saveable {
         }
 
         bookCount.set(newBookCount);
+    }
+
+    @Override
+    public int compareTo(Contestant other) {
+        if(!this.getGrade().equals(other.getGrade())) {
+            return this.getGrade().compareTo(other.getGrade());
+        }
+        if(!this.getLastName().equals(other.getLastName())) {
+            return this.getLastName().compareTo(other.getLastName());
+        }
+        return this.getFirstName().compareTo(other.getFirstName());
     }
 
     public Element getXMLNode(Document doc){
