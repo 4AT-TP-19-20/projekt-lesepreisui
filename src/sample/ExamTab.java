@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -41,6 +42,8 @@ class ExamTab extends BorderPane {
 
         this.setCenter(tbv_exams);
 
+        Data.contestants.addListener(this::contestantsListener);
+
         //Bottom
         Button btn_removeExam = new Button("Prüfung löschen");
         btn_removeExam.setOnAction(e -> btn_removeExamAction());
@@ -49,6 +52,26 @@ class ExamTab extends BorderPane {
 
         BorderPane.setMargin(this.getCenter(), new Insets(10,0,10,0));
         this.setPadding(new Insets(10));
+    }
+
+    private void contestantsListener(ListChangeListener.Change<? extends Contestant> c) {
+        while(c.next()) {
+            for(Contestant added : c.getAddedSubList()) {
+                tbv_exams.getItems().addAll(added.getExams());
+                added.getExams().addListener(this::examsListener);
+            }
+            for (Contestant removed : c.getRemoved()) {
+                tbv_exams.getItems().removeAll(removed.getExams());
+                removed.getExams().removeListener(this::examsListener);
+            }
+        }
+    }
+
+    private void examsListener(ListChangeListener.Change<? extends Exam> c) {
+        while(c.next()) {
+            tbv_exams.getItems().addAll(c.getAddedSubList());
+            tbv_exams.getItems().removeAll(c.getRemoved());
+        }
     }
 
     private void btn_removeExamAction() {
