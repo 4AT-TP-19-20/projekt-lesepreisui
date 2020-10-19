@@ -8,7 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-class ExamTab extends BorderPane implements TabContent {
+class ExamTab extends BorderPane {
     private CustomTableView<Exam> tbv_exams;
 
     ExamTab() {
@@ -63,15 +63,5 @@ class ExamTab extends BorderPane implements TabContent {
                 }
             }
         }
-    }
-
-    @Override
-    public void onOpen() {
-
-    }
-
-    @Override
-    public void onClose() {
-
     }
 }

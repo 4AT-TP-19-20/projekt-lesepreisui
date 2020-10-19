@@ -8,7 +8,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-public class ContestantDetailView extends BorderPane implements TabContent, ChildSaveable {
+public class ContestantDetailView extends BorderPane implements ChildSaveable {
     private Contestant contestant;
 
     ContestantDetailView(Contestant contestant) {
@@ -114,16 +114,6 @@ public class ContestantDetailView extends BorderPane implements TabContent, Chil
 
         BorderPane.setMargin(this.getCenter(), new Insets(10,0,10,0));
         this.setPadding(new Insets(10));
-    }
-
-    @Override
-    public void onOpen() {
-
-    }
-
-    @Override
-    public void onClose() {
-
     }
 
     @Override

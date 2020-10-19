@@ -8,7 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
-public class GroupDetailView extends BorderPane implements TabContent {
+public class GroupDetailView extends BorderPane {
     GroupDetailView(Group group) {
         //Top
         HBox topItems = new HBox();
@@ -34,15 +34,5 @@ public class GroupDetailView extends BorderPane implements TabContent {
 
         BorderPane.setMargin(this.getCenter(), new Insets(10,0,0,0));
         this.setPadding(new Insets(10));
-    }
-
-    @Override
-    public void onOpen() {
-
-    }
-
-    @Override
-    public void onClose() {
-
     }
 }

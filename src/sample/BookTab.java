@@ -11,7 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-public class BookTab extends BorderPane implements TabContent {
+public class BookTab extends BorderPane {
     private static CustomTableView<Book> tbv_books;
 
     BookTab() {
@@ -98,15 +98,5 @@ public class BookTab extends BorderPane implements TabContent {
     protected void onItemSelected() {
         BookDetailWindow bookDetailWindow = new BookDetailWindow(tbv_books.getSelectionModel().getSelectedItem());
         bookDetailWindow.show();
-    }
-
-    @Override
-    public void onOpen() {
-
-    }
-
-    @Override
-    public void onClose() {
-
     }
 }

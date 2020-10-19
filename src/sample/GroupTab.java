@@ -11,7 +11,7 @@ import javafx.scene.layout.StackPane;
 
 import java.util.Map;
 
-public class GroupTab extends BorderPane implements TabContent {
+class GroupTab extends BorderPane {
     private CustomTableView<Group> tbv_groups;
 
     GroupTab() {
@@ -59,15 +59,5 @@ public class GroupTab extends BorderPane implements TabContent {
                 tbv_groups.getItems().add(entry.getValue());
             }
         }
-    }
-
-    @Override
-    public void onOpen() {
-
-    }
-
-    @Override
-    public void onClose() {
-
     }
 }

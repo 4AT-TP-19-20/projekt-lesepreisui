@@ -4,13 +4,13 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 
 class ContentStack extends StackPane {
-    <T extends Node & TabContent> ContentStack(T initialContent) {
+    ContentStack(Node initialContent) {
         this.getChildren().add(initialContent);
 
         open(initialContent);
     }
 
-    <T extends Node & TabContent> void push(T content) {
+    void push(Node content) {
         close(getLast());
 
         this.getChildren().add(content);
@@ -18,7 +18,7 @@ class ContentStack extends StackPane {
         open(content);
     }
 
-    <T extends Node & TabContent> void pop() {
+    void pop() {
         close(getLast());
 
         this.getChildren().remove(this.getChildren().size() - 1);
@@ -34,19 +34,16 @@ class ContentStack extends StackPane {
         close(getLast());
     }
 
-    @SuppressWarnings("unchecked")
-    private <T extends Node & TabContent> T getLast() {
+    private Node getLast() {
         if(this.getChildren().size() > 0) {
-            return (T) this.getChildren().get(this.getChildren().size() - 1);
+            return this.getChildren().get(this.getChildren().size() - 1);
         }
         else {
             throw new RuntimeException("ContentStack is empty!");
         }
     }
 
-    private <T extends Node & TabContent> void open(T toOpen) {
-        toOpen.onOpen();
-
+    private void open(Node toOpen) {
         if(toOpen instanceof ChildSaveable) {
             ButtonController.enableSaveDiscardSystem(((ChildSaveable) toOpen).getSaveable());
         }
@@ -58,9 +55,7 @@ class ContentStack extends StackPane {
         toOpen.setVisible(true);
     }
 
-    private <T extends Node & TabContent> void close(T toClose) {
-        toClose.onClose();
-
+    private void close(Node toClose) {
         ButtonController.disableButtons();
 
         toClose.setVisible(false);

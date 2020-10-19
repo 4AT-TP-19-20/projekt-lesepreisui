@@ -10,7 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-class ContestantTab extends BorderPane implements TabContent {
+class ContestantTab extends BorderPane {
     private CustomTableView<Contestant> tbv_contestants;
 
     ContestantTab() {
@@ -89,15 +89,5 @@ class ContestantTab extends BorderPane implements TabContent {
                 tbv_contestants.getItems().add(contestant);
             }
         }
-    }
-
-    @Override
-    public void onOpen() {
-
-    }
-
-    @Override
-    public void onClose() {
-
     }
 }

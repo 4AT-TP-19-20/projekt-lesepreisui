@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-class SettingsTab extends VBox implements TabContent, ChildSaveable {
+class SettingsTab extends VBox implements ChildSaveable {
     SettingsTab() {
         this.getChildren().add(new SettingsHeader("Einstellungen",
                 "h1", "icons8-settings-144.png", 40, false));
@@ -58,16 +58,6 @@ class SettingsTab extends VBox implements TabContent, ChildSaveable {
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10));
         this.setSpacing(5);
-    }
-
-    @Override
-    public void onOpen() {
-
-    }
-
-    @Override
-    public void onClose() {
-
     }
 
     @Override
