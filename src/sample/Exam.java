@@ -9,10 +9,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
-public class Exam implements Saveable, Comparable<Exam> {
+public class Exam implements Saveable, Comparable<Exam>, Searchable {
     private Book book;
     private IntegerPropertyArray answers;
     private IntegerProperty passed;
@@ -126,7 +126,7 @@ public class Exam implements Saveable, Comparable<Exam> {
     }
 
     public String getDateAsString() {
-        return date.format(DateTimeFormatter.ofPattern("dd.MM.uuuu"));
+        return date.format(Data.dateFormatter);
     }
 
     public void setDate(LocalDate date) {
@@ -170,6 +170,36 @@ public class Exam implements Saveable, Comparable<Exam> {
         //For every book only one exam can be taken by every contestant,
         //which means every exam of a contestant has an unique book, so comparing the books is good enough
         return this.getBook().compareTo(other.getBook());
+    }
+
+    @Override
+    public boolean contains(String s) {
+        if(getBook().contains(s)
+        || getLibrarian().toLowerCase().contains(s)) {
+            return true;
+        }
+
+        try {
+            if(s.contains("-")) { //Date range
+                String[] dates = s.split("-");
+
+                if(dates.length != 2) {
+                    return false;
+                }
+
+                LocalDate date1 = LocalDate.parse(dates[0].trim(), Data.dateFormatter);
+                LocalDate date2 = LocalDate.parse(dates[1].trim(), Data.dateFormatter);
+
+                return getDate().isEqual(date1)
+                        || getDate().isEqual(date2)
+                        || (getDate().isAfter(date1) && getDate().isBefore(date2));
+            }
+            else { //Specific date
+                return getDate().isEqual(LocalDate.parse(s.trim(), Data.dateFormatter));
+            }
+        } catch (DateTimeParseException ex) {
+            return false;
+        }
     }
 
     public Element appendExam(Document doc, Element nodeExams){

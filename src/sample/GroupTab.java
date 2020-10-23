@@ -57,7 +57,7 @@ class GroupTab extends BorderPane {
         }
 
         for(Group group : Data.groups) {
-            if(group.getGrade().toLowerCase().contains(newValue)) {
+            if(group.contains(newValue)) {
                 tbv_groups.getItems().add(group);
             }
         }

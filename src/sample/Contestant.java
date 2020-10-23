@@ -9,7 +9,7 @@ import org.w3c.dom.Element;
 
 import java.util.Arrays;
 
-public class Contestant implements Saveable, Comparable<Contestant> {
+public class Contestant implements Saveable, Comparable<Contestant>, Searchable {
     private StringProperty firstName;
     private StringProperty lastName;
     private StringProperty grade;
@@ -245,6 +245,13 @@ public class Contestant implements Saveable, Comparable<Contestant> {
             return this.getLastName().compareTo(other.getLastName());
         }
         return this.getFirstName().compareTo(other.getFirstName());
+    }
+
+    @Override
+    public boolean contains(String s) {
+        return getFirstName().toLowerCase().contains(s)
+                || getLastName().toLowerCase().contains(s)
+                || getGrade().toLowerCase().contains(s);
     }
 
     public Element getXMLNode(Document doc){

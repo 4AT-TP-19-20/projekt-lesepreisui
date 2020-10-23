@@ -7,7 +7,7 @@ import javafx.beans.property.StringProperty;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class Book implements Comparable<Book> {
+public class Book implements Comparable<Book>, Searchable {
     private StringProperty title;
     private StringProperty authorFirstName;
     private StringProperty authorLastName;
@@ -98,6 +98,14 @@ public class Book implements Comparable<Book> {
             return this.getAuthorFirstName().compareTo(other.getAuthorFirstName());
         }
         return this.getTitle().compareTo(other.getTitle());
+    }
+
+    @Override
+    public boolean contains(String s) {
+        return getTitle().toLowerCase().contains(s)
+                || getAuthorFirstName().toLowerCase().contains(s)
+                || getAuthorLastName().toLowerCase().contains(s)
+                || getLanguage().toLowerCase().contains(s);
     }
 
     Element getXMLNode(Document doc){

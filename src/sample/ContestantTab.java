@@ -83,9 +83,7 @@ class ContestantTab extends BorderPane {
         }
 
         for(Contestant contestant : Data.contestants) {
-            if(contestant.getFirstName().toLowerCase().contains(newValue)
-                    || contestant.getLastName().toLowerCase().contains(newValue)
-                    || contestant.getGrade().toLowerCase().contains(newValue)) {
+            if(contestant.contains(newValue)) {
                 tbv_contestants.getItems().add(contestant);
             }
         }

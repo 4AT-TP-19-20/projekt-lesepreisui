@@ -13,6 +13,7 @@ public class Data {
     static ObservableList<Group> groups;
     static String currentUser;
     static Settings settings;
+    static DateTimeFormatter dateFormatter;
     private static String path = ".\\";
 
     public static void init() {
@@ -20,6 +21,7 @@ public class Data {
         books = FXCollections.observableArrayList();
         groups = FXCollections.observableArrayList();
         settings = new Settings();
+        dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
         contestants.addListener((ListChangeListener<Contestant>) c -> {
             while (c.next()) {
@@ -42,6 +44,7 @@ public class Data {
         Xml.getContestants(path + "contestants.xml");
 
         //Temporary static lists, replace with files
+        /*
         contestants.add(new Contestant("Manuel", "Ploner", "4AT"));
         contestants.add(new Contestant("Mattia", "Galiani", "4AT"));
         contestants.add(new Contestant("Maximilian", "Mitterrutzner", "4AT"));
@@ -50,15 +53,16 @@ public class Data {
         books.add(new Book("The Million Pound Bank Note", "Mark", "Twain", "Englisch", 4));
         books.add(new Book("Harry Potter und die Heiligtümer des Todes", "Joanne", "Rowling", "Deutsch", 4));
         books.add(new Book("Harry Potter und der Stein der Weisen","Joanne","Rowling","Deutsch", 7));
-        contestants.get(0).addExam(new Exam(books.get(0), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("10.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-        contestants.get(0).addExam(new Exam(books.get(1), new int[]{0,1,1,0,1,1}, "Dorothea", LocalDate.parse("11.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-        contestants.get(0).addExam(new Exam(books.get(2), new int[]{0,1,1,0,0,0}, "Dorothea", LocalDate.parse("12.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-        contestants.get(3).addExam(new Exam(books.get(3), new int[]{1,1,1,1,2,2}, "Dorothea", LocalDate.parse("10.01.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-        contestants.get(1).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-        contestants.get(1).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-        contestants.get(2).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-        contestants.get(2).addExam(new Exam(books.get(2), new int[]{0,0,1,1,1,1}, "Dorothea", LocalDate.parse("25.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
-        contestants.get(3).addExam(new Exam(books.get(2), new int[]{1,0,1,1,1,2}, "Dorothea", LocalDate.parse("22.04.2020", DateTimeFormatter.ofPattern("dd.MM.yyyy"))));
+        contestants.get(0).addExam(new Exam(books.get(0), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("10.04.2020", dateFormatter)));
+        contestants.get(0).addExam(new Exam(books.get(1), new int[]{0,1,1,0,1,1}, "Dorothea", LocalDate.parse("11.04.2020", dateFormatter)));
+        contestants.get(0).addExam(new Exam(books.get(2), new int[]{0,1,1,0,0,0}, "Dorothea", LocalDate.parse("12.04.2020", dateFormatter)));
+        contestants.get(3).addExam(new Exam(books.get(3), new int[]{1,1,1,1,2,2}, "Dorothea", LocalDate.parse("10.01.2020", dateFormatter)));
+        contestants.get(1).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", dateFormatter)));
+        contestants.get(1).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", dateFormatter)));
+        contestants.get(2).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", dateFormatter)));
+        contestants.get(2).addExam(new Exam(books.get(2), new int[]{0,0,1,1,1,1}, "Dorothea", LocalDate.parse("25.04.2020", dateFormatter)));
+        contestants.get(3).addExam(new Exam(books.get(2), new int[]{1,0,1,1,1,2}, "Dorothea", LocalDate.parse("22.04.2020", dateFormatter)));
+        */
     }
 
     public static void save() {

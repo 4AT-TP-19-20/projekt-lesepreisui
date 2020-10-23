@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -60,7 +61,7 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
         tbv_exams.addColumn("Vorname Autor","", param -> param.getValue().getBook().authorFirstNameProperty());
         tbv_exams.addColumn("Nachname Autor", "", param -> param.getValue().getBook().authorLastNameProperty());
         tbv_exams.addColumn("Sprache", "", param -> param.getValue().getBook().languageProperty());
-        tbv_exams.addColumn("Datum", "", new PropertyValueFactory<>("date"));
+        tbv_exams.addColumn("Datum", "", param -> new SimpleStringProperty(param.getValue().getDateAsString()));
         tbv_exams.addColumn("BibliothekarIn", "", new PropertyValueFactory<>("librarian"));
         tbv_exams.addColumn("Punkte", "", new PropertyValueFactory<>("points"));
         tbv_exams.addColumn("Bestanden", new StackPane(), param -> new SwitchBox(param.getValue().passedProperty(), "small", false, true));

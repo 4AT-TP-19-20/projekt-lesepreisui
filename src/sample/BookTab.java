@@ -86,10 +86,7 @@ public class BookTab extends BorderPane {
         }
 
         for(Book book : Data.books) {
-            if(book.getTitle().toLowerCase().contains(newValue)
-                    || book.getAuthorFirstName().toLowerCase().contains(newValue)
-                    || book.getAuthorLastName().toLowerCase().contains(newValue)
-                    || book.getLanguage().toLowerCase().contains(newValue)) {
+            if(book.contains(newValue)) {
                 tbv_books.getItems().add(book);
             }
         }
