@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-class Group implements Comparable<Group> {
+public class Group implements Comparable<Group> {
     private final String grade;
     private ObservableList<Contestant> members;
     private IntegerProperty memberCount;
@@ -25,23 +25,23 @@ class Group implements Comparable<Group> {
         qualified.bind(Bindings.greaterThanOrEqual(memberCount, Data.settings.minMembersProperty()));
     }
 
-    String getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    int getPoints() {
+    public int getPoints() {
         return points.get();
     }
 
-    IntegerProperty pointsProperty() {
+    public IntegerProperty pointsProperty() {
         return points;
     }
 
-    ObservableList<Contestant> getMembers() {
+    public ObservableList<Contestant> getMembers() {
         return members;
     }
 
-    void setMembers(ObservableList<Contestant> members) {
+    public void setMembers(ObservableList<Contestant> members) {
         for(Contestant member : members) {
             member.pointsProperty().addListener(e -> pointsUpdate());
         }
@@ -49,35 +49,35 @@ class Group implements Comparable<Group> {
         pointsUpdate();
     }
 
-    void addMember(Contestant member) {
+    public void addMember(Contestant member) {
         member.pointsProperty().addListener(e -> pointsUpdate());
         members.add(member);
         pointsUpdate();
     }
 
-    void removeMember(Contestant member) {
+    public void removeMember(Contestant member) {
         member.pointsProperty().removeListener(e -> pointsUpdate());
         members.remove(member);
         pointsUpdate();
     }
 
-    int getMemberCount() {
+    public int getMemberCount() {
         return memberCount.get();
     }
 
-    IntegerProperty memberCountProperty() {
+    public IntegerProperty memberCountProperty() {
         return memberCount;
     }
 
-    void setMemberCount(int memberCount) {
+    public void setMemberCount(int memberCount) {
         this.memberCount.set(memberCount);
     }
 
-    boolean isQualified() {
+    public boolean isQualified() {
         return qualified.get();
     }
 
-    BooleanProperty qualifiedProperty() {
+    public BooleanProperty qualifiedProperty() {
         return qualified;
     }
 

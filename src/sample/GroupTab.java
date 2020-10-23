@@ -1,15 +1,14 @@
 package sample;
 
-import javafx.beans.property.SimpleStringProperty;
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
-import javafx.scene.control.skin.TableColumnHeader;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-
-import java.util.Map;
 
 class GroupTab extends BorderPane {
     private CustomTableView<Group> tbv_groups;
@@ -23,11 +22,11 @@ class GroupTab extends BorderPane {
 
         //Center
         tbv_groups = new CustomTableView<>();
-        tbv_groups.addColumn("Klasse", "", param -> new SimpleStringProperty(param.getValue().getGrade()));
-        tbv_groups.addColumn("Mitglieder", "", param -> new SimpleStringProperty(String.valueOf(param.getValue().getMemberCount())));
+        tbv_groups.addColumn("Klasse", "", new PropertyValueFactory<>("grade"));
+        tbv_groups.addColumn("Mitglieder", 0, new PropertyValueFactory<>("memberCount"));
         tbv_groups.addColumn("Qualifiziert", new StackPane(), param -> new SwitchBox(param.getValue().qualifiedProperty(), "small", false));
-        tbv_groups.addColumn("Punkte", "", param -> new SimpleStringProperty(String.valueOf(param.getValue().getPoints())));
-        tbv_groups.getItems().addAll(Data.groups.values());
+        tbv_groups.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
+        tbv_groups.getItems().addAll(Data.groups);
         tbv_groups.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
                 tbv_groups.getSelectionModel().clearSelection();
@@ -39,6 +38,9 @@ class GroupTab extends BorderPane {
                 }
             }
         });
+
+        Data.groups.addListener(this::groupsListener);
+
         this.setCenter(tbv_groups);
 
         BorderPane.setMargin(this.getCenter(), new Insets(10, 0, 0, 0));
@@ -49,15 +51,22 @@ class GroupTab extends BorderPane {
         newValue = newValue.trim().toLowerCase();
         tbv_groups.getItems().clear();
 
-        if(newValue.trim().isEmpty()) {
-            tbv_groups.getItems().addAll(Data.groups.values());
+        if(newValue.isEmpty()) {
+            tbv_groups.getItems().addAll(Data.groups);
             return;
         }
 
-        for(Map.Entry<String, Group> entry : Data.groups.entrySet()) {
-            if(entry.getKey().toLowerCase().contains(newValue)) {
-                tbv_groups.getItems().add(entry.getValue());
+        for(Group group : Data.groups) {
+            if(group.getGrade().toLowerCase().contains(newValue)) {
+                tbv_groups.getItems().add(group);
             }
+        }
+    }
+
+    private void groupsListener(ListChangeListener.Change<? extends Group> c) {
+        while (c.next()) {
+            tbv_groups.getItems().addAll(c.getAddedSubList());
+            tbv_groups.getItems().removeAll(c.getRemoved());
         }
     }
 }

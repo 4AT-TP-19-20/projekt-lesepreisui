@@ -26,14 +26,6 @@ public class Contestant implements Saveable, Comparable<Contestant> {
         this.points = new SimpleIntegerProperty();
         this.bookCount = new SimpleIntegerProperty();
         this.isGroupMember = new SimpleBooleanProperty();
-        isGroupMember.addListener(e -> {
-            if(isGroupMember.get()) {
-                Data.getGroupByGrade(grade).addMember(this);
-            }
-            else {
-                Data.getGroupByGrade(grade).removeMember(this);
-            }
-        });
         this.isQualified = new SimpleBooleanProperty();
         isQualified.bind(Bindings.greaterThanOrEqual(bookCount, Data.settings.minBookCountProperty()));
         exams = FXCollections.observableArrayList();

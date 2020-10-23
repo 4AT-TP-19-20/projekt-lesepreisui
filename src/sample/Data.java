@@ -1,16 +1,16 @@
 package sample;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 
 public class Data {
     static ObservableList<Contestant> contestants;
     static ObservableList<Book> books;
-    static HashMap<String, Group> groups;
+    static ObservableList<Group> groups;
     static String currentUser;
     static Settings settings;
     private static String path = ".\\";
@@ -18,8 +18,24 @@ public class Data {
     public static void init() {
         contestants = FXCollections.observableArrayList();
         books = FXCollections.observableArrayList();
-        groups = new HashMap<>();
+        groups = FXCollections.observableArrayList();
         settings = new Settings();
+
+        contestants.addListener((ListChangeListener<Contestant>) c -> {
+            while (c.next()) {
+                for(Contestant added : c.getAddedSubList()) {
+                    added.groupMemberProperty().addListener((observable, oldValue, newValue) -> groupMemberListener(added, newValue));
+                }
+
+                for(Contestant removed : c.getRemoved()) {
+                    removed.groupMemberProperty().removeListener((observable, oldValue, newValue) -> groupMemberListener(removed, newValue));
+                    Group groupOfRemoved = getGroupByGrade(removed.getGrade());
+                    if(groupOfRemoved.getMemberCount() == 0) {
+                        groups.remove(groupOfRemoved);
+                    }
+                }
+            }
+        });
 
         Xml.getSettings(path + "settings.xml");
         Xml.getBooks(path + "books.xml");
@@ -51,12 +67,25 @@ public class Data {
         Xml.set(path + "contestants.xml", "Contestants");
     }
 
-    static Group getGroupByGrade(String grade) {
-        if(groups.containsKey(grade)) {
-            return groups.get(grade);
+    public static Group getGroupByGrade(String grade) {
+        for(Group group : groups) {
+            if(group.getGrade().equals(grade)) {
+                return group;
+            }
         }
-        Group toAdd = new Group(grade);
-        groups.put(grade, toAdd);
-        return toAdd;
+
+        Group newGroup = new Group(grade);
+        groups.add(newGroup);
+        return newGroup;
+    }
+
+    private static void groupMemberListener(Contestant contestant, boolean newValue) {
+        Group group = getGroupByGrade(contestant.getGrade());
+        if(newValue) {
+            group.addMember(contestant);
+        }
+        else {
+            group.removeMember(contestant);
+        }
     }
 }
