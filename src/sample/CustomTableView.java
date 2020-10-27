@@ -14,7 +14,7 @@ class CustomTableView<S extends Searchable & Comparable<S>> extends TableView<S>
         TableColumn<S, T> toAdd = new TableColumn<>(title);
         toAdd.setCellFactory(param -> new AlignedTableCell<>());
         toAdd.setCellValueFactory(factory);
-        this.setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY);
+        this.setColumnResizePolicy(new CustomResizePolicy());
         this.getColumns().add(toAdd);
     }
 }
