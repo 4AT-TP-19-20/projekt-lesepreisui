@@ -23,18 +23,18 @@ class ExamTab extends BorderPane {
         //Center
         tbv_exams = new CustomTableView<>();
 
-        tbv_exams.addColumn("Vorname", "", param -> param.getValue().getContestant().firstNameProperty());
-        tbv_exams.addColumn("Nachname", "", param -> param.getValue().getContestant().lastNameProperty());
-        tbv_exams.addColumn("Klasse", "", param -> param.getValue().getContestant().gradeProperty());
-        tbv_exams.addColumn("Titel", "", param -> param.getValue().getBook().titleProperty());
-        tbv_exams.addColumn("Vorname Autor", "", param -> param.getValue().getBook().authorFirstNameProperty());
-        tbv_exams.addColumn("Nachname Autor", "", param -> param.getValue().getBook().authorLastNameProperty());
-        tbv_exams.addColumn("Sprache", "", param -> param.getValue().getBook().languageProperty());
-        tbv_exams.addColumn("Datum", "", param -> new SimpleStringProperty(param.getValue().getDateAsString()));
-        tbv_exams.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
-        tbv_exams.addColumn("Bestanden", new StackPane(), param -> new SwitchBox(param.getValue().passedProperty(), "small", false, true));
-        tbv_exams.addColumn("BibliothekarIn", "", new PropertyValueFactory<>("librarian"));
-        tbv_exams.addColumn("Antworten", new HBox(), param -> new AnswerBoxes(param.getValue().answersProperty(), false, "small"));
+        tbv_exams.<String>addColumn("Vorname", param -> param.getValue().getContestant().firstNameProperty());
+        tbv_exams.<String>addColumn("Nachname", param -> param.getValue().getContestant().lastNameProperty());
+        tbv_exams.<String>addColumn("Klasse", param -> param.getValue().getContestant().gradeProperty());
+        tbv_exams.<String>addColumn("Titel", param -> param.getValue().getBook().titleProperty());
+        tbv_exams.<String>addColumn("Vorname Autor", param -> param.getValue().getBook().authorFirstNameProperty());
+        tbv_exams.<String>addColumn("Nachname Autor",  param -> param.getValue().getBook().authorLastNameProperty());
+        tbv_exams.<String>addColumn("Sprache", param -> param.getValue().getBook().languageProperty());
+        tbv_exams.<String>addColumn("Datum", param -> new SimpleStringProperty(param.getValue().getDateAsString()));
+        tbv_exams.<Integer>addColumn("Punkte", new PropertyValueFactory<>("points"));
+        tbv_exams.<StackPane>addColumn("Bestanden", param -> new SwitchBox(param.getValue().passedProperty(), "small", false, true));
+        tbv_exams.<String>addColumn("BibliothekarIn", new PropertyValueFactory<>("librarian"));
+        tbv_exams.<HBox>addColumn("Antworten", param -> new AnswerBoxes(param.getValue().answersProperty(), false, "small"));
 
         for(Contestant contestant : Data.contestants) {
             tbv_exams.getItems().addAll(contestant.getExams());

@@ -9,9 +9,8 @@ class CustomTableView<S extends Searchable & Comparable<S>> extends TableView<S>
     CustomTableView() {
         super();
     }
-
-    //TODO find solution without T parameter
-    <T> void addColumn(String title, T t, Callback<TableColumn.CellDataFeatures<S, T>, ObservableValue<T>> factory) {
+    
+    <T> void addColumn(String title, Callback<TableColumn.CellDataFeatures<S, T>, ObservableValue<T>> factory) {
         TableColumn<S, T> toAdd = new TableColumn<>(title);
         toAdd.setCellFactory(param -> new AlignedTableCell<>());
         toAdd.setCellValueFactory(factory);

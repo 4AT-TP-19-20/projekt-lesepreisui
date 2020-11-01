@@ -25,10 +25,10 @@ public class GroupDetailView extends BorderPane {
 
         //Center
         CustomTableView<Contestant> tbv_members = new CustomTableView<>();
-        tbv_members.addColumn("Vorname", "", new PropertyValueFactory<>("firstName"));
-        tbv_members.addColumn("Nachname", "", new PropertyValueFactory<>("lastName"));
-        tbv_members.addColumn("Gelesene Bücher", 0, new PropertyValueFactory<>("bookCount"));
-        tbv_members.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
+        tbv_members.<String>addColumn("Vorname", new PropertyValueFactory<>("firstName"));
+        tbv_members.<String>addColumn("Nachname", new PropertyValueFactory<>("lastName"));
+        tbv_members.<Integer>addColumn("Gelesene Bücher", new PropertyValueFactory<>("bookCount"));
+        tbv_members.<Integer>addColumn("Punkte", new PropertyValueFactory<>("points"));
         tbv_members.getItems().addAll(group.getMembers());
         this.setCenter(tbv_members);
 

@@ -12,20 +12,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-public class EditableListView extends BorderPane {
+class EditableListView extends BorderPane {
     private ListView<String> listView;
     private int index;
 
-    public EditableListView(String titleText, String newText, ObservableList<String> observableList, String iconPath) {
+    EditableListView(String titleText, String newText, ObservableList<String> observableList, String iconPath) {
         index = 1;
 
         //Top
-        Label title = new Label(titleText);
-        title.setPadding(new Insets(0,0,0,10));
         ImageView titleIcon = new ImageView(new Image(iconPath));
         titleIcon.setFitWidth(20);
         titleIcon.setPreserveRatio(true);
-        HBox titleBox= new HBox(titleIcon, title);
+        HBox titleBox = new HBox(titleIcon, new Label(titleText));
+        titleBox.setSpacing(10);
         this.setTop(titleBox);
 
         //Center
@@ -37,36 +36,25 @@ public class EditableListView extends BorderPane {
 
         //Bottom
         HBox bottomItems = new HBox();
-        bottomItems.setAlignment(Pos.CENTER);
-        bottomItems.setPadding(new Insets(10));
-        bottomItems.setSpacing(15);
         ImageView btn_add = new ImageView(new Image("icons8-add-100.png"));
         btn_add.setFitWidth(25);
         btn_add.setPreserveRatio(true);
-        btn_add.setOnMouseClicked(e->{
-            observableList.add(newText + " " + index++);
-        });
-        btn_add.setOnMouseEntered(e->{
-            btn_add.setFitWidth(28);
-        });
-        btn_add.setOnMouseExited(e->{
-            btn_add.setFitWidth(25);
-        });
+        btn_add.setOnMouseClicked(e -> observableList.add(newText + " " + index++));
+        //btn_add.setOnMouseEntered(e -> btn_add.setFitWidth(28));
+        //btn_add.setOnMouseExited(e -> btn_add.setFitWidth(25));
         ImageView btn_remove = new ImageView(new Image("icons8-minus-100.png"));
         btn_remove.setFitWidth(25);
         btn_remove.setPreserveRatio(true);
-        btn_remove.setOnMouseClicked(e->{
+        btn_remove.setOnMouseClicked(e -> {
             if(!listView.getSelectionModel().isEmpty()) {
                 observableList.remove(listView.getSelectionModel().getSelectedItem());
             }
         });
-        btn_remove.setOnMouseEntered(e->{
-            btn_remove.setFitWidth(28);
-        });
-        btn_remove.setOnMouseExited(e->{
-            btn_remove.setFitWidth(25);
-        });
+        //btn_remove.setOnMouseEntered(e -> btn_remove.setFitWidth(28));
+        //btn_remove.setOnMouseExited(e -> btn_remove.setFitWidth(25));
 
+        bottomItems.setAlignment(Pos.CENTER);
+        bottomItems.setPadding(new Insets(10));
         bottomItems.getChildren().addAll(btn_add, btn_remove);
         bottomItems.setSpacing(5);
         HBox.setHgrow(btn_add, Priority.ALWAYS);

@@ -24,11 +24,11 @@ public class BookTab extends BorderPane {
         //Center
         tbv_books = new CustomTableView<>();
 
-        tbv_books.addColumn("Titel", "", new PropertyValueFactory<>("title"));
-        tbv_books.addColumn("Vorname Author", "", new PropertyValueFactory<>("authorFirstName"));
-        tbv_books.addColumn("Nachname Author", "", new PropertyValueFactory<>("authorLastName"));
-        tbv_books.addColumn("Sprache", "", new PropertyValueFactory<>("language"));
-        tbv_books.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
+        tbv_books.<String>addColumn("Titel", new PropertyValueFactory<>("title"));
+        tbv_books.<String>addColumn("Vorname Author", new PropertyValueFactory<>("authorFirstName"));
+        tbv_books.<String>addColumn("Nachname Author", new PropertyValueFactory<>("authorLastName"));
+        tbv_books.<String>addColumn("Sprache", new PropertyValueFactory<>("language"));
+        tbv_books.<Integer>addColumn("Punkte", new PropertyValueFactory<>("points"));
 
         tbv_books.getItems().addAll(Data.books);
         tbv_books.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);

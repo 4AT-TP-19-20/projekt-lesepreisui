@@ -24,12 +24,12 @@ class ContestantTab extends BorderPane {
         this.setTop(txt_search);
 
         //Center
-        tbv_contestants.addColumn("Vorname", "", new PropertyValueFactory<>("firstName"));
-        tbv_contestants.addColumn("Nachname", "", new PropertyValueFactory<>("lastName"));
-        tbv_contestants.addColumn("Klasse", "", new PropertyValueFactory<>("grade"));
-        tbv_contestants.addColumn("Gelesene Bücher", 0, new PropertyValueFactory<>("bookCount"));
-        tbv_contestants.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
-        tbv_contestants.addColumn("Qualifiziert", new StackPane(), param -> new SwitchBox(param.getValue().qualifiedProperty(), "small", false));
+        tbv_contestants.<String>addColumn("Vorname", new PropertyValueFactory<>("firstName"));
+        tbv_contestants.<String>addColumn("Nachname", new PropertyValueFactory<>("lastName"));
+        tbv_contestants.<String>addColumn("Klasse", new PropertyValueFactory<>("grade"));
+        tbv_contestants.<Integer>addColumn("Gelesene Bücher", new PropertyValueFactory<>("bookCount"));
+        tbv_contestants.<Integer>addColumn("Punkte", new PropertyValueFactory<>("points"));
+        tbv_contestants.<StackPane>addColumn("Qualifiziert", param -> new SwitchBox(param.getValue().qualifiedProperty(), "small", false));
 
         tbv_contestants.getItems().addAll(Data.contestants);
         tbv_contestants.setOnMouseClicked((MouseEvent event) -> {

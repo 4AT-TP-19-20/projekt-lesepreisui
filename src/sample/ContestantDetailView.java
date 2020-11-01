@@ -63,15 +63,15 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
 
         tbv_exams = new CustomTableView<>();
 
-        tbv_exams.addColumn("Titel", "", param -> param.getValue().getBook().titleProperty());
-        tbv_exams.addColumn("Vorname Autor","", param -> param.getValue().getBook().authorFirstNameProperty());
-        tbv_exams.addColumn("Nachname Autor", "", param -> param.getValue().getBook().authorLastNameProperty());
-        tbv_exams.addColumn("Sprache", "", param -> param.getValue().getBook().languageProperty());
-        tbv_exams.addColumn("Datum", "", param -> new SimpleStringProperty(param.getValue().getDateAsString()));
-        tbv_exams.addColumn("BibliothekarIn", "", new PropertyValueFactory<>("librarian"));
-        tbv_exams.addColumn("Punkte", "", new PropertyValueFactory<>("points"));
-        tbv_exams.addColumn("Bestanden", new StackPane(), param -> new SwitchBox(param.getValue().passedProperty(), "small", false, true));
-        tbv_exams.addColumn("Antworten", new HBox(), param -> new AnswerBoxes(param.getValue().answersProperty(), false, "small"));
+        tbv_exams.<String>addColumn("Titel", param -> param.getValue().getBook().titleProperty());
+        tbv_exams.<String>addColumn("Vorname Autor", param -> param.getValue().getBook().authorFirstNameProperty());
+        tbv_exams.<String>addColumn("Nachname Autor", param -> param.getValue().getBook().authorLastNameProperty());
+        tbv_exams.<String>addColumn("Sprache", param -> param.getValue().getBook().languageProperty());
+        tbv_exams.<String>addColumn("Datum", param -> new SimpleStringProperty(param.getValue().getDateAsString()));
+        tbv_exams.<String>addColumn("BibliothekarIn", new PropertyValueFactory<>("librarian"));
+        tbv_exams.<String>addColumn("Punkte", new PropertyValueFactory<>("points"));
+        tbv_exams.<StackPane>addColumn("Bestanden", param -> new SwitchBox(param.getValue().passedProperty(), "small", false, true));
+        tbv_exams.<HBox>addColumn("Antworten", param -> new AnswerBoxes(param.getValue().answersProperty(), false, "small"));
 
         tbv_exams.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tbv_exams.getItems().addAll(contestant.getExams());

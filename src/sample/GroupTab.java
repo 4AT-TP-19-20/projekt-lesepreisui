@@ -22,10 +22,10 @@ class GroupTab extends BorderPane {
 
         //Center
         tbv_groups = new CustomTableView<>();
-        tbv_groups.addColumn("Klasse", "", new PropertyValueFactory<>("grade"));
-        tbv_groups.addColumn("Mitglieder", 0, new PropertyValueFactory<>("memberCount"));
-        tbv_groups.addColumn("Qualifiziert", new StackPane(), param -> new SwitchBox(param.getValue().qualifiedProperty(), "small", false));
-        tbv_groups.addColumn("Punkte", 0, new PropertyValueFactory<>("points"));
+        tbv_groups.<String>addColumn("Klasse", new PropertyValueFactory<>("grade"));
+        tbv_groups.<Integer>addColumn("Mitglieder", new PropertyValueFactory<>("memberCount"));
+        tbv_groups.<StackPane>addColumn("Qualifiziert", param -> new SwitchBox(param.getValue().qualifiedProperty(), "small", false));
+        tbv_groups.<Integer>addColumn("Punkte", new PropertyValueFactory<>("points"));
         tbv_groups.getItems().addAll(Data.groups);
         tbv_groups.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
