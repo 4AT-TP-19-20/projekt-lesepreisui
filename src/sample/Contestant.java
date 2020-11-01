@@ -248,7 +248,7 @@ public class Contestant implements Saveable, Comparable<Contestant>, Searchable 
     }
 
     @Override
-    public boolean contains(String s) {
+    public boolean search(String s) {
         return getFirstName().toLowerCase().contains(s)
                 || getLastName().toLowerCase().contains(s)
                 || getGrade().toLowerCase().contains(s);

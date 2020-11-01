@@ -173,8 +173,8 @@ public class Exam implements Saveable, Comparable<Exam>, Searchable {
     }
 
     @Override
-    public boolean contains(String s) {
-        if(getBook().contains(s)
+    public boolean search(String s) {
+        if(getBook().search(s)
         || getLibrarian().toLowerCase().contains(s)) {
             return true;
         }

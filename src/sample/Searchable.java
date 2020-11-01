@@ -1,5 +1,5 @@
 package sample;
 
-public interface Searchable {
-    boolean contains(String s);
+interface Searchable {
+    boolean search(String s);
 }

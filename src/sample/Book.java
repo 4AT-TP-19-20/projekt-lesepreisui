@@ -101,7 +101,7 @@ public class Book implements Comparable<Book>, Searchable {
     }
 
     @Override
-    public boolean contains(String s) {
+    public boolean search(String s) {
         return getTitle().toLowerCase().contains(s)
                 || getAuthorFirstName().toLowerCase().contains(s)
                 || getAuthorLastName().toLowerCase().contains(s)

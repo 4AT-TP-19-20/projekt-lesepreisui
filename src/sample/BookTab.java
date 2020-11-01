@@ -86,7 +86,7 @@ public class BookTab extends BorderPane {
         }
 
         for(Book book : Data.books) {
-            if(book.contains(newValue)) {
+            if(Searchables.contain(newValue, book)) {
                 tbv_books.getItems().add(book);
             }
         }

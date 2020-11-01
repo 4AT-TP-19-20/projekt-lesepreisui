@@ -101,7 +101,7 @@ public class Group implements Comparable<Group>, Searchable {
     }
 
     @Override
-    public boolean contains(String s) {
+    public boolean search(String s) {
         return getGrade().toLowerCase().contains(s);
     }
 }

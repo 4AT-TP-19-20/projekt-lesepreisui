@@ -3,6 +3,7 @@ package sample;
 import javafx.beans.property.Property;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -54,6 +55,10 @@ class SettingsTab extends VBox implements ChildSaveable {
                 "Neuer Benutzer", Data.settings.getUsers(), "icons8-user-100.png");
         userList.setMaxWidth(400);
         this.getChildren().add(userList);
+
+        CheckBox cbx_useAnd = new CheckBox("Schlüsselwörter in der Suche mit UND verknüpfen, sodass alle Wörter vorkommen müssen");
+        cbx_useAnd.selectedProperty().bindBidirectional(Data.settings.useAndInSearchProperty());
+        this.getChildren().add(cbx_useAnd);
 
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10));

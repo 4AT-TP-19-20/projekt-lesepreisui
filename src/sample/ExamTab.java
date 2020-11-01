@@ -103,12 +103,12 @@ class ExamTab extends BorderPane {
         }
 
         for(Contestant contestant : Data.contestants) {
-            if(contestant.contains(newValue)) {
+            if(Searchables.contain(newValue, contestant)) {
                 tbv_exams.getItems().addAll(contestant.getExams());
             }
             else {
                 for(Exam exam : contestant.getExams()) {
-                    if(exam.contains(newValue)) {
+                    if(Searchables.contain(newValue, contestant, exam)) {
                         tbv_exams.getItems().add(exam);
                     }
                 }

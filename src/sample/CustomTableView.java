@@ -5,7 +5,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
 
-class CustomTableView<S extends Comparable<S>> extends TableView<S> {
+class CustomTableView<S extends Searchable & Comparable<S>> extends TableView<S> {
     CustomTableView() {
         super();
     }

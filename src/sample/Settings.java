@@ -1,6 +1,8 @@
 package sample;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class Settings implements Saveable {
     //General
     private ObservableList<String> users = FXCollections.observableArrayList("Dorothea", "Petra");
+    private BooleanProperty useAndInSearch = new SimpleBooleanProperty(true);
 
     //Exam
     private IntegerProperty maxAnswersCount = new SimpleIntegerProperty(6);
@@ -35,6 +38,7 @@ public class Settings implements Saveable {
     public Settings getCopy() {
         Settings copy = new Settings();
         copy.setUsers(getUsers());
+        copy.setUseAndInSearch(useAndInSearch());
 
         copy.setMaxAnswersCount(getMaxAnswersCount());
         copy.setMinCorrectAnswers(getMinCorrectAnswers());
@@ -57,6 +61,7 @@ public class Settings implements Saveable {
         if(other instanceof Settings) {
             Settings otherSettings = (Settings) other;
             return this.getUsers().equals(otherSettings.getUsers())
+                    && this.useAndInSearch() == otherSettings.useAndInSearch()
                     && this.getMaxAnswersCount() == otherSettings.getMaxAnswersCount()
                     && this.getMinCorrectAnswers() == otherSettings.getMinCorrectAnswers()
                     && this.getMinBookCount() == otherSettings.getMinBookCount()
@@ -75,6 +80,7 @@ public class Settings implements Saveable {
         if(other instanceof Settings) {
             Settings otherSettings = (Settings) other;
             this.setUsers(otherSettings.getUsers());
+            this.setUseAndInSearch(otherSettings.useAndInSearch());
 
             this.setMaxAnswersCount(otherSettings.getMaxAnswersCount());
             this.setMinCorrectAnswers(otherSettings.getMinCorrectAnswers());
@@ -206,6 +212,18 @@ public class Settings implements Saveable {
         this.minMembers.set(minMembers);
     }
 
+    boolean useAndInSearch() {
+        return useAndInSearch.get();
+    }
+
+    BooleanProperty useAndInSearchProperty() {
+        return useAndInSearch;
+    }
+
+    void setUseAndInSearch(boolean useAndInSearch) {
+        this.useAndInSearch.set(useAndInSearch);
+    }
+
     Element getXMLNode(Document doc, Element settings){
         Element prizeCountElement = doc.createElement("PrizeCount");
         Element maxPicksElement = doc.createElement("MaxPicks");
@@ -216,6 +234,7 @@ public class Settings implements Saveable {
         Element groupContestStartDateElement = doc.createElement("GroupContestStartDate");
         Element languagesElement = doc.createElement("Languages");
         Element usersElement = doc.createElement("Users");
+        Element useAndInSearchElement = doc.createElement("UseAndInSearch");
 
         prizeCountElement.appendChild(doc.createTextNode("" + getPrizeCount()));
         maxPicksElement.appendChild(doc.createTextNode(getMaxPicks() + ""));
@@ -224,16 +243,17 @@ public class Settings implements Saveable {
         minBookCountElement.appendChild(doc.createTextNode(getMinBookCount() + ""));
         maxBookCountElement.appendChild(doc.createTextNode(getMaxBookCount() + ""));
         groupContestStartDateElement.appendChild(doc.createTextNode(getGroupContestStartDateAsString()));
+        useAndInSearchElement.appendChild(doc.createTextNode(useAndInSearch() + ""));
 
         ObservableList<String> languages = getLanguages();
-        for (String language: languages) {
+        for (String language : languages) {
             Element languageElement = doc.createElement("Language");
             languageElement.appendChild(doc.createTextNode(language));
             languagesElement.appendChild(languageElement);
         }
 
         ObservableList<String> users = getUsers();
-        for (String user: users) {
+        for (String user : users) {
             Element userElement = doc.createElement("User");
             userElement.appendChild(doc.createTextNode(user));
             usersElement.appendChild(userElement);
@@ -248,6 +268,7 @@ public class Settings implements Saveable {
         settings.appendChild(groupContestStartDateElement);
         settings.appendChild(languagesElement);
         settings.appendChild(usersElement);
+        settings.appendChild(useAndInSearchElement);
 
         return settings;
     }
