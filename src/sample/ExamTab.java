@@ -16,7 +16,7 @@ class ExamTab extends BorderPane {
     ExamTab() {
         //Top
         TextField txt_search = new TextField();
-        txt_search.setPromptText("Suche nach ...");
+        txt_search.setPromptText("Suche nach Datum, Teilnehmer, Bücher, ...");
         txt_search.textProperty().addListener((observable, oldValue, newValue) -> textChangeListener(newValue));
         this.setTop(txt_search);
 

@@ -11,6 +11,7 @@ import javafx.scene.layout.*;
 
 public class ContestantDetailView extends BorderPane implements ChildSaveable {
     private Contestant contestant;
+    private CustomTableView<Exam> tbv_exams;
 
     ContestantDetailView(Contestant contestant) {
         this.contestant = contestant;
@@ -55,7 +56,12 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
         this.setTop(topItems);
 
         //Center
-        CustomTableView<Exam> tbv_exams = new CustomTableView<>();
+        VBox centerItems = new VBox();
+        TextField txt_search = new TextField();
+        txt_search.setPromptText("Suche nach Datum, Buch, Autor, ...");
+        txt_search.textProperty().addListener((observable, oldValue, newValue) -> textChangeListener(newValue));
+
+        tbv_exams = new CustomTableView<>();
 
         tbv_exams.addColumn("Titel", "", param -> param.getValue().getBook().titleProperty());
         tbv_exams.addColumn("Vorname Autor","", param -> param.getValue().getBook().authorFirstNameProperty());
@@ -68,7 +74,7 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
         tbv_exams.addColumn("Antworten", new HBox(), param -> new AnswerBoxes(param.getValue().answersProperty(), false, "small"));
 
         tbv_exams.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tbv_exams.setItems(contestant.getExams());
+        tbv_exams.getItems().addAll(contestant.getExams());
         tbv_exams.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
                 tbv_exams.getSelectionModel().clearSelection();
@@ -82,7 +88,10 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
             }
         });
 
-        this.setCenter(tbv_exams);
+        centerItems.getChildren().addAll(txt_search, tbv_exams);
+        centerItems.setSpacing(5);
+        VBox.setVgrow(tbv_exams, Priority.ALWAYS);
+        this.setCenter(centerItems);
 
         //Bottom
         VBox bottomItems = new VBox();
@@ -115,6 +124,22 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
 
         BorderPane.setMargin(this.getCenter(), new Insets(10,0,10,0));
         this.setPadding(new Insets(10));
+    }
+
+    private void textChangeListener(String newValue) {
+        newValue = newValue.trim().toLowerCase();
+        tbv_exams.getItems().clear();
+
+        if(newValue.isEmpty()) {
+            tbv_exams.getItems().addAll(contestant.getExams());
+            return;
+        }
+
+        for(Exam exam : contestant.getExams()) {
+            if(Searchables.contain(newValue, exam)) {
+                tbv_exams.getItems().add(exam);
+            }
+        }
     }
 
     @Override
