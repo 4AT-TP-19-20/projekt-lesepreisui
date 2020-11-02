@@ -19,36 +19,46 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
         //Top
         GridPane topItems = new GridPane();
 
+        Insets rightMargin = new Insets(0, 50, 0, 0);
+
         topItems.add(new Label("Vorname"),0,0);
         TextField txt_firstName = new TextField();
         txt_firstName.textProperty().bindBidirectional(contestant.firstNameProperty());
-        topItems.add(txt_firstName, 1,0,3,1);
+        txt_firstName.setPrefWidth(200);
+        topItems.add(txt_firstName, 1,0);
+        GridPane.setMargin(txt_firstName, rightMargin);
 
         topItems.add(new Label("Nachname"),0,1);
         TextField txt_lastName = new TextField();
         txt_lastName.textProperty().bindBidirectional(contestant.lastNameProperty());
-        topItems.add(txt_lastName, 1,1,3,1);
+        txt_lastName.setPrefWidth(200);
+        topItems.add(txt_lastName, 1,1);
+        GridPane.setMargin(txt_lastName, rightMargin);
 
-        topItems.add(new Label("Klasse"),0,2);
+        topItems.add(new Label("Klasse"),2,0);
         TextField txt_grade = new TextField();
         txt_grade.textProperty().bindBidirectional(contestant.gradeProperty());
-        topItems.add(txt_grade,1,2);
+        txt_grade.setPrefWidth(200);
+        topItems.add(txt_grade,3,0);
+        GridPane.setMargin(txt_grade, rightMargin);
 
-        topItems.add(new Label("Gruppe"),2,2);
+        topItems.add(new Label("Gruppe"),2,1);
         SwitchBox sbx_groupMember = new SwitchBox(contestant.groupMemberProperty(), "small", true);
-        topItems.add(sbx_groupMember,3,2);
+        topItems.add(sbx_groupMember,3,1);
 
-        topItems.add(new Label("Gesamtpunkte"),0,3);
+        topItems.add(new Label("Gesamtpunkte"),4,0);
         TextField txt_points = new TextField();
         txt_points.textProperty().bindBidirectional(contestant.pointsProperty(), StringToInt.getInstance());
         txt_points.setEditable(false);
-        topItems.add(txt_points, 1, 3);
+        topItems.add(txt_points, 5, 0);
+        GridPane.setMargin(txt_points, rightMargin);
 
-        topItems.add(new Label("Gelesene Bücher"),2,3);
+        topItems.add(new Label("Gelesene Bücher"),4,1);
         TextField txt_bookCount = new TextField();
         txt_bookCount.textProperty().bindBidirectional(contestant.bookCountProperty(), StringToInt.getInstance());
         txt_bookCount.setEditable(false);
-        topItems.add(txt_bookCount, 3, 3);
+        topItems.add(txt_bookCount, 5, 1);
+        GridPane.setMargin(txt_bookCount, rightMargin);
 
         topItems.setHgap(5);
         topItems.setVgap(5);
