@@ -2,14 +2,11 @@ package sample;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.util.Callback;
-import javafx.scene.control.TableView.ResizeFeatures;
 
-public class CustomResizePolicy implements Callback<ResizeFeatures, Boolean> {
+public class CustomResizePolicy {
     private double mTVWidth;
 
-    @Override
-    public Boolean call(TableView.ResizeFeatures prop) {
+    public Boolean call(TableView.ResizeFeatures<?> prop) {
         TableView<?> tv = prop.getTable();
         double tvWidth = tv.getWidth();
 
@@ -19,39 +16,37 @@ public class CustomResizePolicy implements Callback<ResizeFeatures, Boolean> {
 
         if (mTVWidth != tvWidth && prop.getColumn() == null) {
             mTVWidth = tvWidth;
-            double restWidth = 0;
-            int numColsToSize = 0;
+            double totalColumnWidth = 0;
+            int columnsToResize = 0;
 
             for (TableColumn<?, ?> col : tv.getColumns()) {
-                restWidth += col.getWidth();
-
-                if(col.isResizable()) {
-                    numColsToSize++;
+                if(col.isResizable() && col.isVisible()) {
+                    totalColumnWidth += col.getWidth();
+                    columnsToResize++;
                 }
             }
 
-            if (numColsToSize == 0) {
-                return TableView.UNCONSTRAINED_RESIZE_POLICY.call(prop);
+            if (columnsToResize == 0) {
+                return TableView.CONSTRAINED_RESIZE_POLICY.call(prop);
             }
 
-            double newWidth = Math.floor((tvWidth - restWidth) / numColsToSize);
+            double newWidth = Math.floor((tvWidth - totalColumnWidth) / columnsToResize);
             double realWidth = 0;
 
-            for (TableColumn<?, ?> col : tv.getColumns()) {
-                if (col.isResizable() && col.isVisible()) {
-                    col.setPrefWidth(col.getWidth() + newWidth);
-                    realWidth += col.getWidth();
-                }
+            for (TableColumn<?, ?> col : tv.getVisibleLeafColumns()) {
+                col.setPrefWidth(col.getWidth() + newWidth);
+                realWidth += col.getWidth();
             }
 
             if(newWidth != 0) {
-                TableColumn<?, ?> col = tv.getColumns().get(tv.getColumns().size() - 1);
+                TableColumn<?, ?> col = tv.getVisibleLeafColumn(tv.getVisibleLeafColumns().size() - 1);
                 col.setPrefWidth(col.getWidth() + (tvWidth - realWidth));
             }
 
             return true;
         } else {
-            return TableView.UNCONSTRAINED_RESIZE_POLICY.call(prop);
+            return TableView.CONSTRAINED_RESIZE_POLICY.call(prop);
         }
     }
+
 }
