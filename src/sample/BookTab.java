@@ -3,7 +3,6 @@ package sample;
 import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
@@ -31,7 +30,6 @@ public class BookTab extends BorderPane {
         tbv_books.<Integer>addColumn("Punkte", new PropertyValueFactory<>("points"));
 
         tbv_books.getItems().addAll(Data.books);
-        tbv_books.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tbv_books.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
                 tbv_books.getSelectionModel().clearSelection();

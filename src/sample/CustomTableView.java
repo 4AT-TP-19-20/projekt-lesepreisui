@@ -9,6 +9,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
 import java.util.Optional;
@@ -29,6 +30,12 @@ class CustomTableView<S extends Searchable & Comparable<S>> extends TableView<S>
                         menu.show(header, e.getScreenX(), e.getScreenY());
                     }
                 });
+
+                header.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> {
+                    if(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
+                        e.consume();
+                    }
+                });
             }
         });
 
@@ -39,6 +46,7 @@ class CustomTableView<S extends Searchable & Comparable<S>> extends TableView<S>
         TableColumn<S, T> toAdd = new TableColumn<>(title);
         toAdd.setCellFactory(param -> new AlignedTableCell<>());
         toAdd.setCellValueFactory(factory);
+        toAdd.setResizable(false);
         this.getColumns().add(toAdd);
 
         CheckMenuItem item = new CheckMenuItem(title);

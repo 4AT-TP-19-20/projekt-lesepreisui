@@ -2,7 +2,8 @@ package sample;
 
 import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -11,7 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 class ContestantTab extends BorderPane {
-    private CustomTableView<Contestant> tbv_contestants;
+    private final CustomTableView<Contestant> tbv_contestants;
 
     ContestantTab() {
         tbv_contestants = new CustomTableView<>();

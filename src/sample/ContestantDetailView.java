@@ -3,7 +3,9 @@ package sample;
 import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -83,7 +85,6 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
         tbv_exams.<StackPane>addColumn("Bestanden", param -> new SwitchBox(param.getValue().passedProperty(), "small", false, true));
         tbv_exams.<HBox>addColumn("Antworten", param -> new AnswerBoxes(param.getValue().answersProperty(), false, "small"));
 
-        tbv_exams.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tbv_exams.getItems().addAll(contestant.getExams());
         tbv_exams.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
