@@ -216,9 +216,45 @@ public class Contestant implements Saveable, Comparable<Contestant>, Searchable 
 
     private void pointsUpdate() {
         int newPoints = 0;
+        Exam maxGermanExam = null;
+        Exam maxOtherExam = null;
 
         for(Exam exam : exams) {
-            newPoints += exam.getPoints();
+            if(exam.getPoints() != 0) {
+                if(exam.getBook().getLanguage().equals("Deutsch")) {
+                    if(maxGermanExam == null) {
+                        maxGermanExam = exam;
+                        continue;
+                    }
+                    else if(exam.getPoints() > maxGermanExam.getPoints()) {
+                        newPoints += maxGermanExam.getPoints();
+                        maxGermanExam = exam;
+                        continue;
+                    }
+                }
+                else {
+                    if(maxOtherExam == null) {
+                        maxOtherExam = exam;
+                        continue;
+                    }
+                    else if(exam.getPoints() > maxOtherExam.getPoints()) {
+                        newPoints += maxOtherExam.getPoints();
+                        maxOtherExam = exam;
+                        continue;
+                    }
+                }
+                newPoints += exam.getPoints();
+            }
+        }
+
+        if(maxGermanExam != null && maxOtherExam != null) {
+            newPoints += maxGermanExam.getPoints() * maxOtherExam.getPoints();
+        }
+        else if(maxGermanExam != null) {
+            newPoints += maxGermanExam.getPoints();
+        }
+        else if(maxOtherExam != null) {
+            newPoints += maxOtherExam.getPoints();
         }
 
         points.set(newPoints);
