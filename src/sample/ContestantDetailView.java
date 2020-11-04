@@ -2,6 +2,7 @@ package sample;
 
 import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +18,10 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
 
     ContestantDetailView(Contestant contestant) {
         this.contestant = contestant;
+        contestant.getExams().addListener((ListChangeListener<Exam>) c -> {
+            tbv_exams.getItems().clear();
+            tbv_exams.getItems().addAll(contestant.getExams());
+        });
 
         //Top
         GridPane topItems = new GridPane();
