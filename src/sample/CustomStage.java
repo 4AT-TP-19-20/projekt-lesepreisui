@@ -14,6 +14,7 @@ class CustomStage extends Stage {
     void setScene(Parent content, double width, double height) {
             Scene scene = new Scene(content, width, height);
             scene.getStylesheets().add("stylesheet.css");
+            this.setResizable(false);
             this.setScene(scene);
     }
 
