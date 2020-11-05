@@ -4,9 +4,7 @@ import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -116,6 +114,17 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
         btn_addExam.setOnAction(e -> {
             BookTab bookTab = new BookTab() {
                 protected void onItemSelected() {
+                    for(Exam exam : contestant.getExams()) {
+                        if(exam.getBook().equals(getSelectedBook())) {
+                            Alert duplicationAlert = new Alert(Alert.AlertType.ERROR, "Es wurde bereits eine Prüfung für das gewählte Buch durchgeführt!", ButtonType.OK);
+                            duplicationAlert.setHeaderText("");
+                            duplicationAlert.setTitle("Doppelte Prüfung");
+                            duplicationAlert.initOwner(this.getScene().getWindow());
+                            duplicationAlert.show();
+                            return;
+                        }
+                    }
+
                     Main.getCurrentContentStack().pop();
 
                     Exam toAdd = new Exam(getSelectedBook());
