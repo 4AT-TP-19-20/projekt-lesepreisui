@@ -32,6 +32,7 @@ public class Data {
                 for(Contestant removed : c.getRemoved()) {
                     removed.groupMemberProperty().removeListener((observable, oldValue, newValue) -> groupMemberListener(removed, newValue));
                     Group groupOfRemoved = getGroupByGrade(removed.getGrade());
+                    groupOfRemoved.removeMember(removed);
                     if(groupOfRemoved.getMemberCount() == 0) {
                         groups.remove(groupOfRemoved);
                     }
@@ -90,6 +91,9 @@ public class Data {
         }
         else {
             group.removeMember(contestant);
+            if(group.getMemberCount() == 0) {
+                groups.remove(group);
+            }
         }
     }
 }

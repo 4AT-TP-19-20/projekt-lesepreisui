@@ -49,6 +49,25 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
 
         topItems.add(new Label("Gruppe"),2,1);
         SwitchBox sbx_groupMember = new SwitchBox(contestant.groupMemberProperty(), "small", true);
+        sbx_groupMember.setDisable(!contestant.getGrade().contains("1"));
+        txt_grade.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.contains("1")) {
+                sbx_groupMember.setDisable(false);
+            } else {
+                sbx_groupMember.setDisable(true);
+
+                contestant.setGroupMember(false);
+                for(Group group : Data.groups) {
+                    if(group.getMembers().contains(contestant)) {
+                        group.removeMember(contestant);
+                        if(group.getMemberCount() == 0) {
+                            Data.groups.remove(group);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
         topItems.add(sbx_groupMember,3,1);
 
         topItems.add(new Label("Gesamtpunkte"),4,0);

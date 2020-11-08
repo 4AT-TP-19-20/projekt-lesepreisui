@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -16,6 +18,7 @@ public class SwitchBox extends StackPane implements ObservableValue<StackPane> {
     private int stateCount;
     private BooleanProperty editable;
     private ImageView[] images;
+    private static final ColorAdjust disabledEffect = new ColorAdjust(0, 0, -0.1, 0);
 
     SwitchBox(String size) {
         this(2, size, true, true);
@@ -54,6 +57,12 @@ public class SwitchBox extends StackPane implements ObservableValue<StackPane> {
         this.setOnMouseClicked(e -> mouseAction());
         setCanBeEmpty(canBeEmpty);
         this.getChildren().addAll(images);
+        disabledProperty().addListener((observable, oldValue, newValue) -> {
+            Effect newEffect = newValue ? SwitchBox.disabledEffect : null;
+            for(ImageView imageView : images) {
+                imageView.setEffect(newEffect);
+            }
+        });
 
         updateImages();
     }
