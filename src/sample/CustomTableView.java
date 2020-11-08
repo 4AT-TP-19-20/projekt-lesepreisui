@@ -36,6 +36,12 @@ class CustomTableView<S extends Searchable & Comparable<S>> extends TableView<S>
                         e.consume();
                     }
                 });
+
+                header.addEventFilter(MouseEvent.MOUSE_PRESSED, (e) -> {
+                    if(e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
+                        e.consume();
+                    }
+                });
             }
         });
 
@@ -46,7 +52,7 @@ class CustomTableView<S extends Searchable & Comparable<S>> extends TableView<S>
         TableColumn<S, T> toAdd = new TableColumn<>(title);
         toAdd.setCellFactory(param -> new AlignedTableCell<>());
         toAdd.setCellValueFactory(factory);
-        toAdd.setResizable(false);
+        // toAdd.setResizable(false);
         this.getColumns().add(toAdd);
 
         CheckMenuItem item = new CheckMenuItem(title);

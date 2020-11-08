@@ -1,77 +1,57 @@
 package sample;
 
-import com.sun.javafx.tk.Toolkit;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.text.Font;
+import javafx.scene.control.TableView.ResizeFeatures;
 import javafx.util.Callback;
 
-public class CustomResizePolicy {
+public class CustomResizePolicy implements Callback<ResizeFeatures, Boolean> {
+    private double mTVWidth;
 
+    @Override
     public Boolean call(TableView.ResizeFeatures prop) {
-        TableView<?> table = prop.getTable();
-        double tableWidth = table.getWidth();
+        TableView<?> tv = prop.getTable();
+        double tvWidth = tv.getWidth();
 
-        if (tableWidth <= 0.0) {
+        if (tvWidth <= 0.0) {
             return false;
         }
 
-        double totalColumnWidth = 0;
+        if (mTVWidth != tvWidth && prop.getColumn() == null) {
+            mTVWidth = tvWidth;
+            double restWidth = 0;
+            int numColsToSize = 0;
 
-        if (table.getVisibleLeafColumns().size() == 0) {
+            for (TableColumn<?, ?> col : tv.getColumns()) {
+                restWidth += col.getWidth();
+
+                if(col.isResizable()) {
+                    numColsToSize++;
+                }
+            }
+
+            if (numColsToSize == 0) {
+                return TableView.CONSTRAINED_RESIZE_POLICY.call(prop);
+            }
+
+            double newWidth = Math.floor((tvWidth - restWidth) / numColsToSize);
+            double realWidth = 0;
+
+            for (TableColumn<?, ?> col : tv.getColumns()) {
+                if (col.isResizable() && col.isVisible()) {
+                    col.setPrefWidth(col.getWidth() + newWidth);
+                    realWidth += col.getWidth();
+                }
+            }
+
+            if(tvWidth - realWidth != 0) {
+                TableColumn<?, ?> col = tv.getColumns().get(tv.getColumns().size() - 1);
+                col.setPrefWidth(col.getWidth() + (tvWidth - realWidth));
+            }
+
+            return true;
+        } else {
             return TableView.CONSTRAINED_RESIZE_POLICY.call(prop);
         }
-
-        for (TableColumn<?, ?> col : table.getVisibleLeafColumns()) {
-            double contentWidth = getContentMaxWidth(col);
-            double headerWidth = getHeadersWidth(col);
-
-            totalColumnWidth += Math.max(contentWidth, headerWidth);
-        }
-
-        double delta = Math.floor((tableWidth - totalColumnWidth) / table.getVisibleLeafColumns().size());
-        double realWidth = 0;
-
-        for (TableColumn<?, ?> col : table.getVisibleLeafColumns()) {
-            double contentWidth = getContentMaxWidth(col);
-            double headerWidth = getHeadersWidth(col);
-
-            double minWidth = Math.max(contentWidth, headerWidth);
-
-            col.setPrefWidth(minWidth + delta);
-            realWidth += col.getWidth();
-        }
-
-        if((tableWidth - realWidth) != 0) {
-            TableColumn<?, ?> col = table.getVisibleLeafColumn(table.getVisibleLeafColumns().size() - 1);
-            col.setPrefWidth(col.getWidth() + (tableWidth - realWidth));
-        }
-
-        return true;
-    }
-
-    private <S, T> double getContentMaxWidth(TableColumn<S, T> column) {
-        double max = 0.0;
-        TableView<S> table = column.getTableView();
-
-        for(S s : table.getItems()) {
-            Callback<TableColumn.CellDataFeatures<S, T>, ObservableValue<T>> callback = column.getCellValueFactory();
-            TableColumn.CellDataFeatures<S, T> features = new TableColumn.CellDataFeatures<>(column.getTableView(), column, s);
-
-            ObservableValue<T> res = callback.call(features);
-
-            double width = Toolkit.getToolkit().getFontLoader().computeStringWidth(res.getValue().toString(), new Font(14));
-
-            if(max < width) {
-                max = width;
-            }
-        }
-
-        return max;
-    }
-
-    private double getHeadersWidth(TableColumn<?, ?> column) {
-        return Toolkit.getToolkit().getFontLoader().computeStringWidth(column.getText(), new Font(18));
     }
 }
