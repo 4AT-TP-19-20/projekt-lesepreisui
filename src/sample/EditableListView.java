@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -18,6 +19,7 @@ class EditableListView extends BorderPane {
 
     EditableListView(String titleText, String newText, ObservableList<String> observableList, String iconPath) {
         index = 1;
+        ColorAdjust hoverEffect = new ColorAdjust(0, 0, 0.3, 0);
 
         //Top
         ImageView titleIcon = new ImageView(new Image(iconPath));
@@ -40,8 +42,8 @@ class EditableListView extends BorderPane {
         btn_add.setFitWidth(25);
         btn_add.setPreserveRatio(true);
         btn_add.setOnMouseClicked(e -> observableList.add(newText + " " + index++));
-        //btn_add.setOnMouseEntered(e -> btn_add.setFitWidth(28));
-        //btn_add.setOnMouseExited(e -> btn_add.setFitWidth(25));
+        btn_add.setOnMouseEntered(e -> btn_add.setEffect(hoverEffect));
+        btn_add.setOnMouseExited(e -> btn_add.setEffect(null));
         ImageView btn_remove = new ImageView(new Image("icons8-minus-100.png"));
         btn_remove.setFitWidth(25);
         btn_remove.setPreserveRatio(true);
@@ -50,8 +52,8 @@ class EditableListView extends BorderPane {
                 observableList.remove(listView.getSelectionModel().getSelectedItem());
             }
         });
-        //btn_remove.setOnMouseEntered(e -> btn_remove.setFitWidth(28));
-        //btn_remove.setOnMouseExited(e -> btn_remove.setFitWidth(25));
+        btn_remove.setOnMouseEntered(e -> btn_remove.setEffect(hoverEffect));
+        btn_remove.setOnMouseExited(e -> btn_remove.setEffect(null));
 
         bottomItems.setAlignment(Pos.CENTER);
         bottomItems.setPadding(new Insets(10));
