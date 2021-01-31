@@ -48,6 +48,7 @@ public class Main extends Application {
                 mainStage.setTitle("LesePreisUI");
                 mainStage.show();
                 tabPane.requestFocus();
+                ButtonController.addCloseRequestHandler();
             }
         });
         controls.getChildren().add(btn_login);

@@ -15,6 +15,7 @@ class ButtonController {
     private static Button btn_save;
     private static Button btn_discard;
     private static Callable<Boolean> canLeave;
+    private static TabPane tabPane;
 
     static void init(TabPane tabPane) {
         btn_back = new Button("Zurück");
@@ -40,6 +41,16 @@ class ButtonController {
             if(oldValue != null) {
                 ((ContentStack) oldValue.getContent()).onDeselected();
                 ((ContentStack) newValue.getContent()).onSelected();
+            }
+        });
+
+        ButtonController.tabPane = tabPane;
+    }
+
+    static void addCloseRequestHandler() {
+        tabPane.getScene().getWindow().setOnCloseRequest(event -> {
+            if(!canLeave.call()) {
+                event.consume();
             }
         });
     }
