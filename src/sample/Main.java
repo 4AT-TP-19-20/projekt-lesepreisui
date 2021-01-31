@@ -64,6 +64,11 @@ public class Main extends Application {
         loginStage.show();
     }
 
+    @Override
+    public void stop() {
+        Data.save();
+    }
+
     static ContentStack getCurrentContentStack() {
         return (ContentStack) tabPane.getSelectionModel().getSelectedItem().getContent();
     }

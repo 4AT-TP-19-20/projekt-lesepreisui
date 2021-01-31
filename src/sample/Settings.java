@@ -18,7 +18,7 @@ public class Settings implements Saveable {
     private BooleanProperty useAndInSearch = new SimpleBooleanProperty(true);
 
     //Exam
-    private IntegerProperty maxAnswersCount = new SimpleIntegerProperty(6);
+    private final int maxAnswersCount = 6;
     private IntegerProperty minCorrectAnswers = new SimpleIntegerProperty(4);
 
     //Drawing
@@ -40,7 +40,6 @@ public class Settings implements Saveable {
         copy.setUsers(getUsers());
         copy.setUseAndInSearch(useAndInSearch());
 
-        copy.setMaxAnswersCount(getMaxAnswersCount());
         copy.setMinCorrectAnswers(getMinCorrectAnswers());
 
         copy.setMinBookCount(getMinBookCount());
@@ -62,7 +61,6 @@ public class Settings implements Saveable {
             Settings otherSettings = (Settings) other;
             return this.getUsers().equals(otherSettings.getUsers())
                     && this.useAndInSearch() == otherSettings.useAndInSearch()
-                    && this.getMaxAnswersCount() == otherSettings.getMaxAnswersCount()
                     && this.getMinCorrectAnswers() == otherSettings.getMinCorrectAnswers()
                     && this.getMinBookCount() == otherSettings.getMinBookCount()
                     && this.getMaxBookCount() == otherSettings.getMaxBookCount()
@@ -82,7 +80,6 @@ public class Settings implements Saveable {
             this.setUsers(otherSettings.getUsers());
             this.setUseAndInSearch(otherSettings.useAndInSearch());
 
-            this.setMaxAnswersCount(otherSettings.getMaxAnswersCount());
             this.setMinCorrectAnswers(otherSettings.getMinCorrectAnswers());
 
             this.setMinBookCount(otherSettings.getMinBookCount());
@@ -100,16 +97,8 @@ public class Settings implements Saveable {
         }
     }
 
-    int getMaxAnswersCount() {
-        return maxAnswersCount.get();
-    }
-
-    IntegerProperty maxAnswersCountProperty() {
+    public int getMaxAnswersCount() {
         return maxAnswersCount;
-    }
-
-    void setMaxAnswersCount(int maxAnswersCount) {
-        this.maxAnswersCount.set(maxAnswersCount);
     }
 
     int getMinCorrectAnswers() {
@@ -227,22 +216,22 @@ public class Settings implements Saveable {
     Element getXMLNode(Document doc, Element settings){
         Element prizeCountElement = doc.createElement("PrizeCount");
         Element maxPicksElement = doc.createElement("MaxPicks");
-        Element maxAnswersCountElement = doc.createElement("MaxAnswersCount");
         Element minCorrectAnswersElement = doc.createElement("MinCorrectAnswers");
         Element minBookCountElement = doc.createElement("MinBookCount");
         Element maxBookCountElement = doc.createElement("MaxBookCount");
         Element groupContestStartDateElement = doc.createElement("GroupContestStartDate");
+        Element minMembersElement = doc.createElement("MinMembers");
         Element languagesElement = doc.createElement("Languages");
         Element usersElement = doc.createElement("Users");
         Element useAndInSearchElement = doc.createElement("UseAndInSearch");
 
         prizeCountElement.appendChild(doc.createTextNode("" + getPrizeCount()));
         maxPicksElement.appendChild(doc.createTextNode(getMaxPicks() + ""));
-        maxAnswersCountElement.appendChild(doc.createTextNode(getMaxAnswersCount() + ""));
         minCorrectAnswersElement.appendChild(doc.createTextNode(getMinCorrectAnswers() + ""));
         minBookCountElement.appendChild(doc.createTextNode(getMinBookCount() + ""));
         maxBookCountElement.appendChild(doc.createTextNode(getMaxBookCount() + ""));
         groupContestStartDateElement.appendChild(doc.createTextNode(getGroupContestStartDateAsString()));
+        minMembersElement.appendChild(doc.createTextNode(getMinMembers() + ""));
         useAndInSearchElement.appendChild(doc.createTextNode(useAndInSearch() + ""));
 
         ObservableList<String> languages = getLanguages();
@@ -261,11 +250,11 @@ public class Settings implements Saveable {
 
         settings.appendChild(prizeCountElement);
         settings.appendChild(maxPicksElement);
-        settings.appendChild(maxAnswersCountElement);
         settings.appendChild(minCorrectAnswersElement);
         settings.appendChild(minBookCountElement);
         settings.appendChild(maxBookCountElement);
         settings.appendChild(groupContestStartDateElement);
+        settings.appendChild(minMembersElement);
         settings.appendChild(languagesElement);
         settings.appendChild(usersElement);
         settings.appendChild(useAndInSearchElement);

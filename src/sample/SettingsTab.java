@@ -19,11 +19,14 @@ class SettingsTab extends VBox implements ChildSaveable {
         this.getChildren().add(new SettingsHeader("Prüfungseinstellungen",
                 "h2", "icons8-quiz-100.png", 25, true));
 
-        this.getChildren().add(new Label("Anzahl an gestellten Fragen"));
-        this.getChildren().add(new CustomTextField(Data.settings.maxAnswersCountProperty()));
-
         this.getChildren().add(new Label("Mindestanzahl an richtigen Antworten"));
         this.getChildren().add(new CustomTextField(Data.settings.minCorrectAnswersProperty()));
+
+        this.getChildren().add(new SettingsHeader("Gruppeneinstellungen",
+                "h2", "icons8-user-100.png", 25, true));
+
+        this.getChildren().add(new Label("Mindestanzahl an Teilnehmern einer Gruppe"));
+        this.getChildren().add(new CustomTextField(Data.settings.minMembersProperty()));
 
         this.getChildren().add(new SettingsHeader("Verlosungseinstellungen",
                 "h2", "icons8-clover-96.png", 25, true));

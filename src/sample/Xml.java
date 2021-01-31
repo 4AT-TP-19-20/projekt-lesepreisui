@@ -143,23 +143,24 @@ public class Xml {
             Element currentSettingElement = (Element) settingsNodeList.item(0);
             Data.settings.setPrizeCount(Integer.parseInt(currentSettingElement.getElementsByTagName("PrizeCount").item(0).getTextContent()));
             Data.settings.setMaxPicks(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxPicks").item(0).getTextContent()));
-            Data.settings.setMaxAnswersCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxAnswersCount").item(0).getTextContent()));
             Data.settings.setMinCorrectAnswers(Integer.parseInt(currentSettingElement.getElementsByTagName("MinCorrectAnswers").item(0).getTextContent()));
             Data.settings.setMinBookCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MinBookCount").item(0).getTextContent()));
             Data.settings.setMaxBookCount(Integer.parseInt(currentSettingElement.getElementsByTagName("MaxBookCount").item(0).getTextContent()));
             Data.settings.setGroupContestStartDate(LocalDate.parse(currentSettingElement.getElementsByTagName("GroupContestStartDate").item(0).getTextContent(), DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            Data.settings.setMinMembers(Integer.parseInt(currentSettingElement.getElementsByTagName("MinMembers").item(0).getTextContent()));
+            Data.settings.setUseAndInSearch(Boolean.parseBoolean(currentSettingElement.getElementsByTagName("UseAndInSearch").item(0).getTextContent()));
 
             NodeList languageNodeList = doc.getElementsByTagName("Language");
             ObservableList<String> languages = FXCollections.observableArrayList();
             for (int i = 0; i < languageNodeList.getLength(); i++) {
-                languages.add(((Element)languageNodeList.item(i)).getTextContent());
+                languages.add(languageNodeList.item(i).getTextContent());
             }
             Data.settings.setLanguages(languages);
 
             NodeList userNodeList = doc.getElementsByTagName("User");
             ObservableList<String> users = FXCollections.observableArrayList();
             for (int i = 0; i < userNodeList.getLength(); i++) {
-                users.add(((Element)userNodeList.item(i)).getTextContent());
+                users.add(userNodeList.item(i).getTextContent());
             }
             Data.settings.setUsers(users);
         }catch (Exception e){
