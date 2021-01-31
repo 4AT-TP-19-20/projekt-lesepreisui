@@ -20,28 +20,28 @@ class SettingsTab extends VBox implements ChildSaveable {
                 "h2", "icons8-quiz-100.png", 25, true));
 
         this.getChildren().add(new Label("Mindestanzahl an richtigen Antworten"));
-        this.getChildren().add(new CustomTextField(Data.settings.minCorrectAnswersProperty()));
+        this.getChildren().add(new IntField(Data.settings.minCorrectAnswersProperty()));
 
         this.getChildren().add(new SettingsHeader("Gruppeneinstellungen",
                 "h2", "icons8-user-100.png", 25, true));
 
         this.getChildren().add(new Label("Mindestanzahl an Teilnehmern einer Gruppe"));
-        this.getChildren().add(new CustomTextField(Data.settings.minMembersProperty()));
+        this.getChildren().add(new IntField(Data.settings.minMembersProperty()));
 
         this.getChildren().add(new SettingsHeader("Verlosungseinstellungen",
                 "h2", "icons8-clover-96.png", 25, true));
 
         this.getChildren().add(new Label("Mindestanzahl gelesener Bücher"));
-        this.getChildren().add(new CustomTextField(Data.settings.minBookCountProperty()));
+        this.getChildren().add(new IntField(Data.settings.minBookCountProperty()));
 
         this.getChildren().add(new Label("Maximalanzahl gelesener Bücher"));
-        this.getChildren().add(new CustomTextField(Data.settings.maxBookCountProperty()));
+        this.getChildren().add(new IntField(Data.settings.maxBookCountProperty()));
 
         this.getChildren().add(new Label("Maximale Anzahl an Ziehungen pro Person"));
-        this.getChildren().add(new CustomTextField(Data.settings.maxPicksProperty()));
+        this.getChildren().add(new IntField(Data.settings.maxPicksProperty()));
 
         this.getChildren().add(new Label("Anzahl vorhandener Preise"));
-        this.getChildren().add(new CustomTextField(Data.settings.prizeCountProperty()));
+        this.getChildren().add(new IntField(Data.settings.prizeCountProperty()));
 
         this.getChildren().add(new SettingsHeader("Bucheinstellungen",
                 "h2", "icons8-book-100.png", 25, true));
@@ -96,9 +96,19 @@ class SettingsTab extends VBox implements ChildSaveable {
         }
     }
 
-    static class CustomTextField extends TextField {
-        CustomTextField(Property<Number> property) {
+    static class IntField extends TextField {
+        IntField(Property<Number> property) {
             this.setId("tf");
+            this.setText(String.valueOf(property.getValue()));
+            this.textProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    property.setValue(Integer.parseInt(newValue));
+                    this.setStyle(null);
+                }
+                catch (NumberFormatException ex) {
+                    this.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+                }
+            });
             this.textProperty().bindBidirectional(property, StringToInt.getInstance());
         }
     }

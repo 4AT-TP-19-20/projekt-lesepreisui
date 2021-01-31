@@ -27,6 +27,9 @@ public class Data {
             while (c.next()) {
                 for(Contestant added : c.getAddedSubList()) {
                     added.groupMemberProperty().addListener((observable, oldValue, newValue) -> groupMemberListener(added, newValue));
+                    if(added.isGroupMember()) {
+                        getGroupByGrade(added.getGrade());
+                    }
                 }
 
                 for(Contestant removed : c.getRemoved()) {
