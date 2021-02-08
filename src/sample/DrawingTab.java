@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -15,60 +16,77 @@ import java.util.Map;
 import java.util.Random;
 
 class DrawingTab extends StackPane {
-    private int remainingPrizes;
+    private final Label lbl_remainingPrizes;
+    private final Label lbl_winner;
+    private final Button btn_start;
+    private final MediaPlayer mediaPlayer;
+    private final MediaView mediaView;
+
     private Contestant[] winners;
+    private int remainingPrizes;
     private int currentWinner;
-    private Label lbl_remainingPrices;
-    private Label lbl_winner;
-    private Button btn_start;
-    private MediaPlayer mediaPlayer;
-    private MediaView mediaView;
 
     DrawingTab() {
-        remainingPrizes = Data.settings.getPrizeCount();
-        String remainingPricesText;
-        currentWinner = 0;
-
-        //BTN START Animation
-        this.setId("black-background");
+        //Start button
         btn_start = new Button("Gewinner Auslosen");
         btn_start.setId("drawing-button");
+        btn_start.setOnAction(this::start);
+        this.getChildren().add(btn_start);
 
-        //Remaining Prizes
-        if (remainingPrizes > 0) {
-            remainingPricesText = "Verbleibende Preise: " + remainingPrizes;
-            this.getChildren().add(btn_start);
-        } else {
-            remainingPricesText = "Alle Preise wurden verlost!";
-        }
-        lbl_remainingPrices = new Label(remainingPricesText);
-        lbl_remainingPrices.setId("remaining");
-        lbl_remainingPrices.setTranslateY(350);
-        this.getChildren().add(lbl_remainingPrices);
+        //Remaining prizes
+        lbl_remainingPrizes = new Label();
+        lbl_remainingPrizes.setId("remaining");
+        lbl_remainingPrizes.setTranslateY(350);
+        this.getChildren().add(lbl_remainingPrizes);
 
-        //btn_start EventHandler
-        btn_start.setOnAction(actionEvent -> {
-            if (remainingPrizes == Data.settings.getPrizeCount()) {
-                pickWinners();
-            }
-            startAnimation();
-            lbl_remainingPrices.setVisible(false);
-            remainingPrizes--;
-        });
-
-        //Media Player and Viewer initialisation
+        //Media Player and Viewer
         mediaPlayer = new MediaPlayer(new Media(new File("LesePreisUIAnimation720p.mp4").toURI().toString()));
         mediaView = new MediaView(mediaPlayer);
         mediaView.setVisible(false);
         this.getChildren().add(mediaView);
 
-        //Label winner initialisation
         lbl_winner = new Label();
         lbl_winner.setId("winner");
         lbl_winner.setTranslateY(-50);
         lbl_winner.setTranslateX(-70);
         lbl_winner.setVisible(false);
         this.getChildren().add(lbl_winner);
+
+        remainingPrizes = Data.settings.getPrizeCount();
+
+        Data.settings.prizeCountProperty().addListener((observable, oldValue, newValue) -> {
+            remainingPrizes = (int) newValue;
+            currentWinner = 0;
+            prizeCountUpdate();
+        });
+
+        this.setId("black-background");
+        prizeCountUpdate();
+    }
+
+    private void start(ActionEvent event) {
+        if (remainingPrizes == Data.settings.getPrizeCount()) {
+            try {
+                pickWinners();
+            } catch (IllegalArgumentException ex) {
+                lbl_remainingPrizes.setText(ex.getMessage());
+                return;
+            }
+        }
+        startAnimation();
+        lbl_remainingPrizes.setVisible(false);
+        remainingPrizes--;
+    }
+
+    private void prizeCountUpdate() {
+        String remainingPrizesText;
+        if (remainingPrizes > 0) {
+            remainingPrizesText = "Verbleibende Preise: " + remainingPrizes;
+        } else {
+            remainingPrizesText = "Alle Preise wurden verlost!";
+        }
+        lbl_remainingPrizes.setText(remainingPrizesText);
+        btn_start.setVisible(remainingPrizes != 0);
     }
 
     private void startAnimation() {
@@ -78,7 +96,7 @@ class DrawingTab extends StackPane {
         //DELAY to show Name
         Task<Void> sleeper = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 try {
                     Thread.sleep(5100);
                 } catch (InterruptedException ignore) {}
@@ -93,13 +111,8 @@ class DrawingTab extends StackPane {
             mediaView.setVisible(false);
             mediaPlayer.stop();
             lbl_winner.setVisible(false);
-            lbl_remainingPrices.setVisible(true);
-            if (remainingPrizes > 0) {
-                lbl_remainingPrices.setText("Verbleibende Preise: " + remainingPrizes);
-            } else {
-                lbl_remainingPrices.setText("Alle Preise wurden verlost!");
-                btn_start.setVisible(false);
-            }
+            lbl_remainingPrizes.setVisible(true);
+            prizeCountUpdate();
         });
     }
 
@@ -120,6 +133,10 @@ class DrawingTab extends StackPane {
             }
         }
 
+        if(Data.settings.getPrizeCount() >= qualifiedContestants.size() * 3) {
+            throw new IllegalArgumentException("Jeder gewinnt! (Zu viele Preise)");
+        }
+
         Random random = new Random();
         winners = new Contestant[Data.settings.getPrizeCount()];
         for(int i = 0; i < Data.settings.getPrizeCount(); i++) {
@@ -130,12 +147,11 @@ class DrawingTab extends StackPane {
                     if(contestant.getValue() < 3) {
                         winners[i] = contestant.getKey();
                         contestant.setValue(contestant.getValue() + 1);
-                        break;
                     }
                     else {
                         i--;
-                        break;
                     }
+                    break;
                 }
                 else {
                     currentPos += contestant.getKey().getPoints();
@@ -144,4 +160,3 @@ class DrawingTab extends StackPane {
         }
     }
 }
-
