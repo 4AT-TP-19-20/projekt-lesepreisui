@@ -3,14 +3,13 @@ package sample.frontend.tabs;
 import javafx.beans.property.Property;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import sample.backend.ChildSaveable;
+import sample.backend.Export;
 import sample.backend.Saveable;
 import sample.frontend.controls.EditableListView;
 import sample.utils.StringToInt;
@@ -68,6 +67,10 @@ public class SettingsTab extends VBox implements ChildSaveable {
         CheckBox cbx_useAnd = new CheckBox("Schlüsselwörter in der Suche mit UND verknüpfen, sodass alle Wörter vorkommen müssen");
         cbx_useAnd.selectedProperty().bindBidirectional(Data.settings.useAndInSearchProperty());
         this.getChildren().add(cbx_useAnd);
+
+        Button btn_print = new Button("Exportieren");
+        btn_print.setOnAction(e -> Export.export());
+        this.getChildren().add(btn_print);
 
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10));
