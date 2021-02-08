@@ -9,6 +9,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import sample.backend.data.Data;
+import sample.frontend.CustomStage;
+import sample.frontend.controls.ContentStack;
+import sample.frontend.tabs.*;
+import sample.frontend.ButtonController;
 
 public class Main extends Application {
     private static TabPane tabPane;
@@ -29,7 +34,7 @@ public class Main extends Application {
         root.setAlignment(Pos.TOP_RIGHT);
         root.getChildren().addAll(tabPane, ButtonController.getButtons());
 
-        ImageView logo = new ImageView(new Image("login.png"));
+        ImageView logo = new ImageView(new Image("sample/images/login.png"));
         logo.setFitWidth(350);
         logo.setPreserveRatio(true);
         loginItems.getChildren().add(logo);
@@ -70,7 +75,7 @@ public class Main extends Application {
         Data.save();
     }
 
-    static ContentStack getCurrentContentStack() {
+    public static ContentStack getCurrentContentStack() {
         return (ContentStack) tabPane.getSelectionModel().getSelectedItem().getContent();
     }
 
