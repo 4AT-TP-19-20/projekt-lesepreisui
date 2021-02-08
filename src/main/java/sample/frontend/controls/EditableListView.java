@@ -22,7 +22,7 @@ public class EditableListView extends BorderPane {
         ColorAdjust hoverEffect = new ColorAdjust(0, 0, 0.3, 0);
 
         //Top
-        ImageView titleIcon = new ImageView(new Image(iconPath));
+        ImageView titleIcon = new ImageView(new Image(getClass().getResourceAsStream(iconPath)));
         titleIcon.setFitWidth(20);
         titleIcon.setPreserveRatio(true);
         HBox titleBox = new HBox(titleIcon, new Label(titleText));
@@ -38,13 +38,13 @@ public class EditableListView extends BorderPane {
 
         //Bottom
         HBox bottomItems = new HBox();
-        ImageView btn_add = new ImageView(new Image("sample/images/editablelistview/plus.png"));
+        ImageView btn_add = new ImageView(new Image(getClass().getResourceAsStream("/images/editablelistview/plus.png")));
         btn_add.setFitWidth(25);
         btn_add.setPreserveRatio(true);
         btn_add.setOnMouseClicked(e -> observableList.add(newText + " " + index++));
         btn_add.setOnMouseEntered(e -> btn_add.setEffect(hoverEffect));
         btn_add.setOnMouseExited(e -> btn_add.setEffect(null));
-        ImageView btn_remove = new ImageView(new Image("sample/images/editablelistview/minus.png"));
+        ImageView btn_remove = new ImageView(new Image(getClass().getResourceAsStream("/images/editablelistview/minus.png")));
         btn_remove.setFitWidth(25);
         btn_remove.setPreserveRatio(true);
         btn_remove.setOnMouseClicked(e -> {

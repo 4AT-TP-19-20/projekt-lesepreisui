@@ -34,7 +34,7 @@ public class Main extends Application {
         root.setAlignment(Pos.TOP_RIGHT);
         root.getChildren().addAll(tabPane, ButtonController.getButtons());
 
-        ImageView logo = new ImageView(new Image("sample/images/login.png"));
+        ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/images/login.png")));
         logo.setFitWidth(350);
         logo.setPreserveRatio(true);
         loginItems.getChildren().add(logo);

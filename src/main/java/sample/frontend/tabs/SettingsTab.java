@@ -19,23 +19,23 @@ import sample.backend.data.Data;
 public class SettingsTab extends VBox implements ChildSaveable {
     public SettingsTab() {
         this.getChildren().add(new SettingsHeader("Einstellungen",
-                "h1", "sample/images/settings/settings.png", 40, false));
+                "h1", "/images/settings/settings.png", 40, false));
 
         this.getChildren().add(new SettingsHeader("Prüfungseinstellungen",
-                "h2", "sample/images/settings/quiz.png", 25, true));
+                "h2", "/images/settings/quiz.png", 25, true));
 
         this.getChildren().add(new Label("Mindestanzahl an richtigen Antworten"));
         this.getChildren().add(new Label("Mindestanzahl an richtigen Antworten"));
         this.getChildren().add(new IntField(Data.settings.minCorrectAnswersProperty()));
 
         this.getChildren().add(new SettingsHeader("Gruppeneinstellungen",
-                "h2", "sample/images/settings/user.png", 25, true));
+                "h2", "/images/settings/user.png", 25, true));
 
         this.getChildren().add(new Label("Mindestanzahl an Teilnehmern einer Gruppe"));
         this.getChildren().add(new IntField(Data.settings.minMembersProperty()));
 
         this.getChildren().add(new SettingsHeader("Verlosungseinstellungen",
-                "h2", "sample/images/settings/clover.png", 25, true));
+                "h2", "/images/settings/clover.png", 25, true));
 
         this.getChildren().add(new Label("Mindestanzahl gelesener Bücher"));
         this.getChildren().add(new IntField(Data.settings.minBookCountProperty()));
@@ -50,18 +50,18 @@ public class SettingsTab extends VBox implements ChildSaveable {
         this.getChildren().add(new IntField(Data.settings.prizeCountProperty()));
 
         this.getChildren().add(new SettingsHeader("Bucheinstellungen",
-                "h2", "sample/images/settings/book.png", 25, true));
+                "h2", "/images/settings/book.png", 25, true));
 
         EditableListView languageList = new EditableListView("Sprachen",
-                "Neue Sprache", Data.settings.getLanguages(), "sample/images/settings/language.png");
+                "Neue Sprache", Data.settings.getLanguages(), "/images/settings/language.png");
         languageList.setMaxWidth(400);
         this.getChildren().add(languageList);
 
         this.getChildren().add(new SettingsHeader("Generelle Einstellungen",
-                "h2", "sample/images/settings/settings.png", 25, true));
+                "h2", "/images/settings/settings.png", 25, true));
 
         EditableListView userList = new EditableListView("Benutzer",
-                "Neuer Benutzer", Data.settings.getUsers(), "sample/images/settings/user.png");
+                "Neuer Benutzer", Data.settings.getUsers(), "/images/settings/user.png");
         userList.setMaxWidth(400);
         this.getChildren().add(userList);
 
@@ -90,7 +90,7 @@ public class SettingsTab extends VBox implements ChildSaveable {
             label.setId(textId);
             label.setPadding(new Insets(0,0,0,15));
 
-            ImageView imageView = new ImageView(new Image(iconUrl));
+            ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(iconUrl)));
             imageView.setFitWidth(iconWidth);
             imageView.setPreserveRatio(true);
 

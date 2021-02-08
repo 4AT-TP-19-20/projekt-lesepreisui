@@ -41,13 +41,13 @@ public class SwitchBox extends StackPane implements ObservableValue<StackPane> {
         int size = sizeMode.equals("small") ? 15 : 50;
 
         images = new ImageView[3];
-        images[0] = new ImageView(new Image("sample/images/switchbox/no.png"));
+        images[0] = new ImageView(new Image(getClass().getResourceAsStream("/images/switchbox/no.png")));
         images[0].setFitHeight(size);
         images[0].setPreserveRatio(true);
-        images[1] = new ImageView(new Image("sample/images/switchbox/yes.png"));
+        images[1] = new ImageView(new Image(getClass().getResourceAsStream("/images/switchbox/yes.png")));
         images[1].setFitHeight(size);
         images[1].setPreserveRatio(true);
-        images[2] = new ImageView(new Image("sample/images/switchbox/empty.png"));
+        images[2] = new ImageView(new Image(getClass().getResourceAsStream("/images/switchbox/empty.png")));
         images[2].setFitHeight(size);
         images[2].setPreserveRatio(true);
 

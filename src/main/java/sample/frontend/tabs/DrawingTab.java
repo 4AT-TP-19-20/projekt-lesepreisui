@@ -11,7 +11,6 @@ import javafx.scene.media.MediaView;
 import sample.backend.data.Contestant;
 import sample.backend.data.Data;
 
-import java.io.File;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Map;
@@ -41,8 +40,7 @@ public class DrawingTab extends StackPane {
         lbl_remainingPrizes.setTranslateY(350);
         this.getChildren().add(lbl_remainingPrizes);
 
-        //Media Player and Viewer
-        mediaPlayer = new MediaPlayer(new Media(new File("LesePreisUIAnimation720p.mp4").toURI().toString()));
+        mediaPlayer = new MediaPlayer(new Media(getClass().getResource("/LesePreisUIAnimation720p.mp4").toString()));
         mediaView = new MediaView(mediaPlayer);
         mediaView.setVisible(false);
         this.getChildren().add(mediaView);

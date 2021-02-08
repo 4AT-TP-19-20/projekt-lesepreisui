@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class CustomStage extends Stage {
     public CustomStage() {
-        this.getIcons().add(new Image("sample/images/icon.png"));
+        this.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.png")));
     }
 
     public void setScene(Parent content, double width, double height) {
