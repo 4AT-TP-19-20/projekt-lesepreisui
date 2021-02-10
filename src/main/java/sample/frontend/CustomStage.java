@@ -13,7 +13,7 @@ public class CustomStage extends Stage {
 
     public void setScene(Parent content, double width, double height) {
             Scene scene = new Scene(content, width, height);
-            scene.getStylesheets().add("stylesheet.css");
+            scene.getStylesheets().add(getClass().getResource("/stylesheet.css").toString());
             this.setResizable(false);
             this.setScene(scene);
     }

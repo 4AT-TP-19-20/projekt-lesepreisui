@@ -17,13 +17,9 @@ import sample.backend.data.Data;
 
 public class SettingsTab extends VBox implements ChildSaveable {
     public SettingsTab() {
-        this.getChildren().add(new SettingsHeader("Einstellungen",
-                "h1", "/images/settings/settings.png", 40, false));
-
         this.getChildren().add(new SettingsHeader("Prüfungseinstellungen",
-                "h2", "/images/settings/quiz.png", 25, true));
+                "h2", "/images/settings/quiz.png", 25, false));
 
-        this.getChildren().add(new Label("Mindestanzahl an richtigen Antworten"));
         this.getChildren().add(new Label("Mindestanzahl an richtigen Antworten"));
         this.getChildren().add(new IntField(Data.settings.minCorrectAnswersProperty()));
 
@@ -100,7 +96,7 @@ public class SettingsTab extends VBox implements ChildSaveable {
             this.getChildren().addAll(label, imageView);
             this.setAlignment(Pos.TOP_CENTER);
             if(hasHeaderPadding) {
-                this.setPadding(new Insets(30,0,0,0));
+                this.setPadding(new Insets(20,0,0,0));
             }
         }
     }
