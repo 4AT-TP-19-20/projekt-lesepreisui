@@ -56,7 +56,7 @@ public class ExamTab extends BorderPane {
         //Bottom
         Button btn_removeExam = new Button("Prüfung löschen");
         btn_removeExam.setOnAction(e -> btn_removeExamAction());
-        btn_removeExam.setId("custom-button");
+        btn_removeExam.setId("red-button");
         this.setBottom(btn_removeExam);
 
         BorderPane.setMargin(this.getCenter(), new Insets(10,0,10,0));

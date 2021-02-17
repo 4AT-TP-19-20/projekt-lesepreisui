@@ -22,7 +22,7 @@ public class SwitchBox extends StackPane implements ObservableValue<StackPane> {
     private final ImageView[] images;
     private int stateCount;
 
-    SwitchBox(String size) {
+    public SwitchBox(String size) {
         this(2, size, true, true);
     }
 

@@ -29,7 +29,7 @@ public class BookDetailWindow extends CustomStage {
         gridPane.add(txt_authorLastName,1,2,2,1);
         gridPane.add(new Label("Sprache"),0,3);
         ComboBox<String> cbx_languages = new ComboBox<>(Data.settings.getLanguages());
-        cbx_languages.setPrefWidth(200);
+        cbx_languages.setPrefWidth(250);
         gridPane.add(cbx_languages,1,3);
         cbx_languages.getSelectionModel().select(book.getLanguage());
         cbx_languages.setOnAction(e->{
@@ -37,8 +37,6 @@ public class BookDetailWindow extends CustomStage {
                 book.setLanguage(cbx_languages.getSelectionModel().getSelectedItem());
             }
         });
-        Button btn_editLanguages = new Button("Sprachen verwalten");
-        gridPane.add(btn_editLanguages,2,3);
         gridPane.add(new Label("Lose"),0,4);
         TextField txt_points = new TextField();
         txt_points.textProperty().bindBidirectional(book.pointsProperty(), StringToInt.getInstance());
@@ -50,6 +48,6 @@ public class BookDetailWindow extends CustomStage {
 
         this.enableBlocking();
         this.setTitle("Buch bearbeiten");
-        this.setScene(gridPane, 450, 170);
+        this.setScene(gridPane, 370, 160);
     }
 }

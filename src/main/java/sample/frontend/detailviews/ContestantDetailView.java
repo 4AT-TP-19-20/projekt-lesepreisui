@@ -4,6 +4,8 @@ import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
@@ -43,23 +45,26 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
         txt_firstName.textProperty().bindBidirectional(contestant.firstNameProperty());
         txt_firstName.setPrefWidth(200);
         topItems.add(txt_firstName, 1,0);
-        GridPane.setMargin(txt_firstName, rightMargin);
+
+        topItems.add(new Canvas(50, 1), 2, 0);
 
         topItems.add(new Label("Nachname"),0,1);
         TextField txt_lastName = new TextField();
         txt_lastName.textProperty().bindBidirectional(contestant.lastNameProperty());
         txt_lastName.setPrefWidth(200);
         topItems.add(txt_lastName, 1,1);
-        GridPane.setMargin(txt_lastName, rightMargin);
 
-        topItems.add(new Label("Klasse"),2,0);
+        topItems.add(new Canvas(50, 1), 2, 1);
+
+        topItems.add(new Label("Klasse"),3,0);
         TextField txt_grade = new TextField();
         txt_grade.textProperty().bindBidirectional(contestant.gradeProperty());
-        txt_grade.setPrefWidth(200);
-        topItems.add(txt_grade,3,0);
-        GridPane.setMargin(txt_grade, rightMargin);
+        txt_grade.setPrefWidth(150);
+        topItems.add(txt_grade,4,0, 2, 1);
 
-        topItems.add(new Label("Gruppe"),2,1);
+        topItems.add(new Canvas(50, 1), 6, 0);
+
+        topItems.add(new Label("Gruppe"),3,1);
         SwitchBox sbx_groupMember = new SwitchBox(contestant.groupMemberProperty(), "small", true);
         sbx_groupMember.setDisable(!contestant.getGrade().contains("1"));
         txt_grade.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -80,26 +85,32 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
                 }
             }
         });
-        topItems.add(sbx_groupMember,3,1);
+        topItems.add(sbx_groupMember,4,1);
 
-        topItems.add(new Label("Gesamtpunkte"),4,0);
+        HBox hbx_qualified = new HBox(5, new Label("Qualifiziert"), new SwitchBox(contestant.qualifiedProperty(), "small", false));
+        hbx_qualified.setAlignment(Pos.CENTER_RIGHT);
+        topItems.add(hbx_qualified, 5, 1);
+
+        topItems.add(new Canvas(50, 1), 6, 1);
+
+        topItems.add(new Label("Gesamtpunkte"),7,0);
         TextField txt_points = new TextField();
         txt_points.textProperty().bindBidirectional(contestant.pointsProperty(), StringToInt.getInstance());
         txt_points.setEditable(false);
-        topItems.add(txt_points, 5, 0);
-        GridPane.setMargin(txt_points, rightMargin);
+        topItems.add(txt_points, 8, 0);
 
-        topItems.add(new Label("Gelesene Bücher"),4,1);
+        topItems.add(new Label("Gelesene Bücher"),7,1);
         TextField txt_bookCount = new TextField();
         txt_bookCount.textProperty().bindBidirectional(contestant.bookCountProperty(), StringToInt.getInstance());
         txt_bookCount.setEditable(false);
-        topItems.add(txt_bookCount, 5, 1);
-        GridPane.setMargin(txt_bookCount, rightMargin);
+        topItems.add(txt_bookCount, 8, 1);
 
         topItems.setHgap(5);
         topItems.setVgap(5);
 
         this.setTop(topItems);
+
+        //topItems.setGridLinesVisible(true);
 
         //Center
         VBox centerItems = new VBox();
