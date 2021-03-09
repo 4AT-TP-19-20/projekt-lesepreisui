@@ -4,11 +4,11 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.json.JSONObject;
 import sample.backend.Searchable;
+import sample.backend.data.database.DatabaseEntry;
 
-public class Book implements Comparable<Book>, Searchable {
+public class Book extends DatabaseEntry implements Comparable<Book>, Searchable {
     private final StringProperty title;
     private final StringProperty authorFirstName;
     private final StringProperty authorLastName;
@@ -20,11 +20,15 @@ public class Book implements Comparable<Book>, Searchable {
     }
 
     public Book(String title, String authorFirstName, String authorLastName, String language, int points) {
+        super("books");
+
         this.title = new SimpleStringProperty(title);
         this.authorFirstName = new SimpleStringProperty(authorFirstName);
         this.authorLastName = new SimpleStringProperty(authorLastName);
         this.language = new SimpleStringProperty(language);
         this.points = new SimpleIntegerProperty(points);
+
+        registerUpdateListeners();
     }
 
     public String getTitle() {
@@ -109,26 +113,34 @@ public class Book implements Comparable<Book>, Searchable {
                 || getLanguage().toLowerCase().contains(s);
     }
 
-    public Element getXMLNode(Document doc){
-        Element book = doc.createElement("Book");
-        Element titleElement = doc.createElement("Title");
-        Element authorFirstNameElement = doc.createElement("AuthorFirstName");
-        Element authorLastNameElement = doc.createElement("AuthorLastName");
-        Element languageElement = doc.createElement("Language");
-        Element pointsElement = doc.createElement("Points");
+    @Override
+    public void onDelete() {
+        for (Exam exam : Data.exams.values()) {
+            if(exam.getBook().equals(this)) {
+                exam.delete();
+            }
+        }
 
-        titleElement.appendChild(doc.createTextNode(this.getTitle()));
-        authorFirstNameElement.appendChild(doc.createTextNode(this.getAuthorFirstName()));
-        authorLastNameElement.appendChild(doc.createTextNode(this.getAuthorLastName()));
-        languageElement.appendChild(doc.createTextNode(this.getLanguage()));
-        pointsElement.appendChild(doc.createTextNode(""+this.getPoints()));
+        Data.books.remove(getId());
+    }
 
-        book.appendChild(titleElement);
-        book.appendChild(authorFirstNameElement);
-        book.appendChild(authorLastNameElement);
-        book.appendChild(languageElement);
-        book.appendChild(pointsElement);
+    @Override
+    public JSONObject toJson() {
+        JSONObject object = new JSONObject();
+        object.put("title", getTitle());
+        object.put("authorfirstname", getAuthorFirstName());
+        object.put("authorlastname", getAuthorLastName());
+        object.put("language", getLanguage());
+        object.put("points", getPoints());
+        return object;
+    }
 
-        return book;
+    @Override
+    public void fromJson(JSONObject object) {
+        this.setTitle(object.getString("title"));
+        this.setAuthorFirstName(object.getString("authorfirstname"));
+        this.setAuthorLastName(object.getString("authorlastname"));
+        this.setLanguage(object.getString("language"));
+        this.setPoints(object.getInt("points"));
     }
 }

@@ -5,17 +5,18 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import sample.backend.IntegerPropertyArray;
 import sample.backend.Saveable;
 import sample.backend.Searchable;
+import sample.backend.data.database.DatabaseEntry;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
-public class Exam implements Saveable, Comparable<Exam>, Searchable {
+public class Exam extends DatabaseEntry implements Saveable, Comparable<Exam>, Searchable {
     private Book book;
     private final IntegerPropertyArray answers;
     private final IntegerProperty passed;
@@ -25,6 +26,8 @@ public class Exam implements Saveable, Comparable<Exam>, Searchable {
     private Contestant contestant;
 
     public Exam(Book book, int[] initialAnswers, String librarian, LocalDate date) {
+        super("exams");
+
         this.book = book;
         this.answers = new IntegerPropertyArray(Data.settings.getMaxAnswersCount(), initialAnswers);
         this.librarian = new SimpleStringProperty(librarian);
@@ -35,6 +38,8 @@ public class Exam implements Saveable, Comparable<Exam>, Searchable {
         onAnswerChangeListener();
         points = new SimpleIntegerProperty(passed.get() == 1 ? book.getPoints() : 0);
         points.bind(Bindings.when(passed.isEqualTo(1)).then(book.pointsProperty()).otherwise(0));
+
+        registerUpdateListeners();
     }
 
     public Exam(Book book) {
@@ -166,6 +171,8 @@ public class Exam implements Saveable, Comparable<Exam>, Searchable {
         else {
             passed.set(2);
         }
+
+        onUpdate();
     }
 
     @Override
@@ -205,25 +212,35 @@ public class Exam implements Saveable, Comparable<Exam>, Searchable {
         }
     }
 
-    public Element appendExam(Document doc, Element nodeExams){
-        Element examElement = doc.createElement("Exam");
-        Element bookTitleElement = doc.createElement("BookTitle");
-        Element answersElement = doc.createElement("Answers");
-        Element librarianElement = doc.createElement("Librarian");
-        Element dateElement = doc.createElement("Date");
+    @Override
+    public JSONObject toJson() {
+        JSONObject object = new JSONObject();
+        object.put("book", getBook().getId());
+        object.put("answers", new JSONArray(getAnswers()));
+        object.put("librarian", getLibrarian());
+        object.put("date", getDateAsString());
+        return object;
+    }
 
-        bookTitleElement.appendChild(doc.createTextNode(this.book.getTitle()));
-        answersElement.appendChild(doc.createTextNode(this.answers.toCompactString()));
-        librarianElement.appendChild(doc.createTextNode(this.getLibrarian()));
-        dateElement.appendChild(doc.createTextNode(this.getDateAsString()));
+    @Override
+    public void fromJson(JSONObject json) {
+        JSONObject object = new JSONObject(json);
 
-        examElement.appendChild(bookTitleElement);
-        examElement.appendChild(answersElement);
-        examElement.appendChild(librarianElement);
-        examElement.appendChild(dateElement);
+        setBook(Data.books.get(object.getString("book")));
 
-        nodeExams.appendChild(examElement);
+        JSONArray answers = object.getJSONArray("answers");
+        for (int i = 0; i < Data.settings.getMaxAnswersCount(); i++) {
+            answersProperty().getByIndex(i).set((int) answers.get(i));
+        }
 
-        return nodeExams;
+        setLibrarian(object.getString("librarian"));
+        setDate(LocalDate.parse(object.getString("date"), Data.dateFormatter));
+
+    }
+
+    @Override
+    public void onDelete() {
+        getContestant().removeExam(this);
+        Data.exams.remove(getId());
     }
 }

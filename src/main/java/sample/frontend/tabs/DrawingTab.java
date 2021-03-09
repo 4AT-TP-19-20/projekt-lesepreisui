@@ -126,8 +126,8 @@ public class DrawingTab extends StackPane {
         int totalPoints = 0;
         ArrayList<Map.Entry<Contestant, Integer>> qualifiedContestants = new ArrayList<>();
 
-        for(Contestant contestant : Data.contestants) {
-            if(contestant.getBookCount() >= Data.settings.getMinBookCount()) {
+        for(Contestant contestant : Data.contestants.values()) {
+            if(contestant.isQualified()) {
                 qualifiedContestants.add(new AbstractMap.SimpleEntry<>(contestant, 0));
                 totalPoints += contestant.getPoints();
             }

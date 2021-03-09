@@ -38,8 +38,6 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
         //Top
         GridPane topItems = new GridPane();
 
-        Insets rightMargin = new Insets(0, 50, 0, 0);
-
         topItems.add(new Label("Vorname"),0,0);
         TextField txt_firstName = new TextField();
         txt_firstName.textProperty().bindBidirectional(contestant.firstNameProperty());
@@ -109,8 +107,6 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
         topItems.setVgap(5);
 
         this.setTop(topItems);
-
-        //topItems.setGridLinesVisible(true);
 
         //Center
         VBox centerItems = new VBox();

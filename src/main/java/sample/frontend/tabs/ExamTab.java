@@ -1,7 +1,7 @@
 package sample.frontend.tabs;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ListChangeListener;
+import javafx.collections.MapChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -43,15 +43,13 @@ public class ExamTab extends BorderPane {
         tbv_exams.<String>addColumn("BibliothekarIn", new PropertyValueFactory<>("librarian"));
         tbv_exams.<HBox>addColumn("Antworten", param -> new AnswerBoxes(param.getValue().answersProperty(), false, "small"));
 
-        for(Contestant contestant : Data.contestants) {
-            tbv_exams.getItems().addAll(contestant.getExams());
-        }
+        tbv_exams.getItems().addAll(Data.exams.values());
         tbv_exams.getSortOrder().add(tbv_exams.getColumns().get(7));
         tbv_exams.sort();
 
-        this.setCenter(tbv_exams);
+        Data.exams.addListener((MapChangeListener<String, Exam>) change -> textChangeListener(txt_search.getText()));
 
-        Data.contestants.addListener(this::contestantsListener);
+        this.setCenter(tbv_exams);
 
         //Bottom
         Button btn_removeExam = new Button("Prüfung löschen");
@@ -63,37 +61,9 @@ public class ExamTab extends BorderPane {
         this.setPadding(new Insets(10));
     }
 
-    private void contestantsListener(ListChangeListener.Change<? extends Contestant> c) {
-        while(c.next()) {
-            for(Contestant added : c.getAddedSubList()) {
-                tbv_exams.getItems().addAll(added.getExams());
-                added.getExams().addListener(this::examsListener);
-            }
-            for (Contestant removed : c.getRemoved()) {
-                tbv_exams.getItems().removeAll(removed.getExams());
-                removed.getExams().removeListener(this::examsListener);
-            }
-        }
-    }
-
-    private void examsListener(ListChangeListener.Change<? extends Exam> c) {
-        while(c.next()) {
-            tbv_exams.getItems().addAll(c.getAddedSubList());
-            tbv_exams.getItems().removeAll(c.getRemoved());
-        }
-    }
-
     private void btn_removeExamAction() {
         if(!tbv_exams.getSelectionModel().isEmpty()) {
-            for(Contestant contestant : Data.contestants) {
-                for(Exam exam : contestant.getExams()) {
-                    if(exam == tbv_exams.getSelectionModel().getSelectedItem()) {
-                        contestant.removeExam(exam);
-                        tbv_exams.getItems().remove(exam);
-                        return;
-                    }
-                }
-            }
+            tbv_exams.getSelectionModel().getSelectedItem().delete();
         }
     }
 
@@ -102,14 +72,13 @@ public class ExamTab extends BorderPane {
         tbv_exams.getItems().clear();
 
         if(newValue.isEmpty()) {
-            for(Contestant contestant : Data.contestants) {
-                tbv_exams.getItems().addAll(contestant.getExams());
-            }
+            tbv_exams.getItems().addAll(Data.exams.values());
             tbv_exams.sort();
             return;
         }
 
-        for(Contestant contestant : Data.contestants) {
+        //If the match is a contestant, all corresponding exams should be listed
+        for(Contestant contestant : Data.contestants.values()) {
             if(Searchables.contain(newValue, contestant)) {
                 tbv_exams.getItems().addAll(contestant.getExams());
             }

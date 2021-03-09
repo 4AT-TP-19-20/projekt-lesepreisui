@@ -70,11 +70,6 @@ public class Main extends Application {
         loginStage.show();
     }
 
-    @Override
-    public void stop() {
-        Data.save();
-    }
-
     public static ContentStack getCurrentContentStack() {
         return (ContentStack) tabPane.getSelectionModel().getSelectedItem().getContent();
     }

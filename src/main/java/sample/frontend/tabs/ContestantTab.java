@@ -1,6 +1,7 @@
 package sample.frontend.tabs;
 
 import com.sun.javafx.scene.control.skin.TableColumnHeader;
+import javafx.collections.MapChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -39,7 +40,7 @@ public class ContestantTab extends BorderPane {
         tbv_contestants.<Integer>addColumn("Punkte", new PropertyValueFactory<>("points"));
         tbv_contestants.<StackPane>addColumn("Qualifiziert", param -> new SwitchBox(param.getValue().qualifiedProperty(), "small", false));
 
-        tbv_contestants.getItems().addAll(Data.contestants);
+        tbv_contestants.getItems().addAll(Data.contestants.values());
         tbv_contestants.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
                 tbv_contestants.getSelectionModel().clearSelection();
@@ -52,25 +53,27 @@ public class ContestantTab extends BorderPane {
                 }
             }
         });
+
+        Data.contestants.addListener((MapChangeListener<String, Contestant>) change -> textChangeListener(txt_search.getText()));
+
         this.setCenter(tbv_contestants);
 
         //Bottom
         VBox bottomItems = new VBox();
         Button btn_addContestant = new Button("Neuer Teilnehmer");
         btn_addContestant.setId("custom-button");
-        btn_addContestant.setOnAction(e->{
+        btn_addContestant.setOnAction(e -> {
             Contestant toAdd = new Contestant();
-            Data.contestants.add(toAdd);
-            textChangeListener(txt_search.getText());
             Main.getCurrentContentStack().push(new ContestantDetailView(toAdd));
+
+            toAdd.synchronize();
+            Data.contestants.put(toAdd.getId(), toAdd);
         });
         Button btn_removeContestant = new Button("Teilnehmer löschen");
         btn_removeContestant.setId("red-button");
-        btn_removeContestant.setOnAction(e->{
-            Contestant selected = tbv_contestants.getSelectionModel().getSelectedItem();
-            if(selected != null) {
-                Data.contestants.remove(selected);
-                textChangeListener(txt_search.getText());
+        btn_removeContestant.setOnAction(e -> {
+            if(!tbv_contestants.getSelectionModel().isEmpty()) {
+                tbv_contestants.getSelectionModel().getSelectedItem().delete();
             }
         });
         bottomItems.getChildren().addAll(btn_addContestant, btn_removeContestant);
@@ -86,11 +89,11 @@ public class ContestantTab extends BorderPane {
         tbv_contestants.getItems().clear();
 
         if(newValue.trim().isEmpty()) {
-            tbv_contestants.getItems().addAll(Data.contestants);
+            tbv_contestants.getItems().addAll(Data.contestants.values());
             return;
         }
 
-        for(Contestant contestant : Data.contestants) {
+        for(Contestant contestant : Data.contestants.values()) {
             if(Searchables.contain(newValue, contestant)) {
                 tbv_contestants.getItems().add(contestant);
             }

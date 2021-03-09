@@ -1,6 +1,7 @@
 package sample.frontend.tabs;
 
 import com.sun.javafx.scene.control.skin.TableColumnHeader;
+import javafx.collections.MapChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -34,7 +35,7 @@ public class BookTab extends BorderPane {
         tbv_books.<String>addColumn("Sprache", new PropertyValueFactory<>("language"));
         tbv_books.<Integer>addColumn("Punkte", new PropertyValueFactory<>("points"));
 
-        tbv_books.getItems().addAll(Data.books);
+        tbv_books.getItems().addAll(Data.books.values());
         tbv_books.setOnMouseClicked((MouseEvent event) -> {
             if(event.getTarget() instanceof TableColumnHeader) {
                 tbv_books.getSelectionModel().clearSelection();
@@ -45,26 +46,29 @@ public class BookTab extends BorderPane {
                 }
             }
         });
+
+        Data.books.addListener((MapChangeListener<String, Book>) change -> textChangeListener(txt_search.getText()));
+
         this.setCenter(tbv_books);
 
         //Bottom
         VBox bottomItems = new VBox();
         Button btn_addBook = new Button("Buch hinzufügen");
         btn_addBook.setId("custom-button");
-        btn_addBook.setOnAction(e->{
+        btn_addBook.setOnAction(e -> {
             Book toAdd = new Book();
-            Data.books.add(toAdd);
             tbv_books.getItems().add(toAdd);
             BookDetailWindow bookDetailWindow = new BookDetailWindow(toAdd);
             bookDetailWindow.show();
+
+            toAdd.synchronize();
+            Data.books.put(toAdd.getId(), toAdd);
         });
         Button btn_removeBook = new Button("Buch löschen");
         btn_removeBook.setId("red-button");
-        btn_removeBook.setOnAction(e->{
+        btn_removeBook.setOnAction(e -> {
             if(!tbv_books.getSelectionModel().isEmpty()) {
-                Book selected = tbv_books.getSelectionModel().getSelectedItem();
-                Data.books.remove(selected);
-                tbv_books.getItems().remove(selected);
+                getSelectedBook().delete();
             }
         });
         bottomItems.getChildren().addAll(btn_addBook, btn_removeBook);
@@ -84,11 +88,11 @@ public class BookTab extends BorderPane {
         tbv_books.getItems().clear();
 
         if(newValue.trim().isEmpty()) {
-            tbv_books.getItems().addAll(Data.books);
+            tbv_books.getItems().addAll(Data.books.values());
             return;
         }
 
-        for(Book book : Data.books) {
+        for(Book book : Data.books.values()) {
             if(Searchables.contain(newValue, book)) {
                 tbv_books.getItems().add(book);
             }
@@ -96,7 +100,7 @@ public class BookTab extends BorderPane {
     }
 
     protected void onItemSelected() {
-        BookDetailWindow bookDetailWindow = new BookDetailWindow(tbv_books.getSelectionModel().getSelectedItem());
+        BookDetailWindow bookDetailWindow = new BookDetailWindow(getSelectedBook());
         bookDetailWindow.show();
     }
 }

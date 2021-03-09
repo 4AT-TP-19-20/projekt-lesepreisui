@@ -4,14 +4,16 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import sample.backend.Saveable;
 import sample.backend.Searchable;
+import sample.backend.data.database.DatabaseEntry;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Contestant implements Saveable, Comparable<Contestant>, Searchable {
+public class Contestant extends DatabaseEntry implements Saveable, Comparable<Contestant>, Searchable {
     private final StringProperty firstName;
     private final StringProperty lastName;
     private final StringProperty grade;
@@ -22,6 +24,8 @@ public class Contestant implements Saveable, Comparable<Contestant>, Searchable 
     private final ObservableList<Exam> exams;
 
     public Contestant(String firstName, String lastName, String grade) {
+        super("contestants");
+
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
         this.grade = new SimpleStringProperty(grade);
@@ -29,8 +33,12 @@ public class Contestant implements Saveable, Comparable<Contestant>, Searchable 
         this.bookCount = new SimpleIntegerProperty();
         this.isGroupMember = new SimpleBooleanProperty();
         this.isQualified = new SimpleBooleanProperty();
+
         isQualified.bind(Bindings.greaterThanOrEqual(bookCount, Data.settings.minBookCountProperty()));
+        isGroupMember.addListener((observable, oldValue, newValue) -> Data.getGroupByGrade(getGrade()).addMember(this));
         exams = FXCollections.observableArrayList();
+
+        registerUpdateListeners();
     }
 
     public Contestant() {
@@ -292,28 +300,43 @@ public class Contestant implements Saveable, Comparable<Contestant>, Searchable 
                 || getGrade().toLowerCase().contains(s);
     }
 
-    public Element getXMLNode(Document doc){
-        Element contestantElement = doc.createElement("Contestant");
-        Element firstNameElement = doc.createElement("FirstName");
-        Element lastNameElement = doc.createElement("LastName");
-        Element gradeElement = doc.createElement("Grade");
-        Element isGroupMemberElement = doc.createElement("IsGroupMember");
-        Element examsElement = doc.createElement("Exams");
-
-        firstNameElement.appendChild(doc.createTextNode(this.getFirstName()));
-        lastNameElement.appendChild(doc.createTextNode(this.getLastName()));
-        gradeElement.appendChild(doc.createTextNode(this.getGrade()));
-        isGroupMemberElement.appendChild(doc.createTextNode("" + this.isGroupMember()));
-        for (Exam exam:exams) {
-            examsElement=exam.appendExam(doc, examsElement);
+    @Override
+    public void onDelete() {
+        isGroupMember.removeListener((observable, oldValue, newValue) -> Data.getGroupByGrade(getGrade()).addMember(this));
+        if(isGroupMember()) {
+            Group group = Data.getGroupByGrade(getGrade());
+            group.removeMember(this);
+            if(group.getMemberCount() == 0) {
+                Data.groups.remove(group);
+            }
         }
 
-        contestantElement.appendChild(firstNameElement);
-        contestantElement.appendChild(lastNameElement);
-        contestantElement.appendChild(gradeElement);
-        contestantElement.appendChild(isGroupMemberElement);
-        contestantElement.appendChild(examsElement);
+        //Foreach on duplicate because lists should not be modified while looping trough them
+        new ArrayList<>(getExams()).forEach(DatabaseEntry::delete);
 
-        return contestantElement;
+        Data.contestants.remove(getId());
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject object = new JSONObject();
+        object.put("firstname", getFirstName());
+        object.put("lastname", getLastName());
+        object.put("grade", getGrade());
+        object.put("isgroupmember", isGroupMember());
+        JSONArray examIDs = new JSONArray(getExams().size());
+        getExams().forEach(exam -> examIDs.put(exam.getId()));
+        object.put("exams", examIDs);
+        return object;
+    }
+
+    @Override
+    @SuppressWarnings("SuspiciousMethodCalls")
+    public void fromJson(JSONObject object) {
+        setFirstName(object.getString("firstname"));
+        setLastName(object.getString("lastname"));
+        setGrade(object.getString("grade"));
+        setGroupMember(object.getBoolean("isgroupmember"));
+        object.getJSONArray("exams").forEach(examID -> addExam(Data.exams.get(examID)));
     }
 }

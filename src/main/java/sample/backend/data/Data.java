@@ -1,18 +1,25 @@
 package sample.backend.data;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import javafx.collections.*;
+import javafx.util.Callback;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import sample.backend.*;
+import sample.backend.data.database.DatabaseEntry;
+import sample.backend.data.database.DatabaseInterface;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class Data {
-    public static ObservableList<Contestant> contestants;
-    public static ObservableList<Book> books;
+    //Backed by database
+    public static ObservableMap<String, Contestant> contestants;
+    public static ObservableMap<String, Book> books;
+    public static ObservableMap<String, Exam> exams;
+
     public static ObservableList<Group> groups;
     public static String currentUser;
     public static Settings settings;
@@ -20,69 +27,38 @@ public class Data {
     private static final String path = ".\\storage\\";
 
     public static void init() {
-        contestants = FXCollections.observableArrayList();
-        books = FXCollections.observableArrayList();
+        contestants = FXCollections.observableHashMap();
+        books = FXCollections.observableHashMap();
+        exams = FXCollections.observableHashMap();
         groups = FXCollections.observableArrayList();
         settings = new Settings();
         dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-        contestants.addListener((ListChangeListener<Contestant>) c -> {
-            while (c.next()) {
-                for(Contestant added : c.getAddedSubList()) {
-                    added.groupMemberProperty().addListener((observable, oldValue, newValue) -> groupMemberListener(added, newValue));
-                    if(added.isGroupMember()) {
-                        getGroupByGrade(added.getGrade());
-                    }
-                }
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                synchronizeLocals(DatabaseInterface.read("books"), books, json -> {
+                    Book b = new Book();
+                    b.fromJson(json);
+                    b.synchronize(json.getString("_id"), json.getString("_rev"));
+                    return b;
+                });
 
-                for(Contestant removed : c.getRemoved()) {
-                    removed.groupMemberProperty().removeListener((observable, oldValue, newValue) -> groupMemberListener(removed, newValue));
-                    Group groupOfRemoved = getGroupByGrade(removed.getGrade());
-                    groupOfRemoved.removeMember(removed);
-                    if(groupOfRemoved.getMemberCount() == 0) {
-                        groups.remove(groupOfRemoved);
-                    }
-                }
+                synchronizeLocals(DatabaseInterface.read("exams"), exams, json -> {
+                    Exam e = new Exam(books.get(json.getString("book")));
+                    e.fromJson(json);
+                    e.synchronize(json.getString("_id"), json.getString("_rev"));
+                    return e;
+                });
+
+                synchronizeLocals(DatabaseInterface.read("contestants"), contestants, json -> {
+                    Contestant c = new Contestant();
+                    c.fromJson(json);
+                    c.synchronize(json.getString("_id"), json.getString("_rev"));
+                    return c;
+                });
             }
-        });
-
-        Xml.getSettings(path + "settings.xml");
-        Xml.getBooks(path + "books.xml");
-        Xml.getContestants(path + "contestants.xml");
-
-        //Temporary static lists, replace with files
-        /*
-        contestants.add(new Contestant("Manuel", "Ploner", "4AT"));
-        contestants.add(new Contestant("Mattia", "Galiani", "4AT"));
-        contestants.add(new Contestant("Maximilian", "Mitterrutzner", "4AT"));
-        contestants.add(new Contestant("Nadine","Mitterrutzner", "4AS"));
-        books.add((new Book("1984", "George", "Orwell", "Deutsch", 5)));
-        books.add(new Book("The Million Pound Bank Note", "Mark", "Twain", "Englisch", 4));
-        books.add(new Book("Harry Potter und die Heiligtümer des Todes", "Joanne", "Rowling", "Deutsch", 4));
-        books.add(new Book("Harry Potter und der Stein der Weisen","Joanne","Rowling","Deutsch", 7));
-        contestants.get(0).addExam(new Exam(books.get(0), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("10.04.2020", dateFormatter)));
-        contestants.get(0).addExam(new Exam(books.get(1), new int[]{0,1,1,0,1,1}, "Dorothea", LocalDate.parse("11.04.2020", dateFormatter)));
-        contestants.get(0).addExam(new Exam(books.get(2), new int[]{0,1,1,0,0,0}, "Dorothea", LocalDate.parse("12.04.2020", dateFormatter)));
-        contestants.get(3).addExam(new Exam(books.get(3), new int[]{1,1,1,1,2,2}, "Dorothea", LocalDate.parse("10.01.2020", dateFormatter)));
-        contestants.get(1).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", dateFormatter)));
-        contestants.get(1).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", dateFormatter)));
-        contestants.get(2).addExam(new Exam(books.get(3), new int[]{1,1,0,1,1,2}, "Dorothea", LocalDate.parse("25.04.2020", dateFormatter)));
-        contestants.get(2).addExam(new Exam(books.get(2), new int[]{0,0,1,1,1,1}, "Dorothea", LocalDate.parse("25.04.2020", dateFormatter)));
-        contestants.get(3).addExam(new Exam(books.get(2), new int[]{1,0,1,1,1,2}, "Dorothea", LocalDate.parse("22.04.2020", dateFormatter)));
-        */
-    }
-
-    public static void save() {
-        if(!Files.exists(Paths.get(path))) {
-            try {
-                Files.createDirectory(Paths.get(path));
-            } catch (IOException ex) {
-                System.out.println("[System] Error while creating storage directory!");
-            }
-        }
-        Xml.set(path + "settings.xml", "Settings");
-        Xml.set(path + "books.xml", "Books");
-        Xml.set(path + "contestants.xml", "Contestants");
+        }, 0, 5000);
     }
 
     public static Group getGroupByGrade(String grade) {
@@ -97,16 +73,45 @@ public class Data {
         return newGroup;
     }
 
-    private static void groupMemberListener(Contestant contestant, boolean newValue) {
-        Group group = getGroupByGrade(contestant.getGrade());
-        if(newValue) {
-            group.addMember(contestant);
-        }
-        else {
-            group.removeMember(contestant);
-            if(group.getMemberCount() == 0) {
-                groups.remove(group);
+    public static <T extends DatabaseEntry> void synchronizeLocals(JSONArray remotes, Map<String, T> locals, Callback<JSONObject, T> factory) {
+        ArrayList<String> ids = new ArrayList<>();
+
+        //Create elements which only exist remotely and update entries whose properties have changed
+        remotes.forEach(item -> {
+            JSONObject jsonItem = (JSONObject) item;
+            String id = jsonItem.getString("_id");
+            String rev = jsonItem.getString("_rev");
+
+            ids.add(id);
+
+            T entry = locals.get(id);
+            if(entry == null) {
+                locals.put(id, factory.call(jsonItem));
             }
-        }
+            else {
+                if(entry.getStatus() == DatabaseEntry.Status.SYNCHRONIZED
+                && entry.getRev().compareTo(rev) < 0) { //If the remote rev is newer (greater) than the local rev
+                    entry.fromJson((JSONObject) item);
+                }
+            }
+        });
+
+        /*
+          Delete elements which only exist locally. Exceptions:
+          - It is being created (Status is CREATING).
+          - It is already being deleted (Status is DELETING).
+        */
+        Map<String, T> missing  = new HashMap<>(locals);
+
+        ids.forEach(missing::remove);
+
+        missing.forEach((id, entry) -> {
+            if(entry.getStatus() == DatabaseEntry.Status.CREATING
+            || entry.getStatus() == DatabaseEntry.Status.DELETING) {
+                return;
+            }
+
+            entry.delete();
+        });
     }
 }

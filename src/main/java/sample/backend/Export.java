@@ -25,7 +25,7 @@ public class Export {
         addHeaderCell("Lose");
         addHeaderCell("Qualifiziert");
 
-        Data.contestants.sorted(Comparator.comparing(Contestant::getPoints).reversed()).forEach(Export::addContentCell);
+        Data.contestants.values().stream().sorted(Comparator.comparing(Contestant::getPoints).reversed()).forEach(Export::addContentCell);
 
         Document document = new Document();
         try {
