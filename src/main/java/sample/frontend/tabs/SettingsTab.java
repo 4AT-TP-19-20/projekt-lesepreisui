@@ -8,14 +8,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import sample.backend.ChildSaveable;
 import sample.backend.Export;
-import sample.backend.Saveable;
 import sample.frontend.controls.EditableListView;
 import sample.utils.StringToInt;
 import sample.backend.data.Data;
 
-public class SettingsTab extends VBox implements ChildSaveable {
+public class SettingsTab extends VBox {
     public SettingsTab() {
         this.getChildren().add(new SettingsHeader("Prüfungseinstellungen",
                 "h2", "/images/settings/quiz.png", 25, false));
@@ -71,11 +69,6 @@ public class SettingsTab extends VBox implements ChildSaveable {
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10));
         this.setSpacing(5);
-    }
-
-    @Override
-    public Saveable getSaveable() {
-        return Data.settings;
     }
 
     static class SettingsHeader extends HBox {

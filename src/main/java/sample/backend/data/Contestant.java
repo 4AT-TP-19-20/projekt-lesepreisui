@@ -6,14 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import sample.backend.Saveable;
 import sample.backend.Searchable;
 import sample.backend.data.database.DatabaseEntry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Contestant extends DatabaseEntry implements Saveable, Comparable<Contestant>, Searchable {
+public class Contestant extends DatabaseEntry implements Comparable<Contestant>, Searchable {
     private final StringProperty firstName;
     private final StringProperty lastName;
     private final StringProperty grade;
@@ -43,42 +42,6 @@ public class Contestant extends DatabaseEntry implements Saveable, Comparable<Co
 
     public Contestant() {
         this("Vorname", "Nachname", "Klasse");
-    }
-
-    @Override
-    public Contestant getCopy() {
-        Contestant copy = new Contestant(getFirstName(), getLastName(), getGrade());
-        copy.setGroupMember(isGroupMember());
-        copy.copyExams(getExams());
-        return copy;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if(other instanceof Contestant) {
-            Contestant otherContestant = (Contestant) other;
-            return this.getFirstName().equals(otherContestant.getFirstName())
-                    && this.getLastName().equals(otherContestant.getLastName())
-                    && this.getGrade().equals(otherContestant.getGrade())
-                    && this.isGroupMember() == otherContestant.isGroupMember()
-                    && this.examsEqual(otherContestant.getExams());
-        }
-        return false;
-    }
-
-    @Override
-    public void setValues(Saveable other) {
-        if(other instanceof Contestant) {
-            Contestant otherContestant = (Contestant) other;
-            this.setFirstName(otherContestant.getFirstName());
-            this.setLastName(otherContestant.getLastName());
-            this.setGrade(otherContestant.getGrade());
-            this.setGroupMember(otherContestant.isGroupMember());
-            this.copyExams(otherContestant.getExams());
-        }
-        else {
-            throw new RuntimeException("Passed Saveable is not instance of Contestant");
-        }
     }
 
     public String getFirstName() {
@@ -165,21 +128,6 @@ public class Contestant extends DatabaseEntry implements Saveable, Comparable<Co
         return exams;
     }
 
-    public void copyExams(ObservableList<Exam> examsToCopy) {
-        clearExams();
-
-        for(Exam exam : examsToCopy) {
-            Exam newExam = exam.getCopy();
-            newExam.pointsProperty().addListener(param -> pointsUpdate());
-            newExam.passedProperty().addListener(param -> bookCountUpdate());
-            newExam.setContestant(exam.getContestant());
-            exams.add(newExam);
-        }
-
-        pointsUpdate();
-        bookCountUpdate();
-    }
-
     public void addExam(Exam exam) {
         exam.pointsProperty().addListener(param -> pointsUpdate());
         exam.passedProperty().addListener(param -> bookCountUpdate());
@@ -195,33 +143,6 @@ public class Contestant extends DatabaseEntry implements Saveable, Comparable<Co
         exams.remove(exam);
         pointsUpdate();
         bookCountUpdate();
-    }
-
-    public void clearExams() {
-        for(Exam exam : exams) {
-            exam.pointsProperty().removeListener(param -> pointsUpdate());
-            exam.passedProperty().removeListener(param -> bookCountUpdate());
-        }
-        exams.clear();
-        pointsUpdate();
-        bookCountUpdate();
-    }
-
-    public boolean examsEqual(ObservableList<Exam> otherExams) {
-        Exam[] ownSorted = exams.toArray(new Exam[0]);
-        Arrays.sort(ownSorted);
-        Exam[] otherSorted = otherExams.toArray(new Exam[0]);
-        Arrays.sort(otherSorted);
-
-        if(ownSorted.length == otherSorted.length) {
-            for (int i = 0; i < ownSorted.length; i++) {
-                if(!ownSorted[i].equals(otherSorted[i])) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
     }
 
     private void pointsUpdate() {

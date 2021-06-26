@@ -8,7 +8,6 @@ import javafx.beans.property.StringProperty;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import sample.backend.IntegerPropertyArray;
-import sample.backend.Saveable;
 import sample.backend.Searchable;
 import sample.backend.data.database.DatabaseEntry;
 
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
-public class Exam extends DatabaseEntry implements Saveable, Comparable<Exam>, Searchable {
+public class Exam extends DatabaseEntry implements Comparable<Exam>, Searchable {
     private Book book;
     private final IntegerPropertyArray answers;
     private final IntegerProperty passed;
@@ -44,41 +43,6 @@ public class Exam extends DatabaseEntry implements Saveable, Comparable<Exam>, S
 
     public Exam(Book book) {
         this(book, new int[]{-1}, Data.currentUser, LocalDate.now());
-    }
-
-    @Override
-    public Exam getCopy() {
-        Exam copy = new Exam(this.getBook(), this.getAnswers(), this.getLibrarian(), this.getDate());
-        copy.setContestant(this.getContestant());
-        return copy;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if(other instanceof Exam) {
-            Exam otherExam = (Exam) other;
-            return this.getBook() == otherExam.getBook()
-                    && Arrays.equals(this.getAnswers(), otherExam.getAnswers())
-                    && this.getLibrarian().equals(otherExam.getLibrarian())
-                    && this.getDate() == otherExam.getDate()
-                    && this.getContestant() == otherExam.getContestant();
-        }
-        return false;
-    }
-
-    @Override
-    public void setValues(Saveable other) {
-        if(other instanceof Exam) {
-            Exam otherExam = (Exam) other;
-            this.setBook(otherExam.getBook());
-            this.setAnswers(otherExam.getAnswers());
-            this.setLibrarian(otherExam.getLibrarian());
-            this.setDate(otherExam.getDate());
-            this.setContestant(otherExam.getContestant());
-        }
-        else {
-            throw new RuntimeException("Passed Saveable is not instance of Exam");
-        }
     }
 
     public Book getBook() {

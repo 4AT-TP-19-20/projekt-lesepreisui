@@ -32,7 +32,7 @@ public class Main extends Application {
         initializeTabs();
 
         root.setAlignment(Pos.TOP_RIGHT);
-        root.getChildren().addAll(tabPane, ButtonController.getButtons());
+        root.getChildren().addAll(tabPane, ButtonController.getButton());
 
         ImageView logo = new ImageView(new Image(getClass().getResourceAsStream("/images/login.png")));
         logo.setFitWidth(350);
@@ -53,7 +53,6 @@ public class Main extends Application {
                 mainStage.setTitle("LesePreisUI");
                 mainStage.show();
                 tabPane.requestFocus();
-                ButtonController.addCloseRequestHandler();
             }
         });
         controls.getChildren().add(btn_login);

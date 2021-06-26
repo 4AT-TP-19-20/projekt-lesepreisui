@@ -24,7 +24,7 @@ import sample.frontend.detailwindows.ExamDetailWindow;
 import sample.frontend.tabs.BookTab;
 import sample.utils.StringToInt;
 
-public class ContestantDetailView extends BorderPane implements ChildSaveable {
+public class ContestantDetailView extends BorderPane {
     private final Contestant contestant;
     private CustomTableView<Exam> tbv_exams;
 
@@ -203,10 +203,5 @@ public class ContestantDetailView extends BorderPane implements ChildSaveable {
                 tbv_exams.getItems().add(exam);
             }
         }
-    }
-
-    @Override
-    public Saveable getSaveable() {
-        return contestant;
     }
 }

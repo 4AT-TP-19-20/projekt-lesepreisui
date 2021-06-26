@@ -2,7 +2,6 @@ package sample.frontend.controls;
 
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import sample.backend.ChildSaveable;
 import sample.frontend.ButtonController;
 
 public class ContentStack extends StackPane {
@@ -46,10 +45,6 @@ public class ContentStack extends StackPane {
     }
 
     private void open(Node toOpen) {
-        if(toOpen instanceof ChildSaveable) {
-            ButtonController.enableSaveDiscardSystem(((ChildSaveable) toOpen).getSaveable());
-        }
-
         if(this.getChildren().size() > 1) {
             ButtonController.enableBack();
         }
@@ -58,7 +53,7 @@ public class ContentStack extends StackPane {
     }
 
     private void close(Node toClose) {
-        ButtonController.disableButtons();
+        ButtonController.disableBack();
 
         toClose.setVisible(false);
     }
