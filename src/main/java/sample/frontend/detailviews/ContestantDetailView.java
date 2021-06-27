@@ -166,9 +166,12 @@ public class ContestantDetailView extends BorderPane {
                     Main.getCurrentContentStack().pop();
 
                     Exam toAdd = new Exam(getSelectedBook());
-                    contestant.addExam(toAdd);
                     ExamDetailWindow examDetailWindow = new ExamDetailWindow(toAdd);
                     examDetailWindow.show();
+
+                    toAdd.synchronize();
+                    Data.exams.put(toAdd.getId(), toAdd);
+                    contestant.addExam(toAdd);
                 }
             };
             Main.getCurrentContentStack().push(bookTab);
@@ -178,7 +181,7 @@ public class ContestantDetailView extends BorderPane {
         btn_removeExam.setOnAction(e->{
             Exam selected = tbv_exams.getSelectionModel().getSelectedItem();
             if(selected != null) {
-                contestant.removeExam(selected);
+                selected.delete();
             }
         });
         bottomItems.getChildren().addAll(btn_addExam, btn_removeExam);

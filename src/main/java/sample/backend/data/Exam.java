@@ -13,7 +13,6 @@ import sample.backend.data.database.DatabaseEntry;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 
 public class Exam extends DatabaseEntry implements Comparable<Exam>, Searchable {
     private Book book;
@@ -23,6 +22,11 @@ public class Exam extends DatabaseEntry implements Comparable<Exam>, Searchable 
     private final StringProperty librarian;
     private LocalDate date;
     private Contestant contestant;
+    private static final Contestant tempContestant;
+
+    static {
+        tempContestant = new Contestant();
+    }
 
     public Exam(Book book, int[] initialAnswers, String librarian, LocalDate date) {
         super("exams");
@@ -31,6 +35,7 @@ public class Exam extends DatabaseEntry implements Comparable<Exam>, Searchable 
         this.answers = new IntegerPropertyArray(Data.settings.getMaxAnswersCount(), initialAnswers);
         this.librarian = new SimpleStringProperty(librarian);
         this.date = date;
+        this.contestant = Exam.tempContestant;
 
         passed = new SimpleIntegerProperty();
         answers.addListener((observable, oldValue, newValue) -> onAnswerChangeListener());
@@ -188,18 +193,15 @@ public class Exam extends DatabaseEntry implements Comparable<Exam>, Searchable 
 
     @Override
     public void fromJson(JSONObject json) {
-        JSONObject object = new JSONObject(json);
+        setBook(Data.books.get(json.getString("book")));
 
-        setBook(Data.books.get(object.getString("book")));
-
-        JSONArray answers = object.getJSONArray("answers");
+        JSONArray answers = json.getJSONArray("answers");
         for (int i = 0; i < Data.settings.getMaxAnswersCount(); i++) {
             answersProperty().getByIndex(i).set((int) answers.get(i));
         }
 
-        setLibrarian(object.getString("librarian"));
-        setDate(LocalDate.parse(object.getString("date"), Data.dateFormatter));
-
+        setLibrarian(json.getString("librarian"));
+        setDate(LocalDate.parse(json.getString("date"), Data.dateFormatter));
     }
 
     @Override
