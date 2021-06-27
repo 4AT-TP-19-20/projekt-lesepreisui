@@ -28,7 +28,7 @@ public class DatabaseInterface {
 
                 connection.connect();
 
-                content = checkSuccessAndGetContent(connection, "add");
+                content = checkSuccessAndGetContent(connection, "read");
             } catch (IOException ex) {
                 System.out.println("Error reading " + type);
                 ex.printStackTrace();
@@ -97,7 +97,7 @@ public class DatabaseInterface {
 
                 JSONObject content = checkSuccessAndGetContent(connection, "update");
 
-                entry.setRev(content.getString("_rev"));
+                entry.setRev(content.getString("rev"));
             } catch (IOException ex) {
                 System.out.println("Error updating " + entry.toString());
                 ex.printStackTrace();
