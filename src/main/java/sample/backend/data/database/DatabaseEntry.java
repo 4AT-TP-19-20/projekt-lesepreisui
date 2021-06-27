@@ -40,16 +40,22 @@ public abstract class DatabaseEntry implements JsonSerializable {
     }
 
     public void synchronize() {
-        status = Status.CREATING;
-        DatabaseInterface.add(this);
+        synchronized (mutex) {
+            if(status != Status.UNSYNCHRONIZED) {
+                throw new IllegalStateException("Database entries have to be synchronized before anything else");
+            }
 
-        while (updateAgain) { //If there are already changes
-            updateAgain = false;
-            status = Status.UPDATING;
-            DatabaseInterface.update(this);
+            status = Status.CREATING;
+            DatabaseInterface.add(this);
+
+            while (updateAgain) { //If there are already changes
+                updateAgain = false;
+                status = Status.UPDATING;
+                DatabaseInterface.update(this);
+            }
+
+            status = Status.SYNCHRONIZED;
         }
-
-        status = Status.SYNCHRONIZED;
     }
 
     public void synchronize(String id, String rev) {
@@ -63,7 +69,7 @@ public abstract class DatabaseEntry implements JsonSerializable {
             return;
         }
 
-        if(status == Status.UPDATING) {
+        if(status == Status.UPDATING || status == Status.CREATING) {
             updateAgain = true;
             return;
         }
@@ -82,13 +88,13 @@ public abstract class DatabaseEntry implements JsonSerializable {
     }
 
     public void delete() {
+        status = Status.DELETING;
+
         onDelete();
 
         if(status == Status.UNSYNCHRONIZED) {
             return;
         }
-
-        status = Status.DELETING;
 
         new Thread(() -> {
             synchronized (mutex) {
