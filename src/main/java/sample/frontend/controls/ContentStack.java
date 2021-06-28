@@ -50,6 +50,10 @@ public class ContentStack extends StackPane {
         }
 
         toOpen.setVisible(true);
+
+        if(toOpen instanceof OpenNotified) {
+            ((OpenNotified) toOpen).onOpen();
+        }
     }
 
     private void close(Node toClose) {

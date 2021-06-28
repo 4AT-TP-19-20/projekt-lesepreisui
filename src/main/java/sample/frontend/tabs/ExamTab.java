@@ -15,14 +15,16 @@ import sample.backend.data.Data;
 import sample.backend.data.Exam;
 import sample.frontend.controls.AnswerBoxes;
 import sample.frontend.controls.CustomTableView;
+import sample.frontend.controls.OpenNotified;
 import sample.frontend.controls.SwitchBox;
 
-public class ExamTab extends BorderPane {
+public class ExamTab extends BorderPane implements OpenNotified {
     private final CustomTableView<Exam> tbv_exams;
+    private final TextField txt_search;
 
     public ExamTab() {
         //Top
-        TextField txt_search = new TextField();
+        txt_search = new TextField();
         txt_search.setPromptText("Suche nach Datum, Teilnehmer, Bücher, ...");
         txt_search.textProperty().addListener((observable, oldValue, newValue) -> textChangeListener(newValue));
         this.setTop(txt_search);
@@ -90,5 +92,10 @@ public class ExamTab extends BorderPane {
                 }
             }
         }
+    }
+
+    @Override
+    public void onOpen() {
+        textChangeListener(txt_search.getText());
     }
 }
