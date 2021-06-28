@@ -4,13 +4,9 @@ import javafx.collections.*;
 import javafx.util.Callback;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import sample.backend.*;
 import sample.backend.data.database.DatabaseEntry;
 import sample.backend.data.database.DatabaseInterface;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -20,11 +16,11 @@ public class Data {
     public static ObservableMap<String, Book> books;
     public static ObservableMap<String, Exam> exams;
 
+    //Local
     public static ObservableList<Group> groups;
     public static String currentUser;
     public static Settings settings;
     public static DateTimeFormatter dateFormatter;
-    private static final String path = ".\\storage\\";
 
     public static void init() {
         contestants = FXCollections.observableHashMap();

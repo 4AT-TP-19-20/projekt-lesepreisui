@@ -10,7 +10,6 @@ import sample.backend.Searchable;
 import sample.backend.data.database.DatabaseEntry;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Contestant extends DatabaseEntry implements Comparable<Contestant>, Searchable {
     private final StringProperty firstName;
@@ -109,15 +108,7 @@ public class Contestant extends DatabaseEntry implements Comparable<Contestant>,
     }
 
     public int getBookCount() {
-        int bookCount = 0;
-
-        for(Exam exam : exams) {
-            if(exam.getPassed() == 1) {
-                bookCount++;
-            }
-        }
-
-        return bookCount;
+        return bookCount.get();
     }
 
     public IntegerProperty bookCountProperty() {
